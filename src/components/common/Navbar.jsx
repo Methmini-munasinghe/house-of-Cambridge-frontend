@@ -214,20 +214,36 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50" style={{ background: '#111111', boxShadow: '0 2px 24px rgba(0,0,0,0.7)' }}>
 
-      <div className="w-full px-14 py-4 flex items-center gap-6">
+      <div className="w-full px-4 md:px-14 py-3 md:py-4 flex items-center flex-wrap gap-3 md:gap-6">
         <Link to="/" className="flex-shrink-0">
-          <img src="/images/logo.png" alt="House of Cambridge" className="h-14 w-auto object-contain" />
+          <img src="/images/logo.png" alt="House of Cambridge" className="h-10 md:h-14 w-auto object-contain" />
         </Link>
 
-        <form onSubmit={handleSearch} className="flex flex-1 max-w-2xl mx-auto" role="search">
+        <button
+          className="md:hidden ml-auto text-[#FFB700]"
+          onClick={() => setMobileOpen((v) => !v)}
+          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+        >
+          {mobileOpen ? <FiX size={26} /> : <FiMenu size={26} />}
+        </button>
+
+        <form
+          onSubmit={handleSearch}
+          className="flex w-full md:flex-1 md:max-w-2xl md:mx-auto order-last md:order-none"
+          role="search"
+        >
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search for Products, Categories and More…"
             aria-label="Search"
-            className="flex-1 bg-white text-[#1A1A1A] placeholder-gray-400 px-4 py-2.5 text-[14px] outline-none rounded-l"
+            className="flex-1 bg-white text-[#1A1A1A] placeholder-gray-400 px-4 py-2.5 text-[13px] md:text-[14px] outline-none rounded-l"
           />
-          <button type="submit" aria-label="Submit search" className="bg-[#FFB700] px-5 rounded-r flex items-center justify-center hover:bg-amber-500 transition-colors">
+          <button
+            type="submit"
+            aria-label="Submit search"
+            className="bg-[#FFB700] px-4 md:px-5 rounded-r flex items-center justify-center hover:bg-amber-500 transition-colors"
+          >
             <FiSearch size={18} className="text-black" />
           </button>
         </form>
@@ -291,10 +307,6 @@ export default function Navbar() {
             )}
           </div>
         </div>
-
-        <button className="md:hidden ml-auto text-[#FFB700]" onClick={() => setMobileOpen((v) => !v)} aria-label={mobileOpen ? 'Close menu' : 'Open menu'}>
-          {mobileOpen ? <FiX size={26} /> : <FiMenu size={26} />}
-        </button>
       </div>
 
       <nav className="hidden md:block border-t border-white/[0.07]" style={{ background: 'linear-gradient(180deg, #1c1c1c 0%, #151515 100%)' }} aria-label="Main navigation">

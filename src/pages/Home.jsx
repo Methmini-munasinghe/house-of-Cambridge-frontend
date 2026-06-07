@@ -141,14 +141,14 @@ function ProductRow({ products, label }) {
         type="button"
         onClick={() => scroll(-1)}
         aria-label={`Scroll ${label || 'products'} left`}
-        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-9 h-9 bg-white border border-gray-200 rounded-full shadow flex items-center justify-center hover:border-[#FFB700] hover:text-[#FFB700] transition-colors"
+        className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-9 h-9 bg-white border border-gray-200 rounded-full shadow items-center justify-center hover:border-[#FFB700] hover:text-[#FFB700] transition-colors"
       >
         <FiChevronLeft size={18} aria-hidden="true" />
       </button>
       <div
         ref={rowRef}
         className="flex gap-4 overflow-x-auto pb-1 scroll-smooth"
-        style={{ scrollbarWidth: 'none' }}
+        style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}
         aria-label={label}
         role="list"
       >
@@ -162,7 +162,7 @@ function ProductRow({ products, label }) {
         type="button"
         onClick={() => scroll(1)}
         aria-label={`Scroll ${label || 'products'} right`}
-        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-9 h-9 bg-white border border-gray-200 rounded-full shadow flex items-center justify-center hover:border-[#FFB700] hover:text-[#FFB700] transition-colors"
+        className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-9 h-9 bg-white border border-gray-200 rounded-full shadow items-center justify-center hover:border-[#FFB700] hover:text-[#FFB700] transition-colors"
       >
         <FiChevronRight size={18} aria-hidden="true" />
       </button>
@@ -182,8 +182,8 @@ function ProductRowSkeleton() {
 
 function SectionHeader({ title, to }) {
   return (
-    <div className="flex items-center justify-between mb-5">
-      <h2 className="text-lg font-bold text-[#1A1A1A] uppercase tracking-wide">{title}</h2>
+    <div className="flex items-center justify-between mb-4 md:mb-5">
+      <h2 className="text-sm md:text-lg font-bold text-[#1A1A1A] uppercase tracking-wide">{title}</h2>
       <Link
         to={to || '/shop'}
         className="text-xs font-semibold text-[#1A1A1A] border border-gray-300 px-3 py-1 rounded hover:border-[#FFB700] hover:text-[#FFB700] transition-colors"
@@ -513,7 +513,7 @@ export default function Home() {
       </section>
 
       <section className="py-8 bg-white" aria-labelledby="popular-heading">
-        <div className="max-w-[1280px] mx-auto px-10">
+        <div className="max-w-[1280px] mx-auto px-4 md:px-10">
           <SectionHeader title="Popular Products" />
           <h2 id="popular-heading" className="sr-only">Popular Products</h2>
           {popular.length > 0
@@ -524,7 +524,7 @@ export default function Home() {
       </section>
 
       <section className="py-8 bg-gray-50" aria-labelledby="new-arrivals-heading">
-        <div className="max-w-[1280px] mx-auto px-10">
+        <div className="max-w-[1280px] mx-auto px-4 md:px-10">
           <SectionHeader title="New Arrivals" />
           <h2 id="new-arrivals-heading" className="sr-only">New Arrivals</h2>
           {homeNewArrivals.length > 0
@@ -535,7 +535,7 @@ export default function Home() {
       </section>
 
       <section className="bg-white py-6" aria-labelledby="sub-banners-heading">
-        <div className="max-w-[1280px] mx-auto px-4">
+        <div className="max-w-[1280px] mx-auto px-4 md:px-10">
           <h2 id="sub-banners-heading" className="sr-only">Shop by department</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
@@ -579,7 +579,7 @@ export default function Home() {
       </section>
 
       <section className="py-8 bg-gray-50" aria-labelledby="beauty-heading">
-        <div className="max-w-[1280px] mx-auto px-10">
+        <div className="max-w-[1280px] mx-auto px-4 md:px-10">
           <SectionHeader title="Beauty and Cosmetics" to="/shop?category=beauty" />
           <h2 id="beauty-heading" className="sr-only">Beauty and Cosmetics</h2>
           {beautyProducts.length > 0
@@ -590,7 +590,7 @@ export default function Home() {
       </section>
 
       <section className="py-8 bg-white" aria-labelledby="electronics-heading">
-        <div className="max-w-[1280px] mx-auto px-10">
+        <div className="max-w-[1280px] mx-auto px-4 md:px-10">
           <SectionHeader title="Electronic Appliances" to="/shop?category=electronics" />
           <h2 id="electronics-heading" className="sr-only">Electronic Appliances</h2>
           {electronicsProducts.length > 0
@@ -601,9 +601,9 @@ export default function Home() {
       </section>
 
       <section className="py-12 bg-white border-t border-gray-100" aria-labelledby="brands-heading">
-        <div className="max-w-[1280px] mx-auto px-6">
-          <div className="text-center mb-8">
-            <h2 id="brands-heading" className="text-[28px] font-black">
+        <div className="max-w-[1280px] mx-auto px-4 md:px-6">
+          <div className="text-center mb-6 md:mb-8">
+            <h2 id="brands-heading" className="text-xl md:text-[28px] font-black">
               <span className="text-[#FFB700]">Trusted By </span>
               <span className="text-[#1A1A1A]">Top Brands</span>
             </h2>

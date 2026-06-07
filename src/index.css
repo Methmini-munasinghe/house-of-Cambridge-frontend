@@ -1,1 +1,3281 @@
 @import "tailwindcss";
+
+/* ============================================================
+   LOGIN PAGE — RESPONSIVE
+   Tablet : max-width 768px
+   Mobile : max-width 375px
+   Rule   : Desktop layout untouched — only responsive layers
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Hide the left decorative image panel */
+  .min-h-screen.flex > .hidden.lg\:block {
+    display: none !important;
+  }
+
+  /* Hide the right benefits panel */
+  .min-h-screen.flex > .hidden.xl\:flex {
+    display: none !important;
+  }
+
+  /* Centre the form column and give it full width */
+  .min-h-screen.flex > .flex-1 {
+    width: 100%;
+    flex: 1 1 100%;
+    padding: 2.5rem 1.5rem;
+    justify-content: center;
+  }
+
+  /* Form card — full width, modest padding */
+  .min-h-screen.flex > .flex-1 > div {
+    width: 100%;
+    max-width: 28rem;
+    padding: 2rem 1.75rem;
+  }
+
+  /* Show the logo inside the form (lg:hidden block) */
+  .min-h-screen.flex .lg\:hidden {
+    display: block !important;
+    margin-bottom: 1.25rem;
+  }
+
+  /* Logo image size */
+  .min-h-screen.flex .lg\:hidden img {
+    height: 2.25rem;
+  }
+
+  /* Page heading */
+  .min-h-screen.flex h1 {
+    font-size: 1.25rem;
+  }
+
+  /* Social login buttons — comfortable tap target */
+  .min-h-screen.flex .space-y-2\.5 button {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Tighter outer padding on small screens */
+  .min-h-screen.flex > .flex-1 {
+    padding: 1.5rem 0.875rem;
+  }
+
+  /* Form card — edge-to-edge feel, reduced padding */
+  .min-h-screen.flex > .flex-1 > div {
+    padding: 1.5rem 1rem;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+    max-width: 100%;
+  }
+
+  /* Page heading smaller */
+  .min-h-screen.flex h1 {
+    font-size: 1.125rem;
+  }
+
+  /* Sub-heading */
+  .min-h-screen.flex p.text-\[13px\].text-\[#60717B\].mb-6 {
+    font-size: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Input labels */
+  .min-h-screen.flex label.block.text-\[13px\] {
+    font-size: 0.75rem;
+  }
+
+  /* Input fields */
+  .min-h-screen.flex input[type="email"],
+  .min-h-screen.flex input[type="password"],
+  .min-h-screen.flex input[type="text"] {
+    font-size: 0.8125rem;
+    padding: 0.625rem 0.75rem;
+  }
+
+  /* Forgot password link */
+  .min-h-screen.flex a.text-\[12px\].text-\[#1A1A1A\].font-medium {
+    font-size: 0.6875rem;
+  }
+
+  /* Remember me checkbox row */
+  .min-h-screen.flex label.flex.items-center.gap-2.text-\[13px\] {
+    font-size: 0.75rem;
+  }
+
+  /* Sign In button */
+  .min-h-screen.flex button[type="submit"] {
+    font-size: 0.8125rem;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+  }
+
+  /* Divider text */
+  .min-h-screen.flex span.text-\[12px\].text-\[#60717B\] {
+    font-size: 0.6875rem;
+  }
+
+  /* Social buttons */
+  .min-h-screen.flex .space-y-2\.5 button {
+    font-size: 0.75rem;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+    gap: 0.5rem;
+  }
+
+  /* Bottom links */
+  .min-h-screen.flex p.text-center.text-\[13px\] {
+    font-size: 0.75rem;
+  }
+
+  /* Guest link */
+  .min-h-screen.flex p.text-center a.text-\[13px\].text-\[#FFB700\] {
+    font-size: 0.75rem;
+  }
+
+  /* Form spacing */
+  .min-h-screen.flex form.space-y-4 {
+    gap: 0.875rem;
+  }
+}
+
+/* ============================================================
+   REGISTER PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Register: hide left image + right sidebar panels */
+  /* (reuses same .min-h-screen.flex rules from Login above) */
+
+  /* First/Last name grid — stay 2-col on tablet, fine as-is */
+
+  /* DOB + Gender grid — stay 2-col on tablet */
+
+  /* Register form card slightly less padding */
+  .min-h-screen.flex > .flex-1 > div.w-full.max-w-\[420px\].bg-white {
+    padding: 2rem 1.75rem;
+  }
+
+  /* Section dividers */
+  .min-h-screen.flex p.text-\[11px\].font-bold.text-\[#60717B\].uppercase {
+    font-size: 0.625rem;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* First/Last name — stack to single column */
+  .min-h-screen.flex .grid.grid-cols-2.gap-3 {
+    grid-template-columns: 1fr;
+  }
+
+  /* DOB + Gender — also stack */
+  .min-h-screen.flex fieldset .grid.grid-cols-2.gap-3 {
+    grid-template-columns: 1fr;
+  }
+
+  /* Password strength bar text */
+  .min-h-screen.flex .mt-1\.5.flex.items-center.gap-2 span {
+    font-size: 0.625rem;
+  }
+
+  /* Terms checkbox text */
+  .min-h-screen.flex label.flex.items-start.gap-2.text-\[13px\] {
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+
+  /* Register form card */
+  .min-h-screen.flex > .flex-1 > div.w-full.max-w-\[420px\].bg-white {
+    padding: 1.5rem 1rem;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+    max-width: 100%;
+  }
+
+  /* "Create My Account" button */
+  .min-h-screen.flex button[type="submit"].w-full.bg-\[#FFB700\] {
+    font-size: 0.8125rem;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+  }
+}
+
+/* ============================================================
+   FORGOT PASSWORD PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Forgot: outer container — column layout */
+  .min-h-screen.flex.items-center > .max-w-\[1100px\] {
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+    gap: 2rem;
+  }
+
+  /* Hide the left illustration panel */
+  .min-h-screen.flex.items-center .hidden.lg\:flex {
+    display: none !important;
+  }
+
+  /* Form column full width */
+  .min-h-screen.flex.items-center .flex-1.max-w-\[460px\] {
+    max-width: 100%;
+    width: 100%;
+    margin: 0;
+  }
+
+  /* Card padding */
+  .min-h-screen.flex.items-center .bg-white.border.border-\[#C5C5C5\].rounded-sm .p-8 {
+    padding: 1.75rem 1.5rem;
+  }
+
+  /* Bottom info panel */
+  .min-h-screen.flex.items-center .border-t.border-\[#E9E9E9\].bg-gray-50.px-8 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Outer container tighter */
+  .min-h-screen.flex.items-center > .max-w-\[1100px\] {
+    padding: 1.25rem 0.875rem;
+  }
+
+  /* Card inner padding */
+  .min-h-screen.flex.items-center .bg-white.border.border-\[#C5C5C5\].rounded-sm .p-8 {
+    padding: 1.25rem 1rem;
+  }
+
+  /* Logo */
+  .min-h-screen.flex.items-center .bg-white.border.border-\[#C5C5C5\].rounded-sm img.h-9 {
+    height: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Headings */
+  .min-h-screen.flex.items-center h1 {
+    font-size: 1.125rem;
+  }
+
+  /* Warning notice box */
+  .min-h-screen.flex.items-center .bg-amber-50.border.border-amber-200 {
+    padding: 0.625rem;
+  }
+
+  .min-h-screen.flex.items-center .bg-amber-50.border.border-amber-200 p {
+    font-size: 0.6875rem;
+  }
+
+  /* Submit + Back buttons */
+  .min-h-screen.flex.items-center button[type="submit"],
+  .min-h-screen.flex.items-center a.w-full.flex.items-center.justify-center.gap-2.border {
+    font-size: 0.8125rem;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+  }
+
+  /* Bottom info panel */
+  .min-h-screen.flex.items-center .border-t.border-\[#E9E9E9\].bg-gray-50.px-8 {
+    padding: 1rem;
+  }
+
+  /* Success / preview state */
+  .min-h-screen.flex.items-center .w-10.h-10.rounded-full {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+}
+
+/* ============================================================
+   EMAIL VERIFICATION PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Reuses .min-h-screen.flex.items-center container rules above */
+
+  /* OTP input group */
+  .flex.gap-2.justify-center[role="group"] {
+    gap: 0.5rem;
+  }
+
+  /* OTP digit boxes */
+  .flex.gap-2.justify-center[role="group"] input.w-12.h-12 {
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 1.125rem;
+  }
+
+  /* Verified checklist card */
+  .bg-\[#F8F8F8\].border.border-\[#E9E9E9\].rounded-\[6px\].p-4 {
+    padding: 0.875rem;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* OTP boxes — fit 6 digits on 375px */
+  .flex.gap-2.justify-center[role="group"] {
+    gap: 0.375rem;
+  }
+
+  .flex.gap-2.justify-center[role="group"] input.w-12.h-12 {
+    width: 2.375rem;
+    height: 2.375rem;
+    font-size: 1rem;
+    border-radius: 0.375rem;
+  }
+
+  /* Countdown text */
+  .min-h-screen.flex.items-center .text-center.mt-4.mb-5 p {
+    font-size: 0.75rem;
+  }
+
+  /* Resend link */
+  .min-h-screen.flex.items-center p.text-center.text-\[12px\].text-\[#60717B\].mb-5 {
+    font-size: 0.6875rem;
+  }
+
+  /* Verified checklist items */
+  .bg-\[#F8F8F8\].border.border-\[#E9E9E9\].rounded-\[6px\].p-4 li p {
+    font-size: 0.75rem;
+  }
+
+  /* Action buttons */
+  .min-h-screen.flex.items-center .space-y-2\.5 button,
+  .min-h-screen.flex.items-center .space-y-2\.5 a {
+    font-size: 0.8125rem;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+  }
+}
+
+/* ============================================================
+   RESET PASSWORD PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Reuses .min-h-screen.flex.items-center container rules */
+
+  /* Password requirements grid — 2-col fine on tablet */
+
+  /* Token preview box */
+  .min-h-screen.flex.items-center .bg-\[#E9E9E9\].rounded-\[6px\].px-3.py-2.mb-4 {
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Password requirements — stack to 1 col */
+  .min-h-screen.flex.items-center .grid.grid-cols-2.gap-1\.5 {
+    grid-template-columns: 1fr;
+    gap: 0.375rem;
+  }
+
+  /* Token text */
+  .min-h-screen.flex.items-center .font-mono {
+    font-size: 0.6875rem;
+    word-break: break-all;
+  }
+
+  /* Warning notice */
+  .min-h-screen.flex.items-center .bg-amber-50 p.text-\[12px\] {
+    font-size: 0.6875rem;
+  }
+
+  /* Bottom panel */
+  .min-h-screen.flex.items-center .border-t.bg-gray-50 {
+    padding: 1rem;
+  }
+
+  /* Success state icon */
+  .min-h-screen.flex.items-center .w-12.h-12.rounded-full.bg-green-100 {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+
+/* ============================================================
+   CHECKOUT PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Main layout — stack main + sidebar */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 > .flex.gap-6.items-start {
+    flex-direction: column;
+  }
+
+  /* Sidebar full width on tablet */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 aside.w-\[300px\] {
+    width: 100%;
+    position: static;
+  }
+
+  /* Sidebar sticky card */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 aside .sticky.top-24 {
+    position: static;
+  }
+
+  /* Step indicator — allow scroll on tablet */
+  nav[aria-label="Checkout steps"] {
+    justify-content: flex-start;
+    gap: 0;
+  }
+
+  /* Connector lines between steps shorter on tablet */
+  nav[aria-label="Checkout steps"] .w-14.sm\:w-20.h-\[2px\] {
+    width: 2rem;
+  }
+
+  /* Step nav buttons — wrap */
+  div[role="group"][aria-label="Navigate between steps"] {
+    gap: 0.5rem;
+  }
+
+  div[role="group"][aria-label="Navigate between steps"] button {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.875rem;
+  }
+
+  /* Cart review table scroll */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .overflow-x-auto table {
+    min-width: 500px;
+  }
+
+  /* Coupon row wrap */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .flex.flex-wrap.items-center.gap-3 {
+    gap: 0.5rem;
+  }
+
+  /* Shipping info card padding */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .bg-white.border.border-\[#E9E9E9\].rounded-\[10px\].p-6 {
+    padding: 1.25rem 1rem;
+  }
+
+  /* Shipping address grid — 2-col fine on tablet */
+
+  /* Payment tabs — allow wrapping on tablet */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .flex.border.border-\[#E9E9E9\].rounded-\[8px\].overflow-hidden[role="tablist"] button {
+    font-size: 0.6875rem;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+  }
+
+  /* Card form grid — 2-col fine on tablet */
+
+  /* Back + Continue buttons row */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .flex.gap-3 {
+    gap: 0.5rem;
+  }
+
+  /* Order summary sidebar items list */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 aside .max-h-\[150px\] {
+    max-height: 10rem;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Outer padding */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  /* Step indicator — compact */
+  nav[aria-label="Checkout steps"] .w-10.h-10.rounded-full {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.75rem;
+  }
+
+  nav[aria-label="Checkout steps"] span.text-\[11px\] {
+    font-size: 0.5625rem;
+  }
+
+  nav[aria-label="Checkout steps"] .w-14.sm\:w-20.h-\[2px\] {
+    width: 1rem;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+  }
+
+  /* Step nav buttons — full width 1-col */
+  div[role="group"][aria-label="Navigate between steps"] {
+    flex-direction: column;
+  }
+
+  div[role="group"][aria-label="Navigate between steps"] button {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.75rem;
+  }
+
+  /* Cart table */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .overflow-x-auto table {
+    min-width: 460px;
+  }
+
+  /* Product name in cart table */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 table p.text-\[13px\].font-medium {
+    font-size: 0.75rem;
+    max-width: 8rem;
+  }
+
+  /* Cart table header */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 table th {
+    font-size: 0.625rem;
+    padding: 0.625rem 0.5rem;
+  }
+
+  /* Cart table cells */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 table td {
+    padding: 0.625rem 0.5rem;
+  }
+
+  /* Coupon input + button */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .flex.gap-2.flex-1 input,
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .flex.gap-2.flex-1 button {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  /* "Continue to Shipping" button */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 button.w-full.bg-\[#FFB700\].text-black.font-bold.text-\[14px\].py-3\.5 {
+    font-size: 0.8125rem;
+    padding-top: 0.875rem;
+    padding-bottom: 0.875rem;
+  }
+
+  /* Shipping step — address grid 1-col */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 fieldset.grid.grid-cols-2.gap-3 {
+    grid-template-columns: 1fr;
+  }
+
+  /* Address label text */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 fieldset label.flex.items-start.gap-3.p-4 {
+    padding: 0.75rem;
+  }
+
+  /* Shipping method options */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 fieldset label.flex.items-center.gap-3.p-4 {
+    padding: 0.75rem;
+    gap: 0.625rem;
+  }
+
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 fieldset label .text-\[13px\].font-semibold {
+    font-size: 0.75rem;
+  }
+
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 fieldset label .text-\[11px\].text-\[#60717B\] {
+    font-size: 0.625rem;
+  }
+
+  /* Payment tabs — 2x2 grid on mobile */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .flex.border.border-\[#E9E9E9\].rounded-\[8px\].overflow-hidden[role="tablist"] {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border-radius: 0.5rem;
+  }
+
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .flex.border.border-\[#E9E9E9\].rounded-\[8px\].overflow-hidden[role="tablist"] button {
+    font-size: 0.6875rem;
+    padding: 0.625rem 0.25rem;
+    border-right: 1px solid #E9E9E9;
+    border-bottom: 1px solid #E9E9E9;
+  }
+
+  /* New card form — 2-col grid stays, just reduce font */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .grid.grid-cols-2.gap-3 input {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.625rem;
+  }
+
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .grid.grid-cols-2.gap-3 label {
+    font-size: 0.6875rem;
+  }
+
+  /* Loyalty points input + button */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .flex.gap-2 input[type="number"],
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .flex.gap-2 button.bg-\[#FFB700\].text-black.px-5 {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  /* Back + Continue/Place Order buttons */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .flex.gap-3 button {
+    font-size: 0.75rem;
+    padding: 0.75rem 0.875rem;
+  }
+
+  /* Sidebar order summary */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 aside .p-5 {
+    padding: 1rem 0.875rem;
+  }
+
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 aside dl .flex.justify-between {
+    font-size: 0.75rem;
+  }
+
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 aside dl .border-t.pt-3 dt,
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 aside dl .border-t.pt-3 dd {
+    font-size: 0.875rem;
+  }
+
+  /* Trust badges */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 aside .grid.grid-cols-3 p {
+    font-size: 0.5625rem;
+  }
+
+  /* Order notes textarea */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 textarea {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  /* Delivery address review card on step 3 */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .bg-white.border.border-\[#E9E9E9\].rounded-\[10px\].p-4 .flex.items-start.justify-between {
+    gap: 0.5rem;
+  }
+}
+
+/* ============================================================
+   ORDER CONFIRMATION PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Progress bar connectors shorter */
+  main.max-w-\[860px\] nav[aria-label="Checkout progress"] .w-14.sm\:w-20 {
+    width: 2rem;
+  }
+
+  /* Reduce section paddings slightly */
+  main.max-w-\[860px\] section.p-5 {
+    padding: 1.25rem;
+  }
+
+  main.max-w-\[860px\] section > div.px-5 {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  main.max-w-\[860px\] section ul li.px-5 {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Outer padding */
+  main.max-w-\[860px\] {
+    padding-top: 1.25rem;
+    padding-bottom: 2.5rem;
+  }
+
+  /* Progress indicator */
+  main.max-w-\[860px\] nav[aria-label="Checkout progress"] .w-10.h-10 {
+    width: 2rem;
+    height: 2rem;
+  }
+  main.max-w-\[860px\] nav[aria-label="Checkout progress"] .w-10.h-10 svg {
+    width: 1rem;
+    height: 1rem;
+  }
+  main.max-w-\[860px\] nav[aria-label="Checkout progress"] span.text-\[11px\] {
+    font-size: 0.5625rem;
+  }
+  main.max-w-\[860px\] nav[aria-label="Checkout progress"] .w-14.sm\:w-20 {
+    width: 1rem;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+  }
+
+  /* Success icon & heading */
+  main.max-w-\[860px\] .w-20.h-20 {
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: 0.75rem;
+  }
+  main.max-w-\[860px\] .w-20.h-20 svg {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+  main.max-w-\[860px\] h1.text-\[28px\] {
+    font-size: 1.25rem;
+  }
+  main.max-w-\[860px\] p.text-\[14px\] {
+    font-size: 0.75rem;
+  }
+
+  /* Order number badge */
+  main.max-w-\[860px\] span.inline-flex.items-center.gap-2.bg-\[\#1A1A1A\] {
+    font-size: 0.6875rem;
+    padding: 0.375rem 0.75rem;
+  }
+
+  /* Email/SMS confirmation row */
+  main.max-w-\[860px\] .flex.flex-wrap.gap-4 {
+    gap: 0.5rem;
+    flex-direction: column;
+  }
+  main.max-w-\[860px\] .flex.items-center.gap-1\.5.text-\[12px\] {
+    font-size: 0.6875rem;
+  }
+
+  /* Loyalty points banner */
+  main.max-w-\[860px\] .bg-amber-50.px-5.py-3\.5 {
+    padding: 0.75rem;
+    align-items: flex-start;
+  }
+  main.max-w-\[860px\] .bg-amber-50 p.text-\[13px\] {
+    font-size: 0.75rem;
+  }
+  main.max-w-\[860px\] .bg-amber-50 p.text-\[12px\] {
+    font-size: 0.6875rem;
+  }
+
+  /* Info cards (Delivery & Payment) */
+  main.max-w-\[860px\] section.p-5 {
+    padding: 1rem;
+  }
+  main.max-w-\[860px\] section h2.text-\[13px\] {
+    font-size: 0.6875rem;
+  }
+  main.max-w-\[860px\] section address p.text-\[13px\] {
+    font-size: 0.75rem;
+  }
+  main.max-w-\[860px\] section address p.text-\[12px\] {
+    font-size: 0.6875rem;
+  }
+  main.max-w-\[860px\] section dl .text-\[12px\] {
+    font-size: 0.6875rem;
+  }
+
+  /* Items Ordered list */
+  main.max-w-\[860px\] section > div.px-5.py-3\.5 {
+    padding: 0.75rem 1rem;
+  }
+  main.max-w-\[860px\] section ul li.px-5.py-4 {
+    padding: 0.75rem 1rem;
+    align-items: flex-start;
+    gap: 0.625rem;
+  }
+  main.max-w-\[860px\] section ul li img.w-14.h-14 {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+  main.max-w-\[860px\] section ul li p.text-\[13px\] {
+    font-size: 0.75rem;
+  }
+  main.max-w-\[860px\] section ul li p.text-\[12px\] {
+    font-size: 0.6875rem;
+  }
+  main.max-w-\[860px\] section ul li p.text-\[11px\] {
+    font-size: 0.625rem;
+  }
+
+  /* Price Summary */
+  main.max-w-\[860px\] section dl .text-\[13px\] {
+    font-size: 0.75rem;
+  }
+  main.max-w-\[860px\] section dl .border-t-2 dt.text-\[15px\] {
+    font-size: 0.8125rem;
+  }
+  main.max-w-\[860px\] section dl .border-t-2 dd.text-\[18px\] {
+    font-size: 1rem;
+  }
+
+  /* Action buttons */
+  main.max-w-\[860px\] .flex-col.sm\:flex-row.gap-3 button,
+  main.max-w-\[860px\] .flex-col.sm\:flex-row.gap-3 a {
+    font-size: 0.75rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    width: 100%;
+  }
+
+  /* Track order link */
+  main.max-w-\[860px\] .text-center.mt-5 a {
+    font-size: 0.75rem;
+  }
+}
+
+/* ============================================================
+   HOME / LANDING PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Hero Carousel */
+  section[aria-label="Promotional hero carousel"] .min-h-\[437px\] {
+    min-height: 22rem;
+  }
+  
+  section[aria-label="Promotional hero carousel"] .px-16 {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+  
+  section[aria-label="Promotional hero carousel"] h1.text-5xl {
+    font-size: 2.5rem;
+  }
+
+  /* Product Rows (reduce outer padding) */
+  .max-w-\[1280px\].mx-auto.px-10 {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Hero Carousel */
+  section[aria-label="Promotional hero carousel"] .min-h-\[437px\] {
+    min-height: 18rem;
+  }
+  
+  section[aria-label="Promotional hero carousel"] .px-16 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  section[aria-label="Promotional hero carousel"] .py-16 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+  section[aria-label="Promotional hero carousel"] p.text-2xl {
+    font-size: 1rem;
+  }
+  
+  section[aria-label="Promotional hero carousel"] h1.text-5xl {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  section[aria-label="Promotional hero carousel"] p.text-xl {
+    font-size: 0.875rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  section[aria-label="Promotional hero carousel"] a.px-8.py-2\.5 {
+    font-size: 0.75rem;
+    padding: 0.5rem 1.25rem;
+  }
+
+  /* Hero Carousel Controls */
+  section[aria-label="Promotional hero carousel"] button.w-10.h-10 {
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  section[aria-label="Promotional hero carousel"] button.w-10.h-10 svg {
+    width: 1rem;
+    height: 1rem;
+  }
+  
+  section[aria-label="Promotional hero carousel"] button.left-4 { left: 0.5rem; }
+  section[aria-label="Promotional hero carousel"] button.right-4 { right: 0.5rem; }
+
+  /* Features List -> Stack to 1 column on narrow mobile */
+  section[aria-label="Service highlights"] ul.grid.divide-x {
+    grid-template-columns: 1fr;
+  }
+  
+  section[aria-label="Service highlights"] ul.grid.divide-x > li {
+    padding: 0.875rem 1rem;
+    border-right-width: 0px !important;
+    border-bottom-width: 1px;
+    border-color: #F3F4F6;
+  }
+  
+  section[aria-label="Service highlights"] ul.grid.divide-x > li:last-child {
+    border-bottom-width: 0px;
+  }
+
+  /* Flash Sale Section */
+  section[aria-labelledby="flash-sale-heading"] .flex.items-center.justify-between.mb-5 {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  section[aria-labelledby="flash-sale-heading"] .flex.items-center.justify-between.mb-5 > a {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  section[aria-labelledby="flash-sale-heading"] div[role="timer"] .w-12.h-12 {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1rem;
+  }
+  
+  section[aria-labelledby="flash-sale-heading"] div[role="timer"] span.text-2xl {
+    font-size: 1.25rem;
+  }
+
+  /* Categories */
+  section[aria-labelledby="categories-heading"] .gap-8 {
+    gap: 1rem;
+  }
+  
+  section[aria-labelledby="categories-heading"] .w-\[120px\].h-\[120px\] {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+  
+  section[aria-labelledby="categories-heading"] p.text-\[13px\] {
+    font-size: 0.625rem;
+  }
+
+  /* Product Rows (Popular, New Arrivals, etc.) */
+  .max-w-\[1280px\].mx-auto.px-10 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-10 h2.text-lg {
+    font-size: 1rem;
+  }
+  
+  /* Hide scroll arrows on mobile in favor of native touch swiping */
+  .max-w-\[1280px\].mx-auto.px-10 .relative > button.w-9.h-9 {
+    display: none;
+  }
+}
+
+/* ============================================================
+   SHOP PAGE (PRODUCT LIST) — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Stack the layout so the filter sidebar goes above products when toggled open */
+  .max-w-\[1280px\].mx-auto.px-4.pb-12.flex.gap-6 {
+    flex-direction: column;
+  }
+
+  /* Make filter sidebar span full width when open */
+  .max-w-\[1280px\].mx-auto.px-4.pb-12.flex.gap-6 > aside {
+    width: 100%;
+  }
+
+  /* Remove stickiness from sidebar on tablet/mobile so it doesn't block the screen */
+  .max-w-\[1280px\].mx-auto.px-4.pb-12.flex.gap-6 > aside > .sticky {
+    position: static;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Mobile Alert Banners (Pre-Owned / New Arrivals) */
+  .bg-red-50.border.border-red-200.rounded-lg.px-5.py-3,
+  .bg-green-50.border.border-green-200.rounded-lg.px-5.py-3 {
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  /* Top Controls (Filters Button & Sort Dropdown) */
+  .flex-1.min-w-0 > .flex.items-center.justify-between.mb-5 {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  /* Spread "Filters" button and "Showing X products" across the row */
+  .flex-1.min-w-0 > .flex.items-center.justify-between.mb-5 > .flex.items-center.gap-3 {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  /* Make Sort dropdown full width */
+  .flex-1.min-w-0 > .flex.items-center.justify-between.mb-5 select {
+    width: 100%;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+    font-size: 0.75rem;
+  }
+
+  /* Sidebar Price Range Inputs */
+  .max-w-\[1280px\].mx-auto.px-4.pb-12.flex.gap-6 > aside .flex.gap-2 input[type="number"] {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  /* Pagination wrapping and sizing for small screens */
+  nav[aria-label="Shop pagination"] {
+    flex-wrap: wrap;
+    gap: 0.375rem;
+  }
+  
+  nav[aria-label="Shop pagination"] button {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.5rem;
+  }
+  
+  nav[aria-label="Shop pagination"] button.w-9.h-9 {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+/* ============================================================
+   PRODUCT DETAIL PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+  /* Grid layouts and row switching are naturally handled by Tailwind's lg: and md: prefixes */
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Product Image Gallery: Stack thumbnails horizontally below main image */
+  .max-w-\[1280px\].mx-auto.px-4.mb-12 .grid > .flex.gap-3 {
+    flex-direction: column-reverse;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.mb-12 .grid > .flex.gap-3 > div[role="list"] {
+    flex-direction: row;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.mb-12 .grid > .flex.gap-3 > div[role="list"] button {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  /* Main Product Details Typography */
+  .max-w-\[1280px\].mx-auto.px-4.mb-12 h1.text-\[20px\] {
+    font-size: 1.125rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.mb-12 span.text-\[28px\] {
+    font-size: 1.5rem;
+  }
+  
+  /* Attributes Box */
+  .border.border-\[\#E9E9E9\].rounded-\[6px\].overflow-hidden.mb-4 .flex.text-\[12px\] span.w-28 {
+    width: 5.5rem;
+  }
+  
+  .border.border-\[\#E9E9E9\].rounded-\[6px\].overflow-hidden.mb-4 .flex.text-\[12px\] span {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.6875rem;
+  }
+
+  /* Action Buttons (Buy Now, Add to Cart, Wishlist) */
+  .flex.flex-col.gap-2.mb-5 button {
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+    font-size: 0.8125rem;
+  }
+
+  /* Trust Badges under Add to Cart */
+  .grid.grid-cols-3.gap-2.border-t.border-\[\#E9E9E9\].pt-4 {
+    gap: 0.25rem;
+  }
+  
+  .grid.grid-cols-3.gap-2.border-t.border-\[\#E9E9E9\].pt-4 p.text-\[11px\] {
+    font-size: 0.625rem;
+  }
+  
+  .grid.grid-cols-3.gap-2.border-t.border-\[\#E9E9E9\].pt-4 p.text-\[10px\] {
+    font-size: 0.5625rem;
+  }
+
+  /* Tabs Row - Make it swipeable horizontally */
+  .mt-12.mb-12 > div[role="tablist"] {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+  }
+  
+  .mt-12.mb-12 > div[role="tablist"]::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .mt-12.mb-12 > div[role="tablist"] button {
+    white-space: nowrap;
+    padding: 0.625rem 1rem;
+    font-size: 0.75rem;
+  }
+
+  /* Review Stats Box */
+  #tabpanel-1 > div > .bg-\[\#F8F8F8\].p-5 {
+    padding: 1rem;
+  }
+  
+  #tabpanel-1 p.text-\[56px\] {
+    font-size: 2.5rem;
+  }
+
+  /* Write Review Form Submit Button */
+  #tabpanel-1 form button[type="submit"] {
+    width: 100%;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+  }
+
+  /* Review List Items */
+  #tabpanel-1 div[role="listitem"].p-4 {
+    padding: 0.875rem;
+  }
+  
+  #tabpanel-1 div[role="listitem"] .flex.items-start.gap-3 {
+    gap: 0.5rem;
+  }
+}
+
+/* ============================================================
+   FLASH SALE PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+  /* Grid layouts and sidebar hiding are naturally handled by Tailwind's lg: and md: prefixes */
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Hero Section Bottom Padding */
+  .max-w-\[1280px\].mx-auto.px-4.sm\:px-8 > .flex.items-center.justify-between.gap-4.pb-6 {
+    padding-bottom: 1rem;
+  }
+
+  /* Unbeatable Deals Strip */
+  .max-w-\[1280px\].mx-auto.px-4.sm\:px-8 > .px-6.py-2\.5.mb-0 {
+    padding: 0.75rem 1rem;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.sm\:px-8 > .px-6.py-2\.5.mb-0 p.text-\[18px\] {
+    font-size: 0.875rem;
+  }
+
+  /* Top Flash Deals Header */
+  .max-w-\[1280px\].mx-auto.px-4.sm\:px-8.py-6 > .px-5.py-3.mb-5.rounded-\[10px\] {
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.sm\:px-8.py-6 > .px-5.py-3.mb-5.rounded-\[10px\] span.text-\[16px\] {
+    font-size: 0.875rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.sm\:px-8.py-6 > .px-5.py-3.mb-5.rounded-\[10px\] span.text-\[12px\] {
+    font-size: 0.625rem;
+    margin-left: 0.25rem;
+  }
+
+  /* Main Product Grid Header (Stack title and sort dropdown) */
+  .flex-1.min-w-0 > .flex.items-center.justify-between.mb-5 {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .flex-1.min-w-0 > .flex.items-center.justify-between.mb-5 select {
+    width: 100%;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+  }
+}
+
+/* ============================================================
+   HEADER / NAVBAR COMPONENT — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Reduce outer padding of the top bar */
+  header.sticky.top-0.z-50 > div.w-full.px-14.py-4 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    gap: 1rem;
+  }
+  
+  /* Tailwind's md:hidden and hidden md:block handle the main layout switching here */
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Top Bar: Reduce padding and allow wrapping so the search bar falls to the next line */
+  header.sticky.top-0.z-50 > div.w-full.px-14.py-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  /* Logo scaling */
+  header.sticky.top-0.z-50 > div.w-full > a.flex-shrink-0 > img.h-14 {
+    height: 2.25rem;
+  }
+
+  /* Hamburger Menu Toggle Button */
+  header.sticky.top-0.z-50 > div.w-full > button.md\:hidden svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  /* Search Bar: Force it to take full width on a new line (order: 3) */
+  header.sticky.top-0.z-50 > div.w-full > form[role="search"] {
+    flex: 1 1 100%;
+    order: 3;
+    max-width: 100%;
+  }
+
+  /* Search Input sizing */
+  header.sticky.top-0.z-50 > div.w-full > form[role="search"] input {
+    font-size: 0.75rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+}
+
+/* ============================================================
+   FOOTER COMPONENT — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Newsletter Banner */
+  footer .h-\[170px\] {
+    height: auto;
+    padding: 2rem 0;
+  }
+
+  footer .h-\[170px\] > .max-w-\[1280px\] {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    justify-content: center;
+    text-align: center;
+  }
+
+  footer .h-\[170px\] h3 {
+    font-size: 1.75rem !important; /* Override inline style */
+  }
+
+  /* Main Footer Links Grid */
+  footer .grid.grid-cols-1.md\:grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    gap: 2.5rem;
+  }
+
+  /* Bottom Copyright Bar */
+  footer .max-w-\[1280px\].mx-auto.px-4.py-4.flex {
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Newsletter Banner */
+  footer .h-\[170px\] {
+    padding: 1.5rem 0;
+  }
+
+  footer .h-\[170px\] > .max-w-\[1280px\] {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  footer .h-\[170px\] h3 {
+    font-size: 1.25rem !important; /* Override inline style */
+  }
+
+  /* Show and stack the newsletter form on mobile */
+  footer .h-\[170px\] .hidden.md\:flex {
+    display: flex !important;
+    flex-direction: column;
+    width: 100%;
+    max-width: 20rem;
+    margin: 0 auto;
+  }
+
+  footer .h-\[170px\] form {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  footer .h-\[170px\] form input,
+  footer .h-\[170px\] form button {
+    width: 100%;
+    border-radius: 0.25rem;
+    text-align: center;
+  }
+
+  /* Main Footer Links Grid -> Stack to 1 column */
+  footer .grid.grid-cols-1.md\:grid-cols-4 {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+/* ============================================================
+   WRITE REVIEW PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Reduce form card padding */
+  main.max-w-\[900px\] section[aria-label="Review form"] > .p-5 {
+    padding: 1.5rem;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Outer padding */
+  main.max-w-\[900px\] {
+    padding-bottom: 2.5rem;
+  }
+
+  /* Headings */
+  main.max-w-\[900px\] > .mb-4 h1 {
+    font-size: 1.125rem;
+  }
+
+  main.max-w-\[900px\] > .mb-4 p.text-\[12px\] {
+    font-size: 0.6875rem;
+  }
+
+  /* Pending Reviews Section */
+  section[aria-label="Pending reviews"] .px-5.py-3 {
+    padding: 0.75rem 1rem;
+  }
+
+  section[aria-label="Pending reviews"] li.px-5.py-3\.5 {
+    padding: 0.75rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+  }
+
+  section[aria-label="Pending reviews"] li button {
+    width: 100%;
+    justify-content: flex-start;
+    padding-top: 0.25rem;
+  }
+
+  /* Review Form Section */
+  section[aria-label="Review form"] .px-5.py-3 {
+    padding: 0.75rem 1rem;
+  }
+
+  section[aria-label="Review form"] > .p-5 {
+    padding: 1rem;
+  }
+
+  section[aria-label="Review form"] .p-3\.5 {
+    padding: 0.75rem;
+  }
+
+  /* Star Rating Container */
+  section[aria-label="Review form"] div[role="group"][aria-label="Star rating"] {
+    gap: 0.25rem;
+  }
+  
+  section[aria-label="Review form"] div[role="group"][aria-label="Star rating"] svg {
+    width: 1.75rem !important;
+    height: 1.75rem !important;
+  }
+
+  /* Photo Upload Box */
+  section[aria-label="Review form"] .border-dashed.px-5.py-7 {
+    padding: 1.5rem 1rem;
+  }
+
+  /* Submit Button */
+  section[aria-label="Review form"] .flex.justify-end button {
+    width: 100%;
+  }
+}
+
+/* ============================================================
+   REVIEW SUBMITTED PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+  
+  /* Reduce card padding */
+  .max-w-\[900px\].mx-auto.px-4.pb-14 > .bg-white.border.border-\[\#E9E9E9\].rounded-\[10px\] {
+    padding: 2rem 1.5rem;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Further reduce card padding */
+  .max-w-\[900px\].mx-auto.px-4.pb-14 > .bg-white.border.border-\[\#E9E9E9\].rounded-\[10px\] {
+    padding: 1.5rem 1rem;
+  }
+
+  /* Scale down the illustration */
+  .max-w-\[900px\].mx-auto.px-4.pb-14 img.max-w-\[420px\] {
+    max-width: 14rem;
+  }
+
+  /* Headings & Text */
+  .max-w-\[900px\].mx-auto.px-4.pb-14 h1.text-\[22px\] {
+    font-size: 1.125rem;
+  }
+
+  .max-w-\[900px\].mx-auto.px-4.pb-14 p.text-\[13px\] {
+    font-size: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Loyalty Points Banner */
+  .max-w-\[900px\].mx-auto.px-4.pb-14 .bg-amber-50.border.border-amber-200 {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .max-w-\[900px\].mx-auto.px-4.pb-14 .bg-amber-50.border.border-amber-200 span {
+    font-size: 0.6875rem;
+  }
+
+  /* Action Buttons -> Stack vertically */
+  .max-w-\[900px\].mx-auto.px-4.pb-14 nav[aria-label="Next steps"] {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .max-w-\[900px\].mx-auto.px-4.pb-14 nav[aria-label="Next steps"] a {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ============================================================
+   WISHLIST PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+  /* Table scroll is natively handled by the overflow-x-auto container */
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Outer padding */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    padding-bottom: 2.5rem;
+  }
+
+  /* Clear Confirmation Modal */
+  .fixed.inset-0.z-50 .bg-white.rounded-\[12px\].p-6 {
+    padding: 1.25rem;
+  }
+  .fixed.inset-0.z-50 .bg-white.rounded-\[12px\].p-6 .flex.gap-3 {
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+  .fixed.inset-0.z-50 .bg-white.rounded-\[12px\].p-6 .flex.gap-3 button {
+    width: 100%;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  /* Header & Controls */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .flex.flex-wrap.items-center.justify-between.gap-3.mb-5 {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .flex.flex-wrap.items-center.justify-between.gap-3.mb-5 h1 {
+    font-size: 1.25rem;
+  }
+
+  /* Sort and Actions Container */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .flex.items-center.gap-2\.5 {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* Sort Dropdown */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .relative select {
+    width: 100%;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+    font-size: 0.75rem;
+  }
+
+  /* Action Buttons (Add All, Clear) */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .flex.items-center.gap-2\.5 button {
+    width: 100%;
+    justify-content: center;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+    font-size: 0.75rem;
+  }
+
+  /* Empty State */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .text-center.py-20 {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .text-center.py-20 h2 {
+    font-size: 1.125rem;
+  }
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .text-center.py-20 p {
+    font-size: 0.75rem;
+  }
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .text-center.py-20 a {
+    font-size: 0.8125rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    display: block;
+    width: 100%;
+  }
+
+  /* Price Drop Alert */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .bg-amber-50.border.border-amber-200 {
+    padding: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .bg-amber-50.border.border-amber-200 button {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+  }
+
+  /* Wishlist Table Tweaks */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 table th {
+    font-size: 0.625rem;
+    padding: 0.625rem 0.5rem;
+  }
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 table td {
+    padding: 0.75rem 0.5rem;
+  }
+}
+
+/* ============================================================
+   PROFILE DASHBOARD PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+  /* Grid layouts are naturally handled by Tailwind's lg: and md: prefixes */
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Recent Orders Header */
+  section[aria-labelledby="recent-orders-heading"] > .px-5.py-3\.5 {
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  section[aria-labelledby="recent-orders-heading"] > .px-5.py-3\.5 > .flex.items-center.gap-2 {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  section[aria-labelledby="recent-orders-heading"] div[role="search"] {
+    flex: 1;
+  }
+  
+  /* Make search input fill the remaining width instead of fixed 10rem (w-40) */
+  section[aria-labelledby="recent-orders-heading"] input.w-40 {
+    width: 100%;
+  }
+
+  /* Recent Orders Table */
+  section[aria-labelledby="recent-orders-heading"] table th.px-4,
+  section[aria-labelledby="recent-orders-heading"] table td.px-4 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  
+  section[aria-labelledby="recent-orders-heading"] table th {
+    font-size: 0.625rem;
+  }
+
+  /* Account Summary & Wishlist Cards */
+  section[aria-labelledby="account-summary-heading"].p-5,
+  section[aria-labelledby="wishlist-heading"].p-5 {
+    padding: 1rem;
+  }
+  
+  section[aria-labelledby="account-summary-heading"] h2,
+  section[aria-labelledby="wishlist-heading"] h2 {
+    font-size: 0.75rem;
+  }
+}
+
+/* ============================================================
+PAYMENT METHODS PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+  /* Handled mostly by ProfileLayout */
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Delete Confirmation Modal */
+  .fixed.inset-0.z-50 .bg-white.rounded-\[12px\].p-6 {
+    padding: 1.25rem;
+  }
+  
+  .fixed.inset-0.z-50 .bg-white.rounded-\[12px\].p-6 .flex.gap-3 {
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+  
+  .fixed.inset-0.z-50 .bg-white.rounded-\[12px\].p-6 .flex.gap-3 button {
+    width: 100%;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  /* Note Box */
+  .bg-green-50.border.border-green-200.rounded-\[8px\].px-4.py-2\.5 {
+    padding: 0.75rem 1rem;
+  }
+
+  /* Card Containers */
+  .bg-white.border.border-\[\#E9E9E9\].rounded-\[10px\].overflow-hidden > .px-5.py-3\.5,
+  .bg-white.border.border-\[\#E9E9E9\].rounded-\[10px\].overflow-hidden > button.px-5.py-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .bg-white.border.border-\[\#E9E9E9\].rounded-\[10px\].overflow-hidden > .border-t.border-\[\#F0F0F0\].p-5 {
+    padding: 1rem;
+  }
+
+  /* Saved Methods List Items */
+  ul.divide-y.divide-\[\#F5F5F5\] li.px-5.py-4 {
+    padding: 1rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  /* Add Method Tabs */
+  div[role="tablist"][aria-label="Payment method type"] {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+  
+  div[role="tablist"][aria-label="Payment method type"] button {
+    width: 100%;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    text-align: center;
+  }
+
+  /* Form Adjustments */
+  form[noValidate] .grid.grid-cols-2.gap-3 {
+    gap: 0.5rem;
+  }
+  
+  form[noValidate] button[type="submit"] {
+    padding-top: 0.875rem;
+    padding-bottom: 0.875rem;
+  }
+
+  /* Paypal/Koko Empty States */
+  .text-center.py-8 {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  .text-center.py-8 button {
+    width: 100%;
+    padding-top: 0.875rem;
+    padding-bottom: 0.875rem;
+  }
+}
+
+/* ============================================================
+   ABOUT US PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Reduce vertical paddings across all major sections */
+  .relative.overflow-hidden[style*="linear-gradient"] .py-14,
+  section.lg\:grid-cols-2.items-center.py-14,
+  section[aria-labelledby="why-choose-heading"].py-14,
+  section[aria-labelledby="testimonials-heading"].py-14,
+  section[aria-labelledby="achievements-heading"].py-14 {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  section[aria-labelledby="cta-heading"] .py-10 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  /* Achievements adjustments */
+  section[aria-labelledby="achievements-heading"] .grid.grid-cols-3 {
+    gap: 1rem;
+  }
+  section[aria-labelledby="achievements-heading"] p.text-\[48px\] {
+    font-size: 2.5rem;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Global container horizontal padding adjustments */
+  .max-w-\[1280px\].mx-auto.px-6 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* --- 1. Hero Section --- */
+  .relative.overflow-hidden[style*="linear-gradient"] .py-14 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  .relative.overflow-hidden[style*="linear-gradient"] h1.text-\[42px\] {
+    font-size: 1.75rem;
+  }
+  .relative.overflow-hidden[style*="linear-gradient"] p.text-\[15px\] {
+    font-size: 0.8125rem;
+    margin-bottom: 1.25rem;
+  }
+  .relative.overflow-hidden[style*="linear-gradient"] a {
+    font-size: 0.75rem;
+    padding: 0.625rem 1.25rem;
+  }
+
+  /* --- 2. Who We Are Section --- */
+  section.lg\:grid-cols-2.items-center.py-14 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    gap: 1.5rem;
+  }
+  section.lg\:grid-cols-2.items-center.py-14 h2.text-\[32px\] {
+    font-size: 1.5rem;
+  }
+  section.lg\:grid-cols-2.items-center.py-14 p.text-\[14px\] {
+    font-size: 0.8125rem;
+  }
+  /* Stack the Value Badges */
+  section.lg\:grid-cols-2.items-center.py-14 .grid.grid-cols-2.gap-3 {
+    grid-template-columns: 1fr;
+    gap: 0.625rem;
+  }
+
+  /* --- 3. Why Choose Us Section --- */
+  section[aria-labelledby="why-choose-heading"].py-14 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  section[aria-labelledby="why-choose-heading"] h2.text-\[32px\] {
+    font-size: 1.5rem;
+  }
+  /* Stack to 1 column */
+  section[aria-labelledby="why-choose-heading"] .grid-cols-2.sm\:grid-cols-3.lg\:grid-cols-5 {
+    grid-template-columns: 1fr;
+  }
+
+  /* --- 4. Testimonials Section --- */
+  section[aria-labelledby="testimonials-heading"].py-14 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  section[aria-labelledby="testimonials-heading"] h2.text-\[32px\] {
+    font-size: 1.5rem;
+  }
+  section[aria-labelledby="testimonials-heading"] p.text-\[14px\] {
+    font-size: 0.8125rem;
+  }
+
+  /* --- 5. Achievements Section --- */
+  section[aria-labelledby="achievements-heading"].py-14 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  section[aria-labelledby="achievements-heading"] h2.text-\[30px\] {
+    font-size: 1.5rem;
+  }
+  /* Stack achievements */
+  section[aria-labelledby="achievements-heading"] .grid.grid-cols-3 {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  section[aria-labelledby="achievements-heading"] p.text-\[48px\] {
+    font-size: 2.25rem;
+  }
+
+  /* --- 6. CTA Section --- */
+  section[aria-labelledby="cta-heading"] .py-10 {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    text-align: center;
+  }
+  section[aria-labelledby="cta-heading"] h2.text-\[28px\] {
+    font-size: 1.25rem;
+  }
+  section[aria-labelledby="cta-heading"] p.text-\[15px\] {
+    font-size: 0.8125rem;
+  }
+  section[aria-labelledby="cta-heading"] a.inline-flex {
+    margin: 0 auto;
+    font-size: 0.75rem;
+    padding: 0.625rem 1.25rem;
+  }
+
+  /* --- 7. Brands Section --- */
+  section[aria-labelledby="brands-heading"].py-12 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  section[aria-labelledby="brands-heading"] h2.text-\[28px\] {
+    font-size: 1.25rem;
+  }
+  section[aria-labelledby="brands-heading"] img.h-9 {
+    height: 1.5rem;
+  }
+}
+
+/* ============================================================
+   LEGAL PAGES (PRIVACY & TERMS) — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Header Box */
+  .bg-\[\#F5F5F5\].border.border-\[\#E9E9E9\].rounded-\[10px\].px-8.py-7 {
+    padding: 1.5rem;
+  }
+
+  /* Main Content Box */
+  .flex-1.min-w-0.space-y-8 > .bg-white.border.border-\[\#E9E9E9\].rounded-\[10px\].p-7 {
+    padding: 1.5rem;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Header Box */
+  .bg-\[\#F5F5F5\].border.border-\[\#E9E9E9\].rounded-\[10px\].px-8.py-7 {
+    padding: 1.25rem 1rem;
+  }
+  .bg-\[\#F5F5F5\].border.border-\[\#E9E9E9\].rounded-\[10px\].px-8.py-7 h1.text-\[32px\] {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .bg-\[\#F5F5F5\].border.border-\[\#E9E9E9\].rounded-\[10px\].px-8.py-7 p.text-\[13px\] {
+    font-size: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .bg-\[\#F5F5F5\].border.border-\[\#E9E9E9\].rounded-\[10px\].px-8.py-7 dl {
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  /* Note Boxes (Privacy & Terms) */
+  .bg-blue-50.border.border-blue-200.rounded-\[8px\].px-5.py-4,
+  .bg-amber-50.border.border-amber-300.rounded-\[8px\].px-5.py-4 {
+    padding: 1rem;
+  }
+
+  /* Main Content Box */
+  .flex-1.min-w-0.space-y-8 > .bg-white.border.border-\[\#E9E9E9\].rounded-\[10px\].p-7 {
+    padding: 1.25rem 1rem;
+  }
+
+  /* Typography adjustments */
+  .flex-1.min-w-0.space-y-8 h2.text-\[18px\] { font-size: 1rem; margin-bottom: 0.75rem; }
+  .flex-1.min-w-0.space-y-8 h3.text-\[14px\] { font-size: 0.8125rem; margin-top: 1rem; }
+  .flex-1.min-w-0.space-y-8 p.text-\[13px\],
+  .flex-1.min-w-0.space-y-8 ul li { font-size: 0.75rem; }
+
+  /* Data Tables */
+  .overflow-x-auto.rounded-\[8px\].border.border-\[\#E9E9E9\] table {
+    min-width: 480px;
+  }
+  .overflow-x-auto.rounded-\[8px\].border.border-\[\#E9E9E9\] table th.px-4.py-2\.5,
+  .overflow-x-auto.rounded-\[8px\].border.border-\[\#E9E9E9\] table td.px-4.py-2\.5 {
+    padding: 0.5rem 0.625rem;
+  }
+}
+
+/* ============================================================
+   LOYALTY POINTS PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Reduce general padding on large cards */
+  .bg-\[\#1A1A1A\].rounded-\[10px\].p-5,
+  .bg-white.border.border-\[\#E9E9E9\].rounded-\[10px\].p-5 {
+    padding: 1.25rem;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Top Dark Card (Tier & Points) */
+  .bg-\[\#1A1A1A\].rounded-\[10px\].p-5 {
+    padding: 1rem;
+  }
+  
+  .bg-\[\#1A1A1A\].rounded-\[10px\].p-5 .flex.items-start.justify-between {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .bg-\[\#1A1A1A\].rounded-\[10px\].p-5 .flex.items-start.justify-between > .text-right {
+    text-align: left;
+  }
+  
+  .bg-\[\#1A1A1A\].rounded-\[10px\].p-5 p.text-\[42px\] {
+    font-size: 2rem;
+  }
+
+  /* Stats Grid */
+  .grid.grid-cols-2.lg\:grid-cols-4.gap-3 {
+    gap: 0.5rem;
+  }
+  
+  .grid.grid-cols-2.lg\:grid-cols-4.gap-3 > div.px-4.py-4 {
+    padding: 0.75rem;
+  }
+  
+  .grid.grid-cols-2.lg\:grid-cols-4.gap-3 > div p.text-\[22px\] {
+    font-size: 1.125rem;
+  }
+
+  /* White Cards (Ways to Earn, Redeem, History) */
+  .bg-white.border.border-\[\#E9E9E9\].rounded-\[10px\].p-5 {
+    padding: 1rem;
+  }
+
+  /* Earn Points Cards */
+  .grid.grid-cols-1.sm\:grid-cols-2.gap-3 > div.p-3\.5 {
+    padding: 0.75rem;
+  }
+
+  /* Redeem Input Row */
+  .bg-white.border.border-\[\#E9E9E9\].rounded-\[10px\].p-5 .flex.gap-2.mb-3 {
+    flex-direction: column;
+  }
+  
+  .bg-white.border.border-\[\#E9E9E9\].rounded-\[10px\].p-5 .flex.gap-2.mb-3 button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Transaction History Tabs */
+  div[role="tablist"][aria-label="Transaction history filters"] button {
+    font-size: 0.6875rem;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+
+  /* Transaction List Items */
+  div[role="tabpanel"] .px-5.py-3\.5 {
+    padding: 0.75rem 1rem;
+  }
+
+  /* Pagination Bar */
+  .px-5.py-3.border-t.border-\[\#F0F0F0\] {
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+/* ============================================================
+   EDIT PROFILE PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Reduce padding on the main form cards */
+  form[noValidate] .bg-white.border.border-\[\#E9E9E9\].rounded-\[10px\].p-5.mb-4 {
+    padding: 1.25rem;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Form cards outer padding */
+  form[noValidate] .bg-white.border.border-\[\#E9E9E9\].rounded-\[10px\].p-5.mb-4 {
+    padding: 1rem;
+  }
+
+  /* Profile Photo Section */
+  form[noValidate] .flex.items-center.gap-5 {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  /* Photo Upload & Remove Buttons */
+  form[noValidate] .flex.items-center.gap-5 .flex.items-center.gap-2 {
+    flex-direction: column;
+    width: 100%;
+    align-items: stretch;
+  }
+  
+  form[noValidate] .flex.items-center.gap-5 .flex.items-center.gap-2 button {
+    width: 100%;
+    justify-content: center;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+  }
+
+  /* Form Grids -> Stack to 1 column */
+  form[noValidate] .grid.grid-cols-2.gap-3.mb-3 {
+    grid-template-columns: 1fr;
+  }
+
+  /* Email change warning note */
+  form[noValidate] #email-change-note {
+    padding: 0.75rem;
+  }
+
+  /* Bottom Action Buttons (Cancel / Save) */
+  form[noValidate] > .flex.items-center.justify-end.gap-3 {
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+  
+  form[noValidate] > .flex.items-center.justify-end.gap-3 button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ============================================================
+   NOTIFICATION CENTER PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Reduce padding on the main container elements */
+  .bg-white.border.border-\[#E9E9E9\].rounded-\[10px\].overflow-hidden > .px-5.py-4,
+  .bg-white.border.border-\[#E9E9E9\].rounded-\[10px\].overflow-hidden .divide-y > div > .px-5.py-4,
+  .bg-white.border.border-\[#E9E9E9\].rounded-\[10px\].overflow-hidden .px-5.py-2,
+  .bg-white.border.border-\[#E9E9E9\].rounded-\[10px\].overflow-hidden > .px-5.py-3\.5 {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Main Header */
+  .bg-white.border.border-\[#E9E9E9\].rounded-\[10px\].overflow-hidden > .px-5.py-4 {
+    padding: 1rem;
+  }
+  
+  .bg-white.border.border-\[#E9E9E9\].rounded-\[10px\].overflow-hidden > .px-5.py-4 h1.text-\[15px\] {
+    font-size: 0.875rem;
+  }
+
+  /* Tab Bar */
+  .bg-white.border.border-\[#E9E9E9\].rounded-\[10px\].overflow-hidden > .flex.border-b[role="tablist"] button {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    font-size: 0.6875rem;
+  }
+
+  /* Date Group Header */
+  .bg-white.border.border-\[#E9E9E9\].rounded-\[10px\].overflow-hidden .px-5.py-2 {
+    padding: 0.375rem 1rem;
+  }
+  
+  .bg-white.border.border-\[#E9E9E9\].rounded-\[10px\].overflow-hidden .px-5.py-2 p.text-\[11px\] {
+    font-size: 0.625rem;
+  }
+
+  /* Notification Item */
+  .bg-white.border.border-\[#E9E9E9\].rounded-\[10px\].overflow-hidden .divide-y > div > .px-5.py-4 {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+  
+  .bg-white.border.border-\[#E9E9E9\].rounded-\[10px\].overflow-hidden .divide-y .w-9.h-9 {
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  .bg-white.border.border-\[#E9E9E9\].rounded-\[10px\].overflow-hidden .divide-y .w-9.h-9 svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  .bg-white.border.border-\[#E9E9E9\].rounded-\[10px\].overflow-hidden .divide-y p.text-\[13px\] {
+    font-size: 0.75rem;
+  }
+  
+  .bg-white.border.border-\[#E9E9E9\].rounded-\[10px\].overflow-hidden .divide-y p.text-\[12px\] {
+    font-size: 0.6875rem;
+  }
+
+  /* Pagination Bar */
+  .bg-white.border.border-\[#E9E9E9\].rounded-\[10px\].overflow-hidden > .px-5.py-3\.5.border-t {
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+/* ============================================================
+   ADDRESS MANAGEMENT PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+  /* Tailwind's md:grid-cols-2 naturally handles the layout here */
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Top Header Bar */
+  .mb-4.flex.items-center.justify-between {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.875rem;
+  }
+  
+  .mb-4.flex.items-center.justify-between > button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Address Card Padding & Actions */
+  .border-2.rounded-\[10px\].p-4 {
+    padding: 1rem;
+  }
+
+  .border-2.rounded-\[10px\].p-4 .flex.items-center.gap-3.mt-3.pt-3 {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  /* Add New Address Placeholder */
+  .border-dashed.min-h-\[160px\] {
+    min-height: 8rem;
+    padding: 1.5rem 1rem;
+  }
+
+  /* Address Label Buttons (Home, Work, Other) */
+  form.space-y-3 .flex.gap-2 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  form.space-y-3 .flex.gap-2 button {
+    padding-left: 0;
+    padding-right: 0;
+    text-align: center;
+  }
+
+  /* Form Grids -> Stack to 1 column */
+  form.space-y-3 .grid.grid-cols-2.gap-3 {
+    grid-template-columns: 1fr;
+  }
+
+  /* Action Buttons (Cancel / Save) */
+  form.space-y-3 .flex.gap-3.pt-2 {
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+  
+  form.space-y-3 .flex.gap-3.pt-2 button {
+    width: 100%;
+  }
+}
+
+/* ============================================================
+RETURN STATUS PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Make the progress bar section horizontally scrollable */
+  .max-w-\[900px\] section[aria-labelledby="return-progress-heading"] {
+    overflow-x: auto;
+    padding-bottom: 1.5rem;
+  }
+
+  .max-w-\[900px\] section[aria-labelledby="return-progress-heading"] > div[role="list"] {
+    min-width: 580px;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Top Summary Card */
+  .max-w-\[900px\] > .bg-white.border.border-\[\#E9E9E9\].rounded-\[10px\].p-5.mb-4 {
+    padding: 1rem;
+  }
+  
+  .max-w-\[900px\] > .bg-white.border.border-\[\#E9E9E9\].rounded-\[10px\].p-5.mb-4 .flex.items-start.justify-between {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  /* Progress Bar Section */
+  .max-w-\[900px\] section[aria-labelledby="return-progress-heading"] {
+    padding: 1rem;
+  }
+  
+  .max-w-\[900px\] section[aria-labelledby="return-progress-heading"] > div[role="list"] {
+    min-width: 480px;
+  }
+  
+  .max-w-\[900px\] section[aria-labelledby="return-progress-heading"] .w-10.h-10 {
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  .max-w-\[900px\] section[aria-labelledby="return-progress-heading"] p.text-\[10px\] {
+    font-size: 0.5625rem;
+  }
+
+  /* Expected Refund Box */
+  .max-w-\[900px\] section[aria-labelledby="return-progress-heading"] .mt-6.bg-\[\#F8F8F8\] {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+  
+  .max-w-\[900px\] section[aria-labelledby="return-progress-heading"] .mt-6.bg-\[\#F8F8F8\] .text-right {
+    text-align: left;
+  }
+
+  /* 3 Info Cards Grid */
+  .max-w-\[900px\] .grid.grid-cols-1.md\:grid-cols-3 > div.p-4 {
+    padding: 1rem;
+  }
+
+  /* Items Section */
+  .max-w-\[900px\] section[aria-labelledby="return-items-heading"] .px-5.py-3\.5 {
+    padding: 0.75rem 1rem;
+  }
+  
+  .max-w-\[900px\] section[aria-labelledby="return-items-heading"] li.px-5.py-4 {
+    padding: 0.75rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+  }
+  
+  .max-w-\[900px\] section[aria-labelledby="return-items-heading"] li img.w-14.h-14 {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  /* Activity Log Section */
+  .max-w-\[900px\] section[aria-labelledby="return-activity-heading"] {
+    padding: 1rem;
+  }
+
+  /* Nav Actions */
+  .max-w-\[900px\] nav[aria-label="Return actions"] {
+    flex-direction: column;
+  }
+  
+  .max-w-\[900px\] nav[aria-label="Return actions"] .flex.gap-2 {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .max-w-\[900px\] nav[aria-label="Return actions"] a,
+  .max-w-\[900px\] nav[aria-label="Return actions"] button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ============================================================
+   RETURN REQUEST PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Step 2 reasons grid - tighten padding to fit 2 columns nicely */
+  .max-w-\[900px\] section[aria-labelledby="step2-heading"] .grid.grid-cols-2 label {
+    padding: 0.75rem;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+  
+  /* Top Order Info Card */
+  .max-w-\[900px\] > .bg-white.border.border-\[\#E9E9E9\].px-5.py-4 {
+    padding: 1rem;
+  }
+
+  .max-w-\[900px\] > .bg-white.border.border-\[\#E9E9E9\].px-5.py-4 .flex.items-center.justify-between {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Step Section Headers */
+  .max-w-\[900px\] section .px-5.py-3\.5 {
+    padding: 0.75rem 1rem;
+  }
+  
+  .max-w-\[900px\] section h2.text-\[13px\] {
+    font-size: 0.75rem;
+  }
+
+  /* Step 1: Items List */
+  .max-w-\[900px\] section[aria-labelledby="step1-heading"] li.px-5.py-4 {
+    padding: 0.75rem 1rem;
+    gap: 0.625rem;
+    flex-wrap: wrap;
+  }
+
+  .max-w-\[900px\] section[aria-labelledby="step1-heading"] li img.w-14.h-14 {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  /* Step 2: Reasons Grid -> Stack to 1 column */
+  .max-w-\[900px\] section[aria-labelledby="step2-heading"] .grid.grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+
+  /* Step 2: Photo Upload Box */
+  .max-w-\[900px\] section[aria-labelledby="step2-heading"] .border-dashed.px-5.py-8 {
+    padding: 1.5rem 1rem;
+  }
+
+  .max-w-\[900px\] section[aria-labelledby="step2-heading"] .border-dashed.px-5.py-8 p.text-\[13px\] {
+    font-size: 0.75rem;
+  }
+
+  /* Step 3: Resolutions List */
+  .max-w-\[900px\] section[aria-labelledby="step3-heading"] label.p-4 {
+    padding: 0.75rem 1rem;
+    align-items: flex-start;
+  }
+  
+  .max-w-\[900px\] section[aria-labelledby="step3-heading"] label.p-4 span.text-xl {
+    margin-top: 0.125rem;
+  }
+
+  /* Bottom Action Buttons -> Stack vertically */
+  .max-w-\[900px\] .flex.items-center.justify-between.gap-3.pt-2 {
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+  
+  .max-w-\[900px\] .flex.items-center.justify-between.gap-3.pt-2 > * {
+    width: 100%;
+    justify-content: center;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+}
+
+/* ============================================================
+   ORDER TRACKING PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Make the progress bar section horizontally scrollable */
+  .max-w-\[1280px\] section[aria-labelledby="progress-heading"] {
+    overflow-x: auto;
+    /* Add padding to make space for the scrollbar without hiding content */
+    padding-bottom: 1.5rem;
+  }
+
+  .max-w-\[1280px\] section[aria-labelledby="progress-heading"] > div[role="list"] {
+    min-width: 640px; /* Force the container to be wide */
+  }
+
+  /* Stack the 3-column info grid */
+  .max-w-\[1280px\] .grid.grid-cols-1.md\:grid-cols-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* --- 1. Top Search Card --- */
+  .max-w-\[1280px\] .bg-white.border .p-5 {
+    padding: 1rem;
+  }
+
+  .max-w-\[1280px\] .bg-white.border h1.text-\[18px\] {
+    font-size: 1rem;
+  }
+
+  .max-w-\[1280px\] .bg-white.border .flex.gap-2[role="search"] {
+    flex-direction: column;
+  }
+
+  .max-w-\[1280px\] .bg-white.border .flex.gap-2[role="search"] button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* --- 2. Order Summary Header --- */
+  .max-w-\[1280px\] .bg-white.border .flex.items-start.justify-between {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.625rem;
+  }
+
+  .max-w-\[1280px\] .bg-white.border h2.text-\[16px\] {
+    font-size: 0.875rem;
+  }
+
+  /* --- 3. Shipment Progress Bar --- */
+  .max-w-\[1280px\] section[aria-labelledby="progress-heading"] {
+    padding: 1rem;
+  }
+
+  .max-w-\[1280px\] section[aria-labelledby="progress-heading"] > div[role="list"] {
+    min-width: 540px; /* Slightly smaller for mobile */
+  }
+
+  .max-w-\[1280px\] section[aria-labelledby="progress-heading"] .w-10.h-10 {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .max-w-\[1280px\] section[aria-labelledby="progress-heading"] .text-\[11px\] {
+    font-size: 0.625rem;
+  }
+
+  .max-w-\[1280px\] section[aria-labelledby="progress-heading"] .max-w-\[72px\] {
+    max-width: 50px;
+  }
+
+  /* Estimated Delivery Box */
+  .max-w-\[1280px\] section[aria-labelledby="progress-heading"] .mt-6.bg-\[\#F8F8F8\] {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+
+  .max-w-\[1280px\] section[aria-labelledby="progress-heading"] .mt-6.bg-\[\#F8F8F8\] .text-right {
+    text-align: left;
+  }
+
+  /* --- 4. Activity Log --- */
+  .max-w-\[1280px\] section[aria-labelledby="activity-heading"] {
+    padding: 1rem;
+  }
+
+  /* --- 5. Info Cards (Address, Carrier, etc.) --- */
+  .max-w-\[1280px\] .grid.grid-cols-1.md\:grid-cols-3.gap-4 > div.p-4 {
+    padding: 1rem;
+  }
+
+  /* --- 6. Items List --- */
+  .max-w-\[1280px\] section[aria-labelledby="shipment-items-heading"] li.px-5.py-4 {
+    padding: 0.75rem 1rem;
+  }
+
+  /* --- 7. Action Buttons --- */
+  .max-w-\[1280px\] nav[aria-label="Order actions"] {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .max-w-\[1280px\] nav[aria-label="Order actions"] a,
+  .max-w-\[1280px\] nav[aria-label="Order actions"] button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ============================================================
+   FAQ PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Search Header */
+  .bg-\[\#F5F5F5\].border.border-\[\#E9E9E9\].rounded-\[10px\].px-8.py-8 {
+    padding: 1.5rem;
+  }
+
+  /* Contact Support Section */
+  section[aria-labelledby="contact-support-heading"].p-6 {
+    padding: 1.25rem;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Search Header */
+  .bg-\[\#F5F5F5\].border.border-\[\#E9E9E9\].rounded-\[10px\].px-8.py-8 {
+    padding: 1.25rem 1rem;
+  }
+  
+  .bg-\[\#F5F5F5\].border.border-\[\#E9E9E9\].rounded-\[10px\].px-8.py-8 h1 {
+    font-size: 1.25rem;
+  }
+  
+  .bg-\[\#F5F5F5\].border.border-\[\#E9E9E9\].rounded-\[10px\].px-8.py-8 p.text-\[13px\] {
+    font-size: 0.75rem;
+  }
+
+  /* Search Input & Button */
+  div[role="search"] input.px-4.py-2\.5 {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  div[role="search"] button.px-5.py-2\.5 {
+    font-size: 0.75rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  /* FAQ Category Headings */
+  section[aria-labelledby^="section-title"] .flex.items-center.gap-2\.5 {
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  section[aria-labelledby^="section-title"] h2.text-\[18px\] {
+    font-size: 1rem;
+  }
+
+  /* FAQ Items (Accordions) */
+  section[aria-labelledby^="section-title"] button.px-5.py-4 {
+    padding: 0.75rem 1rem;
+  }
+  
+  section[aria-labelledby^="section-title"] button.px-5.py-4 span.text-\[13px\] {
+    font-size: 0.75rem;
+  }
+  
+  section[aria-labelledby^="section-title"] .px-5.pb-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  section[aria-labelledby^="section-title"] p.text-\[13px\] {
+    font-size: 0.75rem;
+  }
+
+  /* Contact Support Section */
+  section[aria-labelledby="contact-support-heading"].p-6 {
+    padding: 1rem;
+  }
+  
+  section[aria-labelledby="contact-support-heading"] h3.text-\[16px\] {
+    font-size: 1rem;
+  }
+  
+  section[aria-labelledby="contact-support-heading"] .p-5 {
+    padding: 1rem;
+  }
+}
+
+/* ============================================================
+   ERROR 404 PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Reduce inner card padding */
+  .max-w-\[1280px\].mx-auto.px-4.py-8.pb-14 > .max-w-\[860px\] {
+    padding: 2rem 1.5rem;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Tighter container padding */
+  .max-w-\[1280px\].mx-auto.px-4.py-8.pb-14 > .max-w-\[860px\] {
+    padding: 1.5rem 1rem;
+  }
+
+  /* Scale the custom illustration down slightly to prevent overflow */
+  .max-w-\[1280px\].mx-auto.px-4.py-8.pb-14 > .max-w-\[860px\] .relative.flex.items-end.justify-center.select-none {
+    transform: scale(0.8);
+    transform-origin: center bottom;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Headings & Text */
+  .max-w-\[1280px\].mx-auto.px-4.py-8.pb-14 > .max-w-\[860px\] h1.text-\[28px\] {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.py-8.pb-14 > .max-w-\[860px\] p.text-\[13px\].max-w-\[520px\] {
+    font-size: 0.75rem;
+  }
+
+  /* Search Box */
+  .max-w-\[1280px\].mx-auto.px-4.py-8.pb-14 > .max-w-\[860px\] div[role="search"] input {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .max-w-\[1280px\].mx-auto.px-4.py-8.pb-14 > .max-w-\[860px\] div[role="search"] button {
+    font-size: 0.75rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Action Buttons (stack vertically) */
+  .max-w-\[1280px\].mx-auto.px-4.py-8.pb-14 > .max-w-\[860px\] nav[aria-label="Recovery options"] {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .max-w-\[1280px\].mx-auto.px-4.py-8.pb-14 > .max-w-\[860px\] nav[aria-label="Recovery options"] a,
+  .max-w-\[1280px\].mx-auto.px-4.py-8.pb-14 > .max-w-\[860px\] nav[aria-label="Recovery options"] button {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.75rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  /* Error Reference text */
+  .max-w-\[1280px\].mx-auto.px-4.py-8.pb-14 > .max-w-\[860px\] p.text-\[11px\].mt-10 {
+    font-size: 0.625rem;
+    margin-top: 1.5rem;
+  }
+}
+
+/* ============================================================
+   CONTACT US PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Contact Card Inner Paddings */
+  .bg-white.border.border-\[\#E9E9E9\].rounded-\[14px\].grid > .bg-\[\#1A1A1A\].p-8 {
+    padding: 1.5rem;
+  }
+  
+  .bg-white.border.border-\[\#E9E9E9\].rounded-\[14px\].grid > .p-8:not(.bg-\[\#1A1A1A\]) {
+    padding: 1.5rem;
+  }
+
+  /* Map height reduction on tablet */
+  .rounded-\[12px\].overflow-hidden.border.border-\[\#E9E9E9\].shadow-sm.h-\[300px\] {
+    height: 16rem;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* --- 1. Contact Card Left Side (Dark Panel) --- */
+  .bg-white.border.border-\[\#E9E9E9\].rounded-\[14px\].grid > .bg-\[\#1A1A1A\].p-8 {
+    padding: 1.25rem;
+    gap: 1.25rem;
+  }
+
+  .bg-\[\#1A1A1A\].p-8 h1.text-\[26px\] {
+    font-size: 1.25rem;
+  }
+
+  .bg-\[\#1A1A1A\].p-8 p.text-\[13px\] {
+    font-size: 0.75rem;
+  }
+
+  /* Contact Details List */
+  ul[aria-label="Contact details"].space-y-5 {
+    gap: 0.875rem;
+  }
+
+  ul[aria-label="Contact details"] .w-9.h-9 {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  ul[aria-label="Contact details"] .w-9.h-9 svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  ul[aria-label="Contact details"] a.text-\[14px\],
+  ul[aria-label="Contact details"] address p.text-\[14px\] {
+    font-size: 0.75rem;
+  }
+
+  ul[aria-label="Contact details"] p.text-\[11px\] {
+    font-size: 0.625rem;
+  }
+
+  /* --- 2. Contact Card Right Side (Form Panel) --- */
+  .bg-white.border.border-\[\#E9E9E9\].rounded-\[14px\].grid > .p-8:not(.bg-\[\#1A1A1A\]) {
+    padding: 1.25rem;
+  }
+
+  .bg-white.border.border-\[\#E9E9E9\].rounded-\[14px\].grid h2.text-\[26px\] {
+    font-size: 1.25rem;
+  }
+
+  /* Form Elements */
+  form[noValidate] label.text-\[12px\] {
+    font-size: 0.6875rem;
+  }
+
+  form[noValidate] input,
+  form[noValidate] textarea {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.625rem;
+  }
+
+  form[noValidate] button[type="submit"] {
+    font-size: 0.75rem;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+  }
+
+  /* --- 3. Location Map --- */
+  .rounded-\[12px\].overflow-hidden.border.border-\[\#E9E9E9\].shadow-sm.h-\[300px\] {
+    height: 12rem;
+  }
+
+  /* --- 4. Services Section --- */
+  section[aria-labelledby="services-heading"].py-12 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  /* Stack service boxes to 1 column */
+  section[aria-labelledby="services-heading"] .grid.grid-cols-2.sm\:grid-cols-3.lg\:grid-cols-5 {
+    grid-template-columns: 1fr;
+  }
+
+  /* --- 5. Brands Section --- */
+  section[aria-labelledby="brands-contact-heading"].py-10 {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  section[aria-labelledby="brands-contact-heading"] h2.text-\[22px\] {
+    font-size: 1.125rem;
+  }
+}
+
+/* ============================================================
+   ORDER HISTORY PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Expand search bar to use available space instead of max 280px */
+  .px-5.py-3.border-b.border-\[\#F0F0F0\].flex.items-center.gap-3 .max-w-\[280px\] {
+    max-width: 100%;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Stats Grid: Tighter spacing and smaller text */
+  .grid.grid-cols-2.lg\:grid-cols-4.gap-3 {
+    gap: 0.5rem;
+  }
+
+  .grid.grid-cols-2.lg\:grid-cols-4.gap-3 > div {
+    padding: 0.75rem;
+  }
+
+  .grid.grid-cols-2.lg\:grid-cols-4.gap-3 > div p.text-\[11px\] {
+    font-size: 0.625rem;
+  }
+
+  .grid.grid-cols-2.lg\:grid-cols-4.gap-3 > div p.text-\[22px\] {
+    font-size: 1.125rem;
+  }
+
+  /* Tabs: Slightly smaller padding to fit more on screen */
+  div[role="tablist"][aria-label="Order filters"] button {
+    padding: 0.625rem 1rem;
+    font-size: 0.6875rem;
+  }
+
+  /* Search & Count Bar: Stack vertically on mobile */
+  .px-5.py-3.border-b.border-\[\#F0F0F0\].flex.items-center.gap-3 {
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.625rem;
+  }
+
+  .px-5.py-3.border-b.border-\[\#F0F0F0\].flex.items-center.gap-3 p.ml-auto {
+    margin-left: 0;
+  }
+
+  /* Table: Tighter cell paddings */
+  div[role="tabpanel"] table th.px-4 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-size: 0.625rem;
+  }
+
+  div[role="tabpanel"] table td.px-4 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  div[role="tabpanel"] table td .flex.items-center.gap-2\.5.flex-wrap {
+    gap: 0.375rem;
+  }
+
+  /* Pagination Bar: Stack vertically */
+  .px-5.py-3\.5.border-t.border-\[\#F0F0F0\].flex.items-center.justify-between {
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+/* ============================================================
+   CART PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Stack main layout */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 > .flex.gap-6.items-start {
+    flex-direction: column;
+  }
+
+  /* Sidebar full width */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .w-\[300px\].flex-shrink-0 {
+    width: 100%;
+  }
+
+  /* Remove stickiness from sidebar on tablet/mobile */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .w-\[300px\].flex-shrink-0 > .sticky {
+    position: static;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Outer padding tighter */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    padding-bottom: 2.5rem;
+  }
+
+  /* Header adjustments */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .flex.items-center.justify-between.mb-5 h1 {
+    font-size: 1.125rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .flex.items-center.justify-between.mb-5 h1 span {
+    font-size: 0.875rem;
+  }
+
+  /* Empty state tighter */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .py-20 {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .text-6xl {
+    font-size: 3rem;
+  }
+
+  /* Loyalty points banner */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .bg-amber-50.px-5.py-3 {
+    padding: 0.75rem;
+    align-items: flex-start;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .bg-amber-50.px-5.py-3 .w-9.h-9 {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .bg-amber-50.px-5.py-3 .w-9.h-9 svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .bg-amber-50.px-5.py-3 p.text-\[13px\] {
+    font-size: 0.6875rem;
+  }
+
+  /* Cart Table overrides */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 table {
+    min-width: 500px;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 table th {
+    font-size: 0.625rem;
+    padding: 0.625rem 0.5rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 table td.px-5.py-4,
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 table td.px-4.py-4 {
+    padding: 0.625rem 0.5rem;
+  }
+  
+  /* Product Image & Details */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 table img.w-\[70px\].h-\[70px\] {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 table a.text-\[13px\],
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 table span.text-\[14px\] {
+    font-size: 0.75rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 table span.text-\[13px\] {
+    font-size: 0.6875rem;
+  }
+
+  /* Quantity Buttons */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 table button.w-8.h-8 {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 table span.w-10.h-8 {
+    width: 1.75rem;
+    height: 1.5rem;
+    font-size: 0.75rem;
+  }
+  
+  /* Remove Button */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 table button.w-7.h-7 {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  /* Update Cart & Continue Shopping Bar */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .border-t.border-\[\#E9E9E9\].px-5.py-3\.5 {
+    padding: 0.75rem 1rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .border-t.border-\[\#E9E9E9\].px-5.py-3\.5 a,
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .border-t.border-\[\#E9E9E9\].px-5.py-3\.5 button {
+    font-size: 0.6875rem;
+  }
+
+  /* Sidebar Card */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .w-\[300px\].flex-shrink-0 > div.p-5 {
+    padding: 1rem;
+  }
+
+  /* Promo code inputs */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .w-\[300px\].flex-shrink-0 input {
+    font-size: 0.6875rem;
+    padding: 0.5rem 0.625rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .w-\[300px\].flex-shrink-0 button.px-3\.5 {
+    font-size: 0.6875rem;
+    padding-left: 0.625rem;
+    padding-right: 0.625rem;
+  }
+
+  /* Order Summary Text */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .w-\[300px\].flex-shrink-0 .text-\[13px\] {
+    font-size: 0.75rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .w-\[300px\].flex-shrink-0 .text-\[15px\] {
+    font-size: 0.875rem;
+  }
+
+  /* You May Also Like / Suggestion Cards */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 h3.text-\[16px\] {
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .w-\[140px\] {
+    width: 7.5rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .w-\[140px\] .h-\[110px\] {
+    height: 6.25rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .w-\[140px\] .p-2\.5 {
+    padding: 0.5rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .w-\[140px\] p.text-\[11px\] {
+    font-size: 0.625rem;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .w-\[140px\] p.text-\[12px\] {
+    font-size: 0.6875rem;
+  }
+}
+
+/* ============================================================
+   GUEST CHECKOUT PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+  /* Outer layout stacking is handled by Checkout / Cart Page rules */
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Guest login top banner */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .bg-amber-50.px-5.py-3\.5 {
+    padding: 1rem;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .bg-amber-50.px-5.py-3\.5 p {
+    font-size: 0.75rem;
+    text-align: center;
+  }
+
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .bg-amber-50.px-5.py-3\.5 .flex.gap-2 {
+    width: 100%;
+  }
+
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 .bg-amber-50.px-5.py-3\.5 .flex.gap-2 a {
+    flex: 1;
+    text-align: center;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+  }
+
+  /* Sections padding */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 section.p-6 {
+    padding: 1rem;
+  }
+
+  /* Section Headers */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 section .flex.items-center.gap-3.mb-5 h2 {
+    font-size: 0.875rem;
+  }
+
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 section .flex.items-center.gap-3.mb-5 .w-7.h-7 {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.6875rem;
+  }
+
+  /* Form grids -> Stack to 1 column */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 section .grid.grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 section .col-span-2 {
+    grid-column: span 1 / span 1;
+  }
+
+  /* Form inputs */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 section input.w-full.border {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.625rem;
+  }
+
+  /* Delivery weight note */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 section .bg-\[\#F5F5F5\].px-4.py-2\.5 p {
+    font-size: 0.6875rem;
+  }
+
+  /* Confirm Checkboxes */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 section label.flex.items-start span.text-\[12px\] {
+    font-size: 0.6875rem;
+  }
+
+  /* Place Order Button */
+  .max-w-\[1280px\].mx-auto.px-4.pb-14 section button.text-\[15px\] {
+    font-size: 0.8125rem;
+  }
+}
+
+/* ============================================================
+   PAYMENT DENIED PAGE — RESPONSIVE
+   ============================================================ */
+
+/* ─── TABLET 768px ───────────────────────────────────────── */
+@media (max-width: 48rem) {
+
+  /* Reduce the height and padding of the illustration panel when stacked */
+  .min-h-screen.bg-\[\#F8F8F8\] .bg-red-50 {
+    min-height: 16rem;
+    padding: 2rem;
+  }
+  
+  .min-h-screen.bg-\[\#F8F8F8\] .bg-red-50 img {
+    max-width: 12rem;
+  }
+}
+
+/* ─── MOBILE 375px ───────────────────────────────────────── */
+@media (max-width: 23.4375rem) {
+
+  /* Outer padding slightly tighter */
+  .min-h-screen.bg-\[\#F8F8F8\] {
+    padding-left: 0.875rem;
+    padding-right: 0.875rem;
+  }
+
+  /* Illustration panel smaller for mobile */
+  .min-h-screen.bg-\[\#F8F8F8\] .bg-red-50 {
+    min-height: 12rem;
+    padding: 1.5rem;
+  }
+  
+  .min-h-screen.bg-\[\#F8F8F8\] .bg-red-50 img {
+    max-width: 10rem;
+  }
+
+  /* Main content padding */
+  .min-h-screen.bg-\[\#F8F8F8\] main {
+    padding: 1.5rem 1.25rem;
+  }
+
+  /* Warning Icon */
+  .min-h-screen.bg-\[\#F8F8F8\] main .w-16.h-16 {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Headings & Text */
+  .min-h-screen.bg-\[\#F8F8F8\] main h1.text-\[24px\] {
+    font-size: 1.25rem;
+  }
+  
+  .min-h-screen.bg-\[\#F8F8F8\] main p.text-\[13px\].mb-8 {
+    font-size: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Failure reasons box */
+  .min-h-screen.bg-\[\#F8F8F8\] main .bg-\[\#F8F8F8\].border {
+    padding: 0.875rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .min-h-screen.bg-\[\#F8F8F8\] main .bg-\[\#F8F8F8\].border p.text-\[12px\],
+  .min-h-screen.bg-\[\#F8F8F8\] main .bg-\[\#F8F8F8\].border ul li {
+    font-size: 0.6875rem;
+  }
+
+  /* Action Buttons - Stack vertically on mobile */
+  .min-h-screen.bg-\[\#F8F8F8\] main .flex.gap-3 {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .min-h-screen.bg-\[\#F8F8F8\] main .flex.gap-3 button,
+  .min-h-screen.bg-\[\#F8F8F8\] main .flex.gap-3 a {
+    width: 100%;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    font-size: 0.75rem;
+  }
+}
