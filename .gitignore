@@ -1,0 +1,42 @@
+# Dependencies
+node_modules
+
+# Build output
+/dist
+/build
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+.env.staging
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Vite cache
+.vite/
+
+# Coverage
+coverage/
+
+# Misc
+*.pem
+.cache
