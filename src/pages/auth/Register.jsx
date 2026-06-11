@@ -72,13 +72,16 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (form.password !== form.confirm) { toast.error('Passwords do not match'); return; }
+    if (!form.firstName.trim())         { toast.error('First Name is required'); return; }
+    if (!form.lastName.trim())          { toast.error('Last Name is required'); return; }
+    if (!form.email.trim())             { toast.error('Email Address is required'); return; }
     if (form.password.length < 8)       { toast.error('Password must be at least 8 characters'); return; }
-    if (!form.terms)                     { toast.error('Please accept the Terms & Conditions'); return; }
+    if (form.password !== form.confirm) { toast.error('Passwords do not match'); return; }
+    if (!form.terms)                    { toast.error('Please agree to terms and conditions'); return; }
     const name = `${form.firstName} ${form.lastName}`.trim();
     try {
       const result = await dispatch(register({ name, email: form.email, password: form.password, phone: form.phone })).unwrap();
-      toast.success(result.message || 'Account created! Please check your email to verify.');
+      toast.success(result.message ||'Account created successfully!');
       navigate('/login');
     } catch (err) {
       toast.error(typeof err === 'string' ? err : err?.message || 'Registration failed');
