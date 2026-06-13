@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 /* ============================================================
    LOGIN PAGE — RESPONSIVE
    Tablet : max-width 768px
@@ -972,6 +978,16 @@
   /* Hide scroll arrows on mobile in favor of native touch swiping */
   .max-w-\[1280px\].mx-auto.px-10 .relative > button.w-9.h-9 {
     display: none;
+  }
+  
+  .max-w-\[1280px\].mx-auto.px-10 .relative > div:not(button)::-webkit-scrollbar {
+    display: none; /* Safari/Chrome */
+  }
+
+  .max-w-\[1280px\].mx-auto.px-10 .relative > div:not(button) > * {
+    flex: 0 0 65% !important; /* Shows 1 full item and hints at the next to indicate scrollability */
+    max-width: 65% !important;
+    scroll-snap-align: start;
   }
 }
 

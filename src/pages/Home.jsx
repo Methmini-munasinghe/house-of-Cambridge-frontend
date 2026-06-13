@@ -202,7 +202,7 @@ function FlashCard({ product }) {
   return (
     <Link
       to={`/product/${product._id}`}
-      className="group bg-white rounded-lg overflow-hidden hover:shadow-md transition-shadow flex flex-col"
+      className="group bg-white rounded-lg overflow-hidden hover:shadow-md transition-shadow flex flex-col h-full"
     >
       <div className="relative aspect-square bg-gray-50 overflow-hidden">
         <img
@@ -227,9 +227,11 @@ function FlashCard({ product }) {
           {product.name}
         </p>
         <p className="text-[14px] font-bold text-[#1A1A1A]">Rs. {price.toLocaleString()}</p>
+      <div className="min-h-[20px]">
         {pct > 0 && (
           <p className="text-[11px] text-gray-400 line-through mb-1">Rs. {original.toLocaleString()}</p>
         )}
+      </div>
         <span
           className="mt-2 w-full bg-[#FFB700] text-black text-[11px] font-semibold py-1.5 rounded hover:bg-amber-500 transition-colors text-center block"
           aria-hidden="true"
@@ -253,7 +255,7 @@ function FlashCardSkeleton() {
 
 export default function Home() {
   const dispatch = useDispatch();
-  const { flashSale, popular, homeNewArrivals } = useSelector((s) => s.products);
+  const { flashSale, popular, homeNewArrivals, categories } = useSelector((s) => s.products);
 
   const [slide, setSlide]                       = useState(0);
   const [beautyProducts, setBeautyProducts]     = useState([]);
@@ -287,15 +289,26 @@ export default function Home() {
   }, [startAuto]);
 
   useEffect(() => {
+    if (!categories || categories.length === 0) return;
+
     let cancelled = false;
-    api.get('/products', { params: { category: 'beauty',      limit: MAX_CATEGORY_PRODUCTS } })
-      .then((res) => { if (!cancelled) setBeautyProducts(res.data.products || []); })
-      .catch(() => {});
-    api.get('/products', { params: { category: 'electronics', limit: MAX_CATEGORY_PRODUCTS } })
-      .then((res) => { if (!cancelled) setElectronicsProducts(res.data.products || []); })
-      .catch(() => {});
+
+    const beautyId = categories.find((c) => c.name.toLowerCase().includes('beauty'))?._id;
+    const electronicsId = categories.find((c) => c.name.toLowerCase().includes('electronic'))?._id;
+
+    if (beautyId) {
+      api.get('/products', { params: { category: beautyId, limit: MAX_CATEGORY_PRODUCTS } })
+        .then((res) => { if (!cancelled) setBeautyProducts(res.data.products || []); })
+        .catch(() => {});
+    }
+    if (electronicsId) {
+      api.get('/products', { params: { category: electronicsId, limit: MAX_CATEGORY_PRODUCTS } })
+        .then((res) => { if (!cancelled) setElectronicsProducts(res.data.products || []); })
+        .catch(() => {});
+    }
+
     return () => { cancelled = true; };
-  }, []);
+  }, [categories]);
 
   const cur = HERO_SLIDES[slide];
 
@@ -421,7 +434,7 @@ export default function Home() {
               aria-label="Flash sale products"
             >
               {flashSale.slice(0, MAX_FLASH_CARDS).map((p) => (
-                <div key={p._id} role="listitem">
+            <div key={p._id} role="listitem" className="h-full">
                   <FlashCard product={p} />
                 </div>
               ))}

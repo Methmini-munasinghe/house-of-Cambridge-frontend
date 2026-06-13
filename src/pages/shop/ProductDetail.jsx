@@ -69,8 +69,33 @@ export default function ProductDetail() {
   const [submitting, setSubmitting] = useState(false);
   const scrollRef = useRef(null);
 
+  const productStock = safeInteger(product?.stock ?? 0);
+
   const safeId = id ? encodeURIComponent(id) : null;
   const isWishlisted = wishlist.some((p) => (p._id || p) === id);
+ const handleRatingChange = useCallback((s) => {
+    const rating = Math.min(5, Math.max(1, Math.round(s)));
+    setReview((prev) => ({ ...prev, rating }));
+  }, []);
+
+  const handleCommentChange = useCallback((e) => {
+    const val = e.target.value;
+    if (val.length <= MAX_REVIEW_LENGTH) {
+      setReview((prev) => ({ ...prev, comment: val }));
+    }
+  }, []);
+
+  const handleQtyDecrement = useCallback(() => setQty((q) => Math.max(1, q - 1)), []);
+  const handleQtyIncrement = useCallback(
+    () => setQty((q) => Math.min(productStock, MAX_QTY, q + 1)),
+    [productStock]
+  );
+
+  const scrollRelated = useCallback((dir) => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: dir * SCROLL_AMOUNT, behavior: 'smooth' });
+    }
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -107,7 +132,7 @@ export default function ProductDetail() {
     ? Math.min(99, Math.max(0, Math.round((1 - price / originalPrice) * 100)))
     : 0;
 
-  const productStock = safeInteger(product.stock);
+
   const productRatings = safeRating(product.ratings);
   const productNumReviews = safeInteger(product.numReviews);
   const productName = sanitizeText(product.name);
@@ -175,30 +200,7 @@ export default function ProductDetail() {
     }
   };
 
-  const handleRatingChange = useCallback((s) => {
-    const rating = Math.min(5, Math.max(1, Math.round(s)));
-    setReview((prev) => ({ ...prev, rating }));
-  }, []);
-
-  const handleCommentChange = useCallback((e) => {
-    const val = e.target.value;
-    if (val.length <= MAX_REVIEW_LENGTH) {
-      setReview((prev) => ({ ...prev, comment: val }));
-    }
-  }, []);
-
-  const handleQtyDecrement = useCallback(() => setQty((q) => Math.max(1, q - 1)), []);
-  const handleQtyIncrement = useCallback(
-    () => setQty((q) => Math.min(productStock, MAX_QTY, q + 1)),
-    [productStock]
-  );
-
-  const scrollRelated = useCallback((dir) => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: dir * SCROLL_AMOUNT, behavior: 'smooth' });
-    }
-  }, []);
-
+ 
   const relatedProducts = products
     .filter((p) => p._id && p._id !== id)
     .slice(0, MAX_RELATED);
