@@ -16,7 +16,7 @@ import {
 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
-const VAT_RATE = 0.08;
+const VAT_RATE = 0;
 
 const PAY_TABS = [
   { id: 'card',   label: 'Card' },
@@ -178,7 +178,7 @@ export default function GuestCheckoutPage() {
       fallback: 'Select method',
       green: shippingCost === 0 && !!shippingMethod,
     },
-    { label: 'VAT (8%)', value: `Rs. ${tax.toLocaleString()}` },
+    { label: 'VAT ', value: `Rs. ${tax.toLocaleString()}` },
   ];
 
   return (

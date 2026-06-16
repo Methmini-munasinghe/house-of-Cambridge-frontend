@@ -18,7 +18,7 @@ import {
 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
-const VAT_RATE = 0.08;
+const VAT_RATE = 0;
 
 const BLANK_ADDR = {
   firstName: '', lastName: '', phone: '',
@@ -676,7 +676,7 @@ export default function CheckoutPage() {
                   <dt className="text-[#60717B]">Shipping</dt>
                   <dd>{shippingMethod ? <span className={`font-medium ${shippingCost === 0 ? 'text-green-600' : 'text-[#1A1A1A]'}`}>{shippingCost === 0 ? 'Free' : `Rs. ${shippingCost.toLocaleString()}`}</span> : <span className="text-[#60717B] italic text-[12px]">Select method</span>}</dd>
                 </div>
-                <div className="flex justify-between text-[13px]"><dt className="text-[#60717B]">VAT (8%)</dt><dd className="font-medium text-[#1A1A1A]">Rs. {tax.toLocaleString()}</dd></div>
+                <div className="flex justify-between text-[13px]"><dt className="text-[#60717B]">VAT </dt><dd className="font-medium text-[#1A1A1A]">Rs. {tax.toLocaleString()}</dd></div>
                 <div className="border-t border-[#E9E9E9] pt-3 flex justify-between">
                   <dt className="text-[15px] font-black text-[#1A1A1A]">Total</dt>
                   <dd className="text-right"><span className="text-[15px] font-black text-[#1A1A1A]">Rs. {total.toLocaleString()}</span>{!shippingMethod && <p className="text-[10px] text-[#60717B]">* Excl. shipping</p>}</dd>
