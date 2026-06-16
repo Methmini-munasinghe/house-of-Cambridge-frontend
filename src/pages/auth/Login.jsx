@@ -202,7 +202,7 @@ export default function Login() {
             <Link to="/register" className="font-bold text-[#1A1A1A] hover:text-[#FFB700]">Create one free →</Link>
           </p>
           <p className="text-center mt-2">
-            <Link to="/shop" className="text-[13px] text-[#FFB700] font-medium hover:underline">Continue as Guest →</Link>
+            <Link to="/" className="text-[13px] text-[#FFB700] font-medium hover:underline">Continue as Guest →</Link>
           </p>
         </div>
       </div>
