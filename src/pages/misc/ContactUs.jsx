@@ -110,6 +110,21 @@ export default function ContactUs() {
     }
   }, [form]);
 
+  const newLocal = <div className="max-w-[1280px] mx-auto px-6 pb-10">
+    <div className="rounded-[12px] overflow-hidden border border-[#E9E9E9] shadow-sm h-[300px]">
+      <iframe
+        title="House of Cambridge location map"
+        src={`https://www.google.com/maps?q=${encodeURIComponent(
+          `${CONTACT_INFO.address}, ${CONTACT_INFO.country}`
+        )}&output=embed`}
+        width="100%"
+        height="100%"
+        style={{ border: 0 }}
+        allowFullScreen
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade" />
+    </div>
+  </div>;
   return (
     <Layout>
       <div className="max-w-[1280px] mx-auto px-6">
@@ -317,21 +332,7 @@ export default function ContactUs() {
         </div>
       </div>
 
-      <div className="max-w-[1280px] mx-auto px-6 pb-10">
-        <div className="rounded-[12px] overflow-hidden border border-[#E9E9E9] shadow-sm h-[300px]">
-          <iframe
-            title="House of Cambridge location map"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.197!2d79.9108!3d6.8401!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae25b2c0e6b0f0f%3A0x0!2sPannipitiya%2C%20Sri%20Lanka!5e0!3m2!1sen!2slk!4v1"
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            sandbox="allow-scripts allow-same-origin allow-popups"
-          />
-        </div>
-      </div>
+      {newLocal}
 
       <section className="bg-[#FAFAFA] py-12" aria-labelledby="services-heading">
         <div className="max-w-[1280px] mx-auto px-6">
