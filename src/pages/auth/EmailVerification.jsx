@@ -15,7 +15,7 @@ const VERIFIED_CHECKLIST = [
 function OTPInput({ onComplete }) {
   const [digits, setDigits] = useState(['', '', '', '', '', '']);
   const refs = useRef([]);
-
+npm 
   const handleChange = (i, val) => {
     const v = val.replace(/\D/g, '').slice(-1);
     const next = [...digits];
