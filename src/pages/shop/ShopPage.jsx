@@ -41,6 +41,7 @@ function safePageNumber(val, min = 1, max = 9999) {
 }
 
 function safePriceInput(val) {
+  if (val === '' || val === null || val === undefined) return '';
   const n = Number(val);
   if (!Number.isFinite(n) || n < 0) return '';
   return String(Math.min(MAX_PRICE_INPUT, Math.floor(n)));
@@ -52,12 +53,10 @@ export default function ShopPage() {
   const { products, loading, total, resPerPage, categories } = useSelector((s) => s.products);
 
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [priceMin, setPriceMin] = useState('');
-  const [priceMax, setPriceMax] = useState('');
   const [brandsExpanded, setBrandsExpanded] = useState(false);
   const [expandedCats, setExpandedCats] = useState(new Set());
 
-  const keyword    = sanitizeText(searchParams.get('keyword')    || '');
+  const keyword    = sanitizeText(searchParams.get('keyword') || searchParams.get('search') || '');
   const category   = sanitizeText(searchParams.get('category')   || '');
   const sortRaw    = searchParams.get('sort') || 'newest';
   const sort       = ALLOWED_SORTS.has(sortRaw) ? sortRaw : 'newest';
@@ -67,21 +66,32 @@ export default function ShopPage() {
   const preowned   = searchParams.get('preowned')   === 'true' ? 'true' : '';
   const newArrival = searchParams.get('newArrival') === 'true' ? 'true' : '';
 
+  const [priceMin, setPriceMin] = useState(minPrice);
+  const [priceMax, setPriceMax] = useState(maxPrice);
+
+  useEffect(() => {
+    setPriceMin(minPrice);
+    setPriceMax(maxPrice);
+  }, [minPrice, maxPrice]);
+
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchProducts({
-      keyword:    keyword   || undefined,
-      category:   category  || undefined,
-      sort,
-      page,
-      minPrice:   minPrice  || undefined,
-      maxPrice:   maxPrice  || undefined,
-      preowned:   preowned  || undefined,
-      newArrival: newArrival || undefined,
-    }));
+    const payload = { page };
+    
+    if (keyword)  payload.keyword = keyword;
+    if (category) payload.category = category;
+    if (sort)     payload.sort = sort;
+    
+    if (minPrice !== '') payload.minPrice = minPrice;
+    if (maxPrice !== '') payload.maxPrice = maxPrice;
+    
+    if (preowned)   payload.preowned = true;
+    if (newArrival) payload.newArrival = true;
+
+    dispatch(fetchProducts(payload));
   }, [dispatch, keyword, category, sort, page, minPrice, maxPrice, preowned, newArrival]);
 
   const updateParam = useCallback((key, value) => {
@@ -91,6 +101,10 @@ export default function ShopPage() {
     } else {
       delete params[key];
     }
+    if (key === 'category') {
+    delete params.keyword;
+      delete params.search;
+  }
     params.page = '1';
     setSearchParams(params);
   }, [searchParams, setSearchParams]);
@@ -105,8 +119,8 @@ export default function ShopPage() {
     const params = Object.fromEntries(searchParams);
     const safeMin = safePriceInput(priceMin);
     const safeMax = safePriceInput(priceMax);
-    if (safeMin) params.minPrice = safeMin; else delete params.minPrice;
-    if (safeMax) params.maxPrice = safeMax; else delete params.maxPrice;
+    if (safeMin !== '') params.minPrice = safeMin; else delete params.minPrice;
+    if (safeMax !== '') params.maxPrice = safeMax; else delete params.maxPrice;
     params.page = '1';
     setSearchParams(params);
   }, [priceMin, priceMax, searchParams, setSearchParams]);

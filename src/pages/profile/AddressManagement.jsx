@@ -14,6 +14,28 @@ const BLANK = {
 
 const MAX_ADDRESSES = 5;
 
+const PHONE_RE = /^[0-9\s\+\-\(\)]{7,20}$/;
+const POSTAL_CODE_RE = /^\d{5}$/;
+
+function validateForm(form) {
+  if (!form.fullName.trim()) return 'Full name is required.';
+  if (!form.addressLine1.trim()) return 'Address Line 1 is required.';
+  if (!form.city.trim()) return 'City is required.';
+  if (!form.state.trim()) return 'Province is required.';
+  if (!form.postalCode.trim()) return 'Postal code is required.';
+  if (form.country === 'Sri Lanka' && !POSTAL_CODE_RE.test(form.postalCode.trim())) return 'Please enter a valid 5-digit postal code (e.g. 90000).';
+  if (!form.phone.trim()) return 'Phone number is required.';
+  if (!PHONE_RE.test(form.phone.trim())) return 'Please enter a valid phone number.';
+  return null;
+}
+
+const decodeHtml = (str) => {
+  if (!str) return '';
+  const txt = document.createElement('textarea');
+  txt.innerHTML = str;
+  return txt.value;
+};
+
 export default function AddressManagement() {
   const dispatch = useDispatch();
   const { addresses } = useSelector((s) => s.user);
@@ -31,14 +53,28 @@ export default function AddressManagement() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const error = validateForm(form);
+    if (error) {
+      toast.error(error);
+      return;
+    }
+
+    console.log("form submitted:", form);
     if (editing) {
       const res = await dispatch(updateAddress({ id: editing, data: form }));
-      if (res.meta.requestStatus === 'fulfilled') { toast.success('Address updated'); closeForm(); }
-      else toast.error('Update failed');
+      if (res.meta.requestStatus === 'fulfilled') { 
+        toast.success('Address updated'); closeForm(); 
+      } else { 
+        toast.error(res.payload?.message || (res.payload?.issues && res.payload.issues[0]?.description) || 'Update failed'); 
+      }
     } else {
       const res = await dispatch(addAddress(form));
-      if (res.meta.requestStatus === 'fulfilled') { toast.success('Address added'); closeForm(); }
-      else toast.error('Add failed');
+      if (res.meta.requestStatus === 'fulfilled') { 
+        toast.success('Address added'); closeForm(); 
+      } else { 
+        toast.error(res.payload?.message || (res.payload?.issues && res.payload.issues[0]?.description) || 'Add failed'); 
+      }
     }
   };
 
@@ -86,9 +122,15 @@ export default function AddressManagement() {
             <div className="flex items-center gap-1.5 mb-2">
               <span className="text-[10px] font-bold bg-[#F0F0F0] text-[#60717B] px-2 py-0.5 rounded-full uppercase">{a.label}</span>
             </div>
-            <p className="text-[13px] font-bold text-[#1A1A1A] mb-0.5">{a.fullName}</p>
-            <p className="text-[12px] text-[#60717B]">{a.addressLine1}{a.addressLine2 ? `, ${a.addressLine2}` : ''}</p>
-            <p className="text-[12px] text-[#60717B]">{a.city}{a.postalCode ? ` ${a.postalCode}` : ''}, {a.state}</p>
+            <p className="text-[13px] font-bold text-[#1A1A1A] mb-0.5">{decodeHtml(a.fullName)}</p>
+            <p className="text-[12px] text-[#60717B]">
+              {decodeHtml(a.addressLine1)}
+              {a.addressLine2 ? `, ${decodeHtml(a.addressLine2)}` : ''}
+            </p>
+            <p className="text-[12px] text-[#60717B]">
+              {decodeHtml(a.city)}
+              {a.postalCode ? ` ${a.postalCode}` : ''}, {decodeHtml(a.state)}
+            </p>
             <p className="text-[12px] text-[#60717B]">{a.country}</p>
             <p className="text-[12px] text-[#60717B] mt-0.5">{a.phone}</p>
             <div className="flex items-center gap-3 mt-3 pt-3 border-t border-[#F5F5F5]">
@@ -134,7 +176,7 @@ export default function AddressManagement() {
           <p className="text-[14px] font-black text-[#1A1A1A] mb-4">
             {editing ? 'Edit Address' : 'Add New Address'}
           </p>
-          <form onSubmit={handleSubmit} className="space-y-3">
+          <form onSubmit={handleSubmit} className="space-y-3" noValidate>
        
             <div>
               <label className="block text-[11px] font-bold text-[#60717B] uppercase tracking-wider mb-1.5">Address Label</label>
@@ -176,14 +218,14 @@ export default function AddressManagement() {
               </div>
               <div>
                 <label className="block text-[11px] font-bold text-[#60717B] uppercase tracking-wider mb-1">Postal Code</label>
-                <input value={form.postalCode} onChange={(e) => set('postalCode', e.target.value)} placeholder="00300" className={inputCls} />
+                <input value={form.postalCode} onChange={(e) => set('postalCode', e.target.value)} required type="text" inputMode="numeric" pattern="[0-9]{5}" maxLength={5} placeholder="00300" className={inputCls} />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-[11px] font-bold text-[#60717B] uppercase tracking-wider mb-1">Province</label>
-                <input value={form.state} onChange={(e) => set('state', e.target.value)} placeholder="Western" className={inputCls} />
+                <input value={form.state} onChange={(e) => set('state', e.target.value)} required placeholder="Western" className={inputCls} />
               </div>
               <div>
                 <label className="block text-[11px] font-bold text-[#60717B] uppercase tracking-wider mb-1">Country</label>
