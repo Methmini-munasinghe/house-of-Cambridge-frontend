@@ -107,6 +107,34 @@ export const facebookLogin = createAsyncThunk('auth/facebookLogin', async (acces
   } catch (err) { return rejectWithValue(apiErr(err)); }
 });
 
+const decodeEntity = (str) => {
+  if (typeof str !== 'string') return str;
+  const entities = {
+    '&amp;': '&', '&lt;': '<', '&gt;': '>',
+    '&quot;': '"', '&#39;': "'", '&#x27;': "'",
+    '&#x2F;': '/', '&#x2f;': '/'
+  };
+  return str.replace(/&amp;|&lt;|&gt;|&quot;|&#39;|&#x27;|&#x2[fF];|&#(\d+);|&#x([0-9a-fA-F]+);/g, (match, dec, hex) => {
+    if (entities[match]) return entities[match];
+    if (dec) return String.fromCharCode(dec);
+    if (hex) return String.fromCharCode(parseInt(hex, 16));
+    return match;
+  });
+};
+
+const deepDecode = (obj) => {
+  if (typeof obj === 'string') return decodeEntity(obj);
+  if (Array.isArray(obj)) return obj.map(deepDecode);
+  if (obj !== null && typeof obj === 'object') {
+    const decoded = {};
+    for (const key in obj) {
+      decoded[key] = deepDecode(obj[key]);
+    }
+    return decoded;
+  }
+  return obj;
+};
+
 const pending  = (state) => { state.loading = true; state.error = null; };
 const rejected = (state, action) => { state.loading = false; state.error = action.payload; };
 
@@ -138,7 +166,7 @@ const authSlice = createSlice({
       .addCase(login.pending, pending)
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.user ?? null;
+        state.user = deepDecode(action.payload.user) ?? null;
         state.token = action.payload.token ?? null;
         state.isAuthenticated = !!action.payload.user;
       })
@@ -158,7 +186,7 @@ const authSlice = createSlice({
       .addCase(loadUser.pending, (state) => { state.loading = true; })
       .addCase(loadUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.user ?? null;
+        state.user = deepDecode(action.payload.user) ?? null;
         state.isAuthenticated = !!action.payload.user;
       })
       .addCase(loadUser.rejected, (state) => {
@@ -179,7 +207,7 @@ const authSlice = createSlice({
       .addCase(resetPassword.pending, pending)
       .addCase(resetPassword.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.user ?? null;
+        state.user = deepDecode(action.payload.user) ?? null;
         state.token = action.payload.token ?? null;
         state.isAuthenticated = !!action.payload.user;
       })
@@ -188,7 +216,7 @@ const authSlice = createSlice({
       .addCase(verifyEmail.pending, pending)
       .addCase(verifyEmail.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.user ?? null;
+        state.user = deepDecode(action.payload.user) ?? null;
         state.token = action.payload.token ?? null;
         state.isAuthenticated = !!action.payload.user;
       })
@@ -204,7 +232,7 @@ const authSlice = createSlice({
       .addCase(googleLogin.pending, pending)
       .addCase(googleLogin.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.user ?? null;
+        state.user = deepDecode(action.payload.user) ?? null;
         state.token = action.payload.token ?? null;
         state.isAuthenticated = !!action.payload.user;
       })
@@ -213,7 +241,7 @@ const authSlice = createSlice({
       .addCase(facebookLogin.pending, pending)
       .addCase(facebookLogin.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.user ?? null;
+        state.user = deepDecode(action.payload.user) ?? null;
         state.token = action.payload.token ?? null;
         state.isAuthenticated = !!action.payload.user;
       })

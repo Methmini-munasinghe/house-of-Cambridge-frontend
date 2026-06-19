@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCart } from '../../redux/slices/cartSlice.js';
+import { fetchCart, removeFromCart } from '../../redux/slices/cartSlice.js';
 import { createOrder } from '../../redux/slices/orderSlice.js';
 import { initiateKoko, getPayHereHash } from '../../redux/slices/paymentSlice.js';
 import { submitPayHereForm, PAYHERE_MERCHANT_ID } from '../../utils/payhere.js';
@@ -12,7 +12,7 @@ import Breadcrumb from '../../components/ui/Breadcrumb.jsx';
 import { PageSpinner } from '../../components/ui/Spinner.jsx';
 import {
   FiCheck, FiTruck, FiRefreshCw, FiShield,
-  FiChevronRight, FiPackage,
+  FiChevronRight, FiPackage, FiX,
 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
@@ -82,6 +82,11 @@ export default function GuestCheckoutPage() {
   const setContactField = (key) => (e) => setContact((c) => ({ ...c, [key]: e.target.value }));
   const setAddrField    = (key) => (e) => setAddr((a)    => ({ ...a, [key]: e.target.value }));
   const setCardField    = (key) => (e) => setCardInfo((c) => ({ ...c, [key]: e.target.value }));
+
+  const handleRemoveItem = useCallback((productId) => {
+    dispatch(removeFromCart(productId));
+    toast.success('Item removed');
+  }, [dispatch]);
 
   const handlePlaceOrder = useCallback(async () => {
     if (placing) return;
@@ -442,6 +447,14 @@ export default function GuestCheckoutPage() {
                             <p className="text-[11px] text-[#60717B]">Qty {item.quantity}</p>
                           </div>
                           <span className="text-[12px] font-bold text-[#1A1A1A] whitespace-nowrap">Rs. {(item.price * item.quantity).toLocaleString()}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveItem(p?._id)}
+                            aria-label={`Remove ${p?.name} from checkout`}
+                            className="w-6 h-6 rounded-full flex items-center justify-center text-gray-400 hover:bg-red-50 hover:text-red-500 transition-colors ml-1 shrink-0"
+                          >
+                            <FiX size={12} aria-hidden="true" />
+                          </button>
                         </li>
                       );
                     })}

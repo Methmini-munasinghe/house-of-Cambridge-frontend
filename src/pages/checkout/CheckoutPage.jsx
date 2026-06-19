@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCart, applyCoupon } from '../../redux/slices/cartSlice.js';
+import { fetchCart, applyCoupon, removeFromCart } from '../../redux/slices/cartSlice.js';
 import { createOrder } from '../../redux/slices/orderSlice.js';
 import { fetchAddresses } from '../../redux/slices/userSlice.js';
 import { initiateKoko, getPayHereHash } from '../../redux/slices/paymentSlice.js';
@@ -130,6 +130,11 @@ export default function CheckoutPage() {
     () => buildShippingAddress(selectedAddr, addresses, newAddr),
     [selectedAddr, addresses, newAddr],
   );
+
+  const handleRemoveItem = useCallback((productId) => {
+    dispatch(removeFromCart(productId));
+    toast.success('Item removed');
+  }, [dispatch]);
 
   const handleCoupon = useCallback(() => {
     const code = couponCode.trim().toUpperCase();
@@ -301,8 +306,8 @@ export default function CheckoutPage() {
                     <table className="w-full min-w-[520px]">
                       <thead>
                         <tr className="bg-[#F5F5F5] border-b border-[#E9E9E9]">
-                          {['Product', 'Unit Price', 'Weight', 'Qty', 'Subtotal'].map((h) => (
-                            <th key={h} scope="col" className={`text-[12px] font-bold text-[#60717B] uppercase tracking-wider px-4 py-3.5 ${h === 'Product' ? 'text-left px-5' : 'text-center'}`}>{h}</th>
+                          {['Product', 'Unit Price', 'Weight', 'Qty', 'Subtotal', ''].map((h, i) => (
+                            <th key={h || i} scope="col" className={`text-[12px] font-bold text-[#60717B] uppercase tracking-wider px-4 py-3.5 ${h === 'Product' ? 'text-left px-5' : 'text-center'}`}>{h}</th>
                           ))}
                         </tr>
                       </thead>
@@ -325,6 +330,11 @@ export default function CheckoutPage() {
                               <td className="px-4 py-3.5 text-center"><span className="text-[12px] text-[#60717B]">{itemWt > 0 ? `${itemWt.toFixed(2)} kg` : '—'}</span></td>
                               <td className="px-4 py-3.5 text-center"><span className="text-[13px] font-medium text-[#60717B]">{item.quantity}</span></td>
                               <td className="px-4 py-3.5 text-center"><span className="text-[13px] font-bold text-[#1A1A1A]">Rs. {(item.price * item.quantity).toLocaleString()}</span></td>
+                              <td className="px-2 py-3.5 text-center">
+                                <button type="button" onClick={() => handleRemoveItem(p?._id)} aria-label={`Remove ${p?.name}`} className="w-7 h-7 rounded-full flex items-center justify-center text-gray-400 hover:bg-red-50 hover:text-red-500 transition-colors mx-auto">
+                                  <FiX size={13} aria-hidden="true" />
+                                </button>
+                              </td>
                             </tr>
                           );
                         })}
@@ -659,6 +669,14 @@ export default function CheckoutPage() {
                             <p className="text-[11px] text-[#60717B]">Qty {item.quantity}</p>
                           </div>
                           <span className="text-[12px] font-bold text-[#1A1A1A] whitespace-nowrap">Rs. {(item.price * item.quantity).toLocaleString()}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveItem(p?._id)}
+                            aria-label={`Remove ${p?.name} from checkout`}
+                            className="w-6 h-6 rounded-full flex items-center justify-center text-gray-400 hover:bg-red-50 hover:text-red-500 transition-colors ml-1 shrink-0"
+                          >
+                            <FiX size={12} aria-hidden="true" />
+                          </button>
                         </li>
                       );
                     })}

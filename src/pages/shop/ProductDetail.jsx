@@ -126,8 +126,17 @@ export default function ProductDetail() {
 
   if (loading || !product) return <Layout><PageSpinner /></Layout>;
 
-  const price = safePrice(product.discountPrice > 0 ? product.discountPrice : product.price);
-  const originalPrice = product.discountPrice > 0 ? safePrice(product.price) : null;
+const price = safePrice(
+  product.flashSalePrice > 0 
+    ? product.flashSalePrice 
+    : product.discountPrice > 0 
+      ? product.discountPrice 
+      : product.price
+);
+
+const originalPrice = (product.flashSalePrice > 0 || product.discountPrice > 0) 
+  ? safePrice(product.price) 
+  : null;
   const discountPct = originalPrice && originalPrice > 0
     ? Math.min(99, Math.max(0, Math.round((1 - price / originalPrice) * 100)))
     : 0;

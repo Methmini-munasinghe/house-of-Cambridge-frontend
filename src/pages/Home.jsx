@@ -226,12 +226,18 @@ function FlashCard({ product }) {
         <p className="text-[12px] font-medium text-[#1A1A1A] line-clamp-2 mb-1.5 flex-1">
           {product.name}
         </p>
-        <p className="text-[14px] font-bold text-[#1A1A1A]">Rs. {price.toLocaleString()}</p>
-      <div className="min-h-[20px]">
-        {pct > 0 && (
-          <p className="text-[11px] text-gray-400 line-through mb-1">Rs. {original.toLocaleString()}</p>
-        )}
-      </div>
+        <div className="flex items-end justify-between mb-0.5 w-full">
+          <div className="min-h-[20px] flex items-end">
+            {pct > 0 && (
+              <span className="text-[10px] text-gray-400 line-through">
+                Rs. {original.toLocaleString()}
+              </span>
+            )}
+          </div>
+          <span className="text-[14px] font-bold text-[#1A1A1A]">
+            Rs. {price.toLocaleString()}
+          </span>
+        </div>
         <span
           className="mt-2 w-full bg-[#FFB700] text-black text-[11px] font-semibold py-1.5 rounded hover:bg-amber-500 transition-colors text-center block"
           aria-hidden="true"
@@ -308,7 +314,7 @@ export default function Home() {
     }
 
     return () => { cancelled = true; };
-  }, [categories]);
+  }, [categories?.length]);
 
   const cur = HERO_SLIDES[slide];
 
