@@ -64,15 +64,43 @@ export const clearCartAsync = createAsyncThunk(
   }
 );
 
+const decodeEntity = (str) => {
+  if (typeof str !== 'string') return str;
+  const entities = {
+    '&amp;': '&', '&lt;': '<', '&gt;': '>',
+    '&quot;': '"', '&#39;': "'", '&#x27;': "'",
+    '&#x2F;': '/', '&#x2f;': '/'
+  };
+  return str.replace(/&amp;|&lt;|&gt;|&quot;|&#39;|&#x27;|&#x2[fF];|&#(\d+);|&#x([0-9a-fA-F]+);/g, (match, dec, hex) => {
+    if (entities[match]) return entities[match];
+    if (dec) return String.fromCharCode(dec);
+    if (hex) return String.fromCharCode(parseInt(hex, 16));
+    return match;
+  });
+};
+
+const deepDecode = (obj) => {
+  if (typeof obj === 'string') return decodeEntity(obj);
+  if (Array.isArray(obj)) return obj.map(deepDecode);
+  if (obj !== null && typeof obj === 'object') {
+    const decoded = {};
+    for (const key in obj) {
+      decoded[key] = deepDecode(obj[key]);
+    }
+    return decoded;
+  }
+  return obj;
+};
+
 const EMPTY_CART = { items: [], discount: 0, coupon: null };
 
-const setCart     = (state, action) => { state.loading = false; state.cart  = action.payload.cart; };
+const setCart     = (state, action) => { state.loading = false; state.cart  = deepDecode(action.payload.cart); };
 const setPending  = (state)         => { state.loading = true;  state.error = null; };
 const setRejected = (state, action) => { state.loading = false; state.error = action.payload; };
 
 const cartSlice = createSlice({
   name: 'cart',
-  initialState: { cart: null, loading: false, error: null },
+  initialState: { cart: EMPTY_CART, loading: false, error: null },
   reducers: {
     clearCartError: (state) => { state.error = null; },
     clearCart:      (state) => { state.cart  = EMPTY_CART; },

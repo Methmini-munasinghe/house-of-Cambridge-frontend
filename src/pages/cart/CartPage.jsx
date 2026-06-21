@@ -24,6 +24,8 @@ import toast from 'react-hot-toast';
 export default function CartPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
+  // 1. SELECTORS & INITIAL STATES (Unconditional)
   const { cart, loading }             = useSelector((s) => s.cart);
   const { addresses }                 = useSelector((s) => s.user);
   const { isAuthenticated }           = useSelector((s) => s.auth);
@@ -33,6 +35,7 @@ export default function CartPage() {
   const [couponApplied, setCouponApplied] = useState('');
   const scrollRef = useRef(null);
 
+  // 2. ALL LIFECYCLE EFFECTS (Unconditional)
   useEffect(() => { dispatch(fetchCart()); }, [dispatch]);
 
   useEffect(() => {
@@ -51,19 +54,7 @@ export default function CartPage() {
     }
   }, [dispatch, items.length]);
 
-  if (loading && !cart) return <Layout><PageSpinner /></Layout>;
-
-  const subtotal      = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
-  const discount      = cart?.discount || 0;
-  const totalWeightKg = calcTotalWeightKg(items);
-  const vat           = Math.round((subtotal - discount) * 0.08);
-  const cartTotal     = subtotal - discount + vat;
-  const loyaltyPoints = Math.floor(subtotal / 50);
-  const defaultAddress = addresses.find((a) => a.isDefault) || addresses[0];
-
-  const cartItemIds = new Set(items.map((i) => i.product?._id));
-  const suggestions = relatedProducts.filter((p) => !cartItemIds.has(p._id)).slice(0, 8);
-
+  // 3. ALL HANDLERS AND CALLBAK HOOKS (Unconditional)
   const handleQty = useCallback((productId, qty) => {
     if (qty <= 0) {
       dispatch(removeFromCart(productId));
@@ -102,6 +93,21 @@ export default function CartPage() {
     dispatch(fetchCart());
     toast.success('Cart updated!');
   }, [dispatch]);
+
+  // 4. 🚨 MOVE THE EARLY RETURN HERE (BELOW ALL HOOKS) 🚨
+  if (loading && !cart) return <Layout><PageSpinner /></Layout>;
+
+  // 5. MEMOS & COMPUTED PROPERTIES (Safely processing after hooks)
+  const subtotal      = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+  const discount      = cart?.discount || 0;
+  const totalWeightKg = calcTotalWeightKg(items);
+  const vat           = Math.round((subtotal - discount) * 0.08);
+  const cartTotal     = subtotal - discount + vat;
+  const loyaltyPoints = Math.floor(subtotal / 50);
+  const defaultAddress = addresses.find((a) => a.isDefault) || addresses[0];
+
+  const cartItemIds = new Set(items.map((i) => i.product?._id));
+  const suggestions = relatedProducts.filter((p) => !cartItemIds.has(p._id)).slice(0, 8);
 
   return (
     <Layout>

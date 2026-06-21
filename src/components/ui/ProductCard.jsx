@@ -64,9 +64,9 @@ export default function ProductCard({ product }) {
   return (
     <Link
       to={`/product/${product._id}`}
-      className="group block bg-white rounded-[10px] border border-[#E9E9E9] hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition-all duration-200 overflow-hidden relative"
+      className="group flex flex-col h-full w-full bg-white rounded-[10px] border border-[#E9E9E9] hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition-all duration-200 overflow-hidden relative"
     >
-      <div className="relative aspect-square overflow-hidden bg-gray-50">
+      <div className="relative aspect-square overflow-hidden bg-gray-50 flex-shrink-0">
         <img
           src={product.images?.[0]?.url || 'https://placehold.co/400x400?text=No+Image'}
           alt={product.name}
@@ -112,7 +112,7 @@ export default function ProductCard({ product }) {
         )}
       </div>
 
-      <div className="p-3">
+      <div className="p-3 flex flex-col flex-1">
         <div className="flex items-center gap-0.5 mb-1.5" aria-label={`Rating: ${product.ratings ?? 0} out of 5`}>
           {[1, 2, 3, 4, 5].map((s) => (
             <FaStar
@@ -124,15 +124,21 @@ export default function ProductCard({ product }) {
           <span className="text-[10px] text-gray-400 ml-1">({product.numReviews ?? 0})</span>
         </div>
 
-        <h3 className="text-[13px] font-medium text-[#1A1A1A] line-clamp-2 mb-2 leading-snug min-h-[36px]">
+        <h3 className="text-[13px] font-medium text-[#1A1A1A] line-clamp-2 mb-2 leading-snug min-h-[36px] flex-1">
           {product.name}
         </h3>
 
-        <div className="mb-2.5 flex items-baseline gap-1.5">
-          <span className="text-[15px] font-bold text-[#171C26]">Rs. {price.toLocaleString()}</span>
-          {originalPrice && (
-            <span className="text-[11px] text-gray-400 line-through">Rs. {originalPrice.toLocaleString()}</span>
-          )}
+        <div className="flex items-end justify-between mb-2.5 w-full">
+          <div className="min-h-[20px] flex items-end">
+            {originalPrice && (
+              <span className="text-[11px] text-gray-400 line-through">
+                Rs. {originalPrice.toLocaleString()}
+              </span>
+            )}
+          </div>
+          <span className="text-[15px] font-bold text-[#171C26]">
+            Rs. {price.toLocaleString()}
+          </span>
         </div>
 
         {inStock ? (

@@ -106,6 +106,34 @@ export const markNotificationRead = createAsyncThunk(
 const setPending  = (state)         => { state.loading = true;  state.error = null; };
 const setRejected = (state, action) => { state.loading = false; state.error = action.payload; };
 
+const decodeEntity = (str) => {
+  if (typeof str !== 'string') return str;
+  const entities = {
+    '&amp;': '&', '&lt;': '<', '&gt;': '>',
+    '&quot;': '"', '&#39;': "'", '&#x27;': "'",
+    '&#x2F;': '/', '&#x2f;': '/'
+  };
+  return str.replace(/&amp;|&lt;|&gt;|&quot;|&#39;|&#x27;|&#x2[fF];|&#(\d+);|&#x([0-9a-fA-F]+);/g, (match, dec, hex) => {
+    if (entities[match]) return entities[match];
+    if (dec) return String.fromCharCode(dec);
+    if (hex) return String.fromCharCode(parseInt(hex, 16));
+    return match;
+  });
+};
+
+const deepDecode = (obj) => {
+  if (typeof obj === 'string') return decodeEntity(obj);
+  if (Array.isArray(obj)) return obj.map(deepDecode);
+  if (obj !== null && typeof obj === 'object') {
+    const decoded = {};
+    for (const key in obj) {
+      decoded[key] = deepDecode(obj[key]);
+    }
+    return decoded;
+  }
+  return obj;
+};
+
 const userSlice = createSlice({
   name: 'user',
   initialState: {
@@ -135,14 +163,14 @@ const userSlice = createSlice({
     });
 
     builder
-      .addCase(fetchProfile.fulfilled,        (state, action) => { state.loading = false; state.profile       = action.payload.user; })
-      .addCase(updateProfile.fulfilled,       (state, action) => { state.loading = false; state.profile       = action.payload.user; state.message = 'Profile updated'; })
-      .addCase(fetchAddresses.fulfilled,      (state, action) => { state.loading = false; state.addresses     = action.payload.addresses; })
-      .addCase(addAddress.fulfilled,          (state, action) => { state.loading = false; state.addresses.push(action.payload.address); })
+      .addCase(fetchProfile.fulfilled,        (state, action) => { state.loading = false; state.profile       = deepDecode(action.payload.user); })
+      .addCase(updateProfile.fulfilled,       (state, action) => { state.loading = false; state.profile       = deepDecode(action.payload.user); state.message = 'Profile updated'; })
+      .addCase(fetchAddresses.fulfilled,      (state, action) => { state.loading = false; state.addresses     = deepDecode(action.payload.addresses) || []; })
+      .addCase(addAddress.fulfilled,          (state, action) => { state.loading = false; state.addresses.push(deepDecode(action.payload.address)); })
       .addCase(updateAddress.fulfilled,       (state, action) => {
         state.loading = false;
         const idx = state.addresses.findIndex((a) => a._id === action.payload.address._id);
-        if (idx !== -1) state.addresses[idx] = action.payload.address;
+        if (idx !== -1) state.addresses[idx] = deepDecode(action.payload.address);
       })
       .addCase(deleteAddress.fulfilled,       (state, action) => { state.loading = false; state.addresses     = state.addresses.filter((a) => a._id !== action.payload); })
       .addCase(fetchWishlist.fulfilled,       (state, action) => { state.loading = false; state.wishlist      = action.payload.wishlist?.products || []; })

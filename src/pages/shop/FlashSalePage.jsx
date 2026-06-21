@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFlashSaleProducts } from '../../redux/slices/productSlice';
 import Layout from '../../components/common/Layout';
@@ -86,10 +86,19 @@ function Countdown({ endsAt }) {
 
 function TopDealCard({ product }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const price = safePrice(product.discountPrice > 0 ? product.discountPrice : product.price);
-  const originalPrice = product.discountPrice > 0 ? safePrice(product.price) : null;
-  const discount = originalPrice && originalPrice > 0
+  const price = safePrice(
+    product.flashSalePrice > 0
+      ? product.flashSalePrice
+      : product.discountPrice > 0
+      ? product.discountPrice
+      : product.price
+  );
+
+  // Set original price if a valid lower sale price exists
+  const originalPrice = (product.flashSalePrice > 0 || product.discountPrice > 0) ? safePrice(product.price) : null;
+  const discount = originalPrice && originalPrice > price
     ? Math.min(99, Math.max(0, Math.round((1 - price / originalPrice) * 100)))
     : 0;
 
@@ -98,14 +107,14 @@ function TopDealCard({ product }) {
   const imageUrl = product.images?.[0]?.url || 'https://placehold.co/200x200?text=No+Image';
   const rating = safeRating(product.ratings);
 
-  const handleAddToCart = useCallback(
+  const handleBuyNow = useCallback(
     (e) => {
       e.preventDefault();
       if (!productId) return;
       dispatch(addToCart({ productId, quantity: 1 }));
-      toast.success('Added to cart!');
+      navigate('/checkout');
     },
-    [dispatch, productId]
+    [dispatch, productId, navigate]
   );
 
   if (!productId) return null;
@@ -113,9 +122,9 @@ function TopDealCard({ product }) {
   return (
     <Link
       to={`/product/${encodeURIComponent(productId)}`}
-      className="flex-shrink-0 w-[183px] bg-white rounded-[14px] border border-[#E9E9E9] shadow-[0_2px_12px_rgba(0,0,0,0.08)] overflow-hidden hover:shadow-[0_4px_20px_rgba(0,0,0,0.14)] transition-shadow"
+      className="flex flex-col h-full w-full bg-white rounded-[14px] border border-[#E9E9E9] shadow-[0_2px_12px_rgba(0,0,0,0.08)] overflow-hidden hover:shadow-[0_4px_20px_rgba(0,0,0,0.14)] transition-shadow"
     >
-      <div className="relative aspect-square bg-gray-50">
+      <div className="relative aspect-square bg-gray-50 flex-shrink-0">
         <img
           src={imageUrl}
           alt={productName}
@@ -124,32 +133,36 @@ function TopDealCard({ product }) {
           onError={(e) => { e.currentTarget.src = 'https://placehold.co/200x200?text=No+Image'; }}
         />
         {discount > 0 && (
-          <span className="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold rounded-full w-8 h-8 flex items-center justify-center leading-tight text-center">
+          <span className="absolute bottom-2 right-2 bg-red-600 text-white text-[10px] font-bold rounded-full w-8 h-8 flex items-center justify-center leading-tight text-center">
             -{discount}%
           </span>
         )}
       </div>
-      <div className="p-2.5">
+      <div className="p-2.5 flex flex-col flex-1">
         <div className="flex gap-0.5 mb-1" aria-label={`Rating: ${rating} out of 5`}>
           {[1, 2, 3, 4, 5].map((s) => (
             <FaStar key={s} size={9} className={s <= Math.round(rating) ? 'text-[#FFB700]' : 'text-gray-200'} aria-hidden="true" />
           ))}
         </div>
-        <p className="text-[11px] text-[#1A1A1A] font-medium line-clamp-2 leading-snug mb-1.5 min-h-[30px]">
+        <p className="text-[11px] text-[#1A1A1A] font-medium line-clamp-2 leading-snug mb-1.5 min-h-[30px] flex-1">
           {productName}
         </p>
-        <p className="text-[14px] font-bold text-[#1A1A1A] mb-0.5">
-          Rs. {price.toLocaleString()}
-          {originalPrice && (
-            <span className="text-[10px] text-gray-400 line-through ml-1">
-              Rs. {originalPrice.toLocaleString()}
-            </span>
-          )}
-        </p>
+        <div className="flex items-end justify-between mb-0.5 w-full">
+          <div className="min-h-[20px] flex items-end">
+            {originalPrice && (
+              <span className="text-[10px] text-gray-400 line-through">
+                Rs. {originalPrice.toLocaleString()}
+              </span>
+            )}
+          </div>
+          <span className="text-[14px] font-bold text-[#1A1A1A]">
+            Rs. {price.toLocaleString()}
+          </span>
+        </div>
         <button
-          onClick={handleAddToCart}
+          onClick={handleBuyNow}
           className="w-full bg-[#FFB700] text-black text-[11px] font-bold py-1.5 rounded-[4px] flex items-center justify-center gap-1 hover:bg-amber-500 transition-colors"
-          aria-label={`Add ${productName} to cart`}
+          aria-label={`Buy ${productName} now`}
         >
           <FaShoppingCart size={10} aria-hidden="true" /> Buy Now
         </button>
@@ -449,7 +462,7 @@ export default function FlashSalePage() {
               aria-label="Top flash deals"
             >
               {validFlashSaleProducts.map((p) => (
-                <div key={p._id} role="listitem">
+                <div key={p._id} role="listitem" className="w-[183px] flex-shrink-0 flex">
                   <TopDealCard product={p} />
                 </div>
               ))}
@@ -514,7 +527,7 @@ export default function FlashSalePage() {
               </div>
             </aside>
 
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 w-full min-w-0">
               <div className="flex items-center justify-between mb-5">
                 <div>
                   <h2 className="text-[18px] font-bold text-[#1A1A1A]">All Flash Sale Products</h2>
@@ -535,16 +548,16 @@ export default function FlashSalePage() {
               </div>
 
               <div
-                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
-                role="list"
-                aria-label="Flash sale products"
-              >
-                {paginated.map((p) => (
-                  <div key={p._id} role="listitem">
-                    <ProductCard product={p} />
-                  </div>
-                ))}
-              </div>
+  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+  role="list"
+  aria-label="Flash sale products"
+>
+  {paginated.map((p) => (
+    <div key={p._id} role="listitem" className="w-full flex">
+      <TopDealCard product={p} /> 
+    </div>
+  ))}
+</div>
 
               {totalPages > 1 && (
                 <nav className="flex items-center justify-center gap-1 mt-8" aria-label="Pagination">
