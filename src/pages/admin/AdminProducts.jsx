@@ -41,6 +41,53 @@ const FLAG_FIELDS = [
   { key: 'isFlashSale',  label: 'Flash Sale' },
 ];
 
+const CATEGORY_SPECIFIC_FIELDS = {
+  'Beauty & Cosmetics': [
+    { name: 'manufactureCountry', label: 'Manufacture Country', type: 'text', placeholder: 'e.g. France' },
+    { name: 'suitableFor', label: 'Suitable For', type: 'text', placeholder: 'e.g. Adults, Unisex' },
+    { name: 'skinHairType', label: 'Hair / Skin Type Compatibility', type: 'text', placeholder: 'e.g. Oily Skin, Dry Hair' },
+    { name: 'keyIngredients', label: 'Key Ingredients', type: 'text', placeholder: 'e.g. Retinol, Vitamin C' },
+  ],
+  'Baby Care': [
+    { name: 'manufactureCountry', label: 'Manufacture Country', type: 'text', placeholder: 'e.g. United Kingdom' },
+    { name: 'ageRange', label: 'Age Range', type: 'text', placeholder: 'e.g. 0-6 Months' },
+    { name: 'suitableFor', label: 'Suitable For', type: 'text', placeholder: 'e.g. Newborns' },
+    { name: 'skinTypeCompatibility', label: 'Skin Type Compatibility', type: 'text', placeholder: 'e.g. Hypoallergenic' },
+    { name: 'keyIngredients', label: 'Key Ingredients', type: 'text', placeholder: 'e.g. Aloe Vera, Chamomile' },
+  ],
+  'Home Appliances': [
+    { name: 'manufactureCountry', label: 'Manufacture Country', type: 'text', placeholder: 'e.g. Germany' },
+    { name: 'model', label: 'Model', type: 'text', placeholder: 'e.g. H-200' },
+    { name: 'material', label: 'Material', type: 'text', placeholder: 'e.g. Stainless Steel, Plastic' },
+    { name: 'dimensions', label: 'Dimensions (L × W × H)', type: 'text', placeholder: 'e.g. 30x20x15 cm' },
+    { name: 'colour', label: 'Colour', type: 'text', placeholder: 'e.g. Silver, White' },
+    { name: 'compatibility', label: 'Compatibility', type: 'text', placeholder: 'e.g. Standard Sink' },
+    { name: 'packaging', label: 'Packaging', type: 'text', placeholder: 'e.g. Eco-friendly box' },
+    { name: 'warranty', label: 'Warranty', type: 'text', placeholder: 'e.g. 1 Year' },
+  ],
+  'Electronics': [
+    { name: 'model', label: 'Model', type: 'text', placeholder: 'e.g. E-X70' },
+    { name: 'powerSupply', label: 'Power Supply', type: 'text', placeholder: 'e.g. 220V / Battery' },
+    { name: 'material', label: 'Material', type: 'text', placeholder: 'e.g. Polycarbonate' },
+    { name: 'colour', label: 'Colour', type: 'text', placeholder: 'e.g. Charcoal Black' },
+    { name: 'compatibility', label: 'Compatibility', type: 'text', placeholder: 'e.g. Bluetooth 5.0 Devices' },
+    { name: 'warranty', label: 'Warranty', type: 'text', placeholder: 'e.g. 2 Years' },
+  ],
+  'Computer & Printers': [
+    { name: 'model', label: 'Model', type: 'text', placeholder: 'e.g. LaserJet Pro' },
+    { name: 'processor', label: 'Processor / Chipset', type: 'text', placeholder: 'e.g. Intel i5 / Quad-Core' },
+    { name: 'ram', label: 'RAM', type: 'text', placeholder: 'e.g. 8GB DDR4' },
+    { name: 'storage', label: 'Storage (SSD / HDD)', type: 'text', placeholder: 'e.g. 512GB NVMe SSD' },
+    { name: 'display', label: 'Display Size & Resolution', type: 'text', placeholder: 'e.g. 15.6" FHD' },
+    { name: 'os', label: 'Operating System', type: 'text', placeholder: 'e.g. Windows 11' },
+    { name: 'connectivity', label: 'Connectivity (USB, Bluetooth, Wi-Fi)', type: 'text', placeholder: 'e.g. USB 3.0, Wi-Fi 6' },
+    { name: 'powerSupply', label: 'Power Supply', type: 'text', placeholder: 'e.g. 65W AC Adapter' },
+    { name: 'colour', label: 'Colour', type: 'text', placeholder: 'e.g. Platinum Silver' },
+    { name: 'compatibility', label: 'Compatibility', type: 'text', placeholder: 'e.g. Universal macOS & Windows' },
+    { name: 'warranty', label: 'Warranty', type: 'text', placeholder: 'e.g. 3 Years' },
+  ]
+};
+
 export default function AdminProducts() {
   const dispatch = useDispatch();
   const { products, productsTotal, categories, brands = [], loading } = useSelector((s) => s.admin);
@@ -60,6 +107,8 @@ export default function AdminProducts() {
   const [instrInput,   setInstrInput]   = useState('');
   const fileRef = useRef(null);
 
+  const [attributes, setAttributes] = useState({});
+
   const pages = Math.ceil((productsTotal ?? 0) / PAGE_SIZE);
 
   const filteredBrands = useMemo(() =>
@@ -67,6 +116,22 @@ export default function AdminProducts() {
       b.isActive && (!form.category || b.category?._id === form.category || b.category === form.category)
     ),
   [brands, form.category]);
+
+  // Derive active category string label cleanly
+const currentCategoryName = useMemo(() => {
+    if (!form.category) return '';
+    const match = categories.find((c) => c._id === form.category);
+    if (!match) return '';
+    
+    const name = match.name.trim().toLowerCase();
+    if (name.includes('computer')) return 'Computer & Printers';
+    if (name.includes('appliance') || name.includes('house')) return 'Home Appliances';
+    if (name.includes('beauty')) return 'Beauty & Cosmetics';
+    if (name.includes('baby')) return 'Baby Care';
+    if (name.includes('elect')) return 'Electronics';
+    
+    return match.name;
+  }, [form.category, categories]);
 
   useEffect(() => {
     dispatch(fetchAdminCategories());
@@ -86,9 +151,17 @@ export default function AdminProducts() {
 
   const setField = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
+  // Handle Category selection change to purge dead properties
+  const handleCategorySelection = (e) => {
+    const categoryId = e.target.value;
+    setForm((f) => ({ ...f, category: categoryId, brand: '' }));
+    setAttributes({}); // Clean out dynamic values safely
+  };
+
   const openCreate = useCallback(() => {
     setEditing(null);
     setForm(EMPTY);
+    setAttributes({});
     setFiles([]);
     setPreviews([]);
     setInstrInput('');
@@ -115,6 +188,7 @@ export default function AdminProducts() {
       isFlashSale:       p.isFlashSale   || false,
       flashSalePrice:    p.flashSalePrice || '',
     });
+    setAttributes(p.attributes || {}); // Load stored custom parameters on edit
     setFiles([]);
     setPreviews(p.images?.map((i) => i.url) || []);
     setInstrInput('');
@@ -155,6 +229,12 @@ export default function AdminProducts() {
           fd.append(k, String(v));
         }
       });
+
+      // 3. 🚨 INJECT EXTRA DYNAMIC SPECIFICATIONS INTO FORM DATA 🚨
+      if (Object.keys(attributes).length > 0) {
+        fd.append('attributes', JSON.stringify(attributes));
+      }
+
       files.forEach((f) => fd.append('images', f));
 
       if (editing) {
@@ -222,6 +302,7 @@ export default function AdminProducts() {
             aria-label="Filter by category"
             className="px-3 py-2 text-[13px] border border-[#E9E9E9] rounded-[8px] bg-[#FAFAFA] focus:outline-none focus:border-[#FFB700]"
           >
+            <option value="">All Categories</option>
             <option value="">All Categories</option>
             {categories.map((c) => <option key={c._id} value={c._id}>{c.name}</option>)}
           </select>
@@ -386,7 +467,6 @@ export default function AdminProducts() {
                   <input
                     value={instrInput}
                     onChange={(e) => setInstrInput(e.target.value)}
-                    onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addInstruction(); } }}
                     placeholder="Type a point and press Enter or click Add…"
                     aria-label="New usage instruction"
                     className="flex-1 px-3 py-2 text-[13px] border border-[#E9E9E9] rounded-[8px] bg-[#FAFAFA] focus:outline-none focus:border-[#FFB700]"
@@ -422,7 +502,7 @@ export default function AdminProducts() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label htmlFor="prod-cat" className="text-[13px] font-semibold text-[#1A1A1A] block mb-1">Category</label>
-                  <select id="prod-cat" value={form.category} onChange={(e) => setForm((f) => ({ ...f, category: e.target.value, brand: '' }))} className={INPUT_CLS}>
+                  <select id="prod-cat" value={form.category} onChange={handleCategorySelection} className={INPUT_CLS}>
                     <option value="">Select category</option>
                     {categories.map((c) => <option key={c._id} value={c._id}>{c.name}</option>)}
                   </select>
@@ -435,6 +515,30 @@ export default function AdminProducts() {
                   </select>
                 </div>
               </div>
+
+              {CATEGORY_SPECIFIC_FIELDS[currentCategoryName] && (
+                <div className="p-4 bg-amber-50/50 border border-amber-200/60 rounded-[8px] space-y-3">
+                  <h4 className="text-[12px] font-bold text-[#FFB700] uppercase tracking-wider border-b border-amber-200/40 pb-1">
+                     {currentCategoryName}
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {CATEGORY_SPECIFIC_FIELDS[currentCategoryName].map((field) => (
+                      <div key={field.name} className="flex flex-col">
+                        <label className="text-[11px] font-bold text-[#60717B] uppercase tracking-wider mb-1">
+                          {field.label}
+                        </label>
+                        <input
+                          type={field.type}
+                          placeholder={field.placeholder}
+                          value={attributes[field.name] || ''}
+                          onChange={(e) => setAttributes((prev) => ({ ...prev, [field.name]: e.target.value }))}
+                          className="w-full px-3 py-1.5 text-[12px] border border-[#E9E9E9] rounded-[6px] bg-white focus:outline-none focus:border-[#FFB700]"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="flex flex-wrap gap-4" role="group" aria-label="Product flags">
                 {FLAG_FIELDS.map(({ key, label }) => (
