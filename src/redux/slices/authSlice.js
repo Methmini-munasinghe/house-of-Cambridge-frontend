@@ -1,4 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { signInWithPopup } from 'firebase/auth';          
+import { auth, googleProvider } from '../../firebase/firebaseConfig'
 import api from '../api/axiosInstance';
 
 const TOKEN_KEY = 'token';
@@ -91,12 +93,24 @@ export const updatePassword = createAsyncThunk('auth/updatePassword', async (dat
   } catch (err) { return rejectWithValue(apiErr(err)); }
 });
 
-export const googleLogin = createAsyncThunk('auth/googleLogin', async (accessToken, { rejectWithValue }) => {
+export const googleLogin = createAsyncThunk('auth/googleLogin', async (_, { rejectWithValue }) => {
   try {
-    const res = await api.post('/auth/google', { accessToken });
+   
+    const result  = await signInWithPopup(auth, googleProvider);
+
+    
+    const idToken = await result.user.getIdToken();
+
+    const res = await api.post('/auth/google', { idToken });
     if (res.data.token) storeToken(res.data.token);
     return res.data;
-  } catch (err) { return rejectWithValue(apiErr(err)); }
+  } catch (err) {
+    if (err.code === 'auth/popup-closed-by-user' ||
+        err.code === 'auth/cancelled-popup-request') {
+      return rejectWithValue('Google sign-in was cancelled');
+    }
+    return rejectWithValue(apiErr(err));
+  }
 });
 
 export const facebookLogin = createAsyncThunk('auth/facebookLogin', async (accessToken, { rejectWithValue }) => {

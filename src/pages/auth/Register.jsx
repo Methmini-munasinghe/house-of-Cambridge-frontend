@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { register, googleLogin, facebookLogin } from '../../redux/slices/authSlice.js';
-import { useGoogleLogin } from '@react-oauth/google';
+
 import useFacebookSDK from '../../hooks/useFacebookSDK.js';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import toast from 'react-hot-toast';
@@ -88,20 +88,17 @@ export default function Register() {
     }
   };
 
-  const handleGoogleLogin = useGoogleLogin({
-    onSuccess: async ({ access_token }) => {
-      setSocialLoading('google');
-      try {
-        await dispatch(googleLogin(access_token)).unwrap();
-        navigate('/', { replace: true });
-      } catch (err) {
-        toast.error(typeof err === 'string' ? err : 'Google sign-up failed');
-      } finally {
-        setSocialLoading('');
-      }
-    },
-    onError: () => toast.error('Google sign-up was cancelled'),
-  });
+  const handleGoogleLogin = async () => {
+  setSocialLoading('google');
+  try {
+    await dispatch(googleLogin()).unwrap(); // Firebase popup happens inside thunk
+    navigate('/', { replace: true });
+  } catch (err) {
+    toast.error(typeof err === 'string' ? err : 'Google sign-up failed');
+  } finally {
+    setSocialLoading('');
+  }
+};
 
   const handleFacebookLogin = () => {
     if (!fbReady) { toast.error('Facebook SDK not ready yet, please try again'); return; }
@@ -262,7 +259,7 @@ export default function Register() {
           </div>
 
           <div className="space-y-2.5">
-            <button type="button" onClick={() => handleGoogleLogin()} disabled={!!socialLoading} className="w-full flex items-center justify-center gap-2.5 border border-[#C5C5C5] bg-white rounded-[6px] py-2.5 text-[13px] font-medium text-[#1A1A1A] hover:bg-gray-50 transition-colors disabled:opacity-60">
+            <button type="button" onClick={handleGoogleLogin} disabled={!!socialLoading} className="w-full flex items-center justify-center gap-2.5 border border-[#C5C5C5] bg-white rounded-[6px] py-2.5 text-[13px] font-medium text-[#1A1A1A] hover:bg-gray-50 transition-colors disabled:opacity-60">
               {socialLoading === 'google'
                 ? <span className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" aria-hidden="true" />
                 : <GoogleIcon />
