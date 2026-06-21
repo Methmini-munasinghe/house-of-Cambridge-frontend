@@ -17,8 +17,7 @@ const TIERS = [
 const EARN_CARDS = [
   { icon: FiShoppingBag,   title: 'Shop & Earn',       desc: '1 point per Rs. 50 spent on any order',                   pts: '+1 pt / Rs.50' },
   { icon: FiMessageSquare, title: 'Write a Review',     desc: 'Earn 20 pts per verified product review',                 pts: '+20 pts'       },
-  { icon: FiCheck,         title: 'Complete Profile',   desc: 'Fill all profile fields for a one-time bonus',            pts: '+50 pts'       },
-  { icon: FiUserPlus,      title: 'Refer a Friend',     desc: 'Earn 200 pts when a referred friend places an order',     pts: '+200 pts'      },
+  
 ];
 
 const HISTORY_TABS = ['All', 'Earned', 'Redeemed', 'Expired'];
