@@ -234,7 +234,7 @@ const handleWishlist = () => {
 
   const ATTRIBUTES = [
     product.brand  && { label: 'Brand',  value: sanitizeText(String(product.brand)) },
-    product.weight && { label: 'Weight', value: sanitizeText(String(product.weight)) },
+    product.weight && { label: 'Weight(g)', value: sanitizeText(String(product.weight)) },
     product.volume && { label: 'Volume', value: sanitizeText(String(product.volume)) },
     product.model  && { label: 'Model',  value: sanitizeText(String(product.model)) },
     product.origin && { label: 'Origin', value: sanitizeText(String(product.origin)) },
