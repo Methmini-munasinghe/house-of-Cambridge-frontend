@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { FaTruck, FaUndo, FaLock, FaMedal, FaStar, FaBolt } from 'react-icons/fa';
 import {
@@ -9,6 +10,7 @@ import {
   fetchPopularProducts,
   fetchHomeNewArrivals,
 } from '../redux/slices/productSlice';
+import { addToCart } from '../redux/slices/cartSlice';   
 import api from '../redux/api/axiosInstance';
 import ProductCard from '../components/ui/ProductCard';
 import Layout from '../components/common/Layout';
@@ -193,11 +195,27 @@ function SectionHeader({ title, to }) {
     </div>
   );
 }
-
 function FlashCard({ product }) {
+  const dispatch = useDispatch();
+
   const price    = safeNum(product.flashSalePrice || product.discountPrice || product.price);
   const original = safeNum(product.price);
   const pct      = original > price ? Math.round((1 - price / original) * 100) : 0;
+
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const toastId = toast.loading('Adding to cart...');
+
+    dispatch(addToCart({ productId: product._id, quantity: 1 }))
+      .then(() => {
+        toast.success('Added to cart!', { id: toastId });
+      })
+      .catch(() => {
+        toast.error('Failed to add to cart', { id: toastId });
+      });
+  };
 
   return (
     <Link
@@ -217,6 +235,7 @@ function FlashCard({ product }) {
           </span>
         )}
       </div>
+
       <div className="p-3 flex flex-col flex-1">
         <div className="flex gap-0.5 mb-1" aria-hidden="true">
           {[1, 2, 3, 4, 5].map((s) => (
@@ -238,12 +257,13 @@ function FlashCard({ product }) {
             Rs. {price.toLocaleString()}
           </span>
         </div>
-        <span
-          className="mt-2 w-full bg-[#FFB700] text-black text-[11px] font-semibold py-1.5 rounded hover:bg-amber-500 transition-colors text-center block"
-          aria-hidden="true"
+
+        <button
+          onClick={handleAddToCart}
+          className="mt-2 w-full bg-[#FFB700] text-black text-[11px] font-semibold py-1.5 rounded hover:bg-[#e6a600] active:scale-[0.98] transition-all duration-200 cursor-pointer"
         >
-          Buy Now
-        </span>
+          Add to Cart
+        </button>
       </div>
     </Link>
   );

@@ -146,27 +146,45 @@ const originalPrice = (product.flashSalePrice > 0 || product.discountPrice > 0)
   const productNumReviews = safeInteger(product.numReviews);
   const productName = sanitizeText(product.name);
 
-  const handleAddToCart = () => {
-    if (!product._id) return;
-    dispatch(addToCart({ productId: product._id, quantity: qty }));
-    toast.success('Added to cart!');
-  };
+const handleAddToCart = () => {
+  if (!product._id) return;
 
-  const handleBuyNow = () => {
-    if (!product._id) return;
-    dispatch(addToCart({ productId: product._id, quantity: qty }));
-    navigate('/checkout');
-  };
+  const toastId = toast.loading('Adding to cart...');
 
-  const handleWishlist = () => {
-    if (!isAuthenticated) {
-      toast.error('Please login to save items');
-      return;
-    }
-    if (!product._id) return;
-    dispatch(toggleWishlist(product._id));
-    toast.success(isWishlisted ? 'Removed from wishlist' : 'Added to wishlist!');
-  };
+  dispatch(addToCart({ productId: product._id, quantity: qty }))
+    .then(() => {
+      toast.success('Added to cart!', { id: toastId });
+    })
+    .catch(() => {
+      toast.error('Failed to add to cart', { id: toastId });
+    });
+};
+
+const handleBuyNow = () => {
+  if (!product._id) return;
+
+  const toastId = toast.loading('Adding to cart...');
+
+  dispatch(addToCart({ productId: product._id, quantity: qty }))
+    .then(() => {
+      toast.success('Added to cart!', { id: toastId });
+      navigate('/checkout');
+    })
+    .catch(() => {
+      toast.error('Failed to add to cart', { id: toastId });
+    });
+};
+
+const handleWishlist = () => {
+  if (!isAuthenticated) {
+    toast.error('Please login to save items');
+    return;
+  }
+  if (!product._id) return;
+
+  dispatch(toggleWishlist(product._id));
+  toast.success(isWishlisted ? 'Removed from wishlist' : 'Added to wishlist!');
+};
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
@@ -412,34 +430,41 @@ const originalPrice = (product.flashSalePrice > 0 || product.discountPrice > 0)
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-2 mb-5">
-                  <button
-                    onClick={handleBuyNow}
-                    className="w-full bg-[#FFB700] text-black font-bold text-[14px] py-3 rounded-[6px] hover:bg-amber-500 transition-colors"
-                  >
-                    Buy Now
-                  </button>
-                  <button
-                    onClick={handleAddToCart}
-                    className="w-full border-2 border-[#C5C5C5] text-[#1A1A1A] font-bold text-[14px] py-3 rounded-[6px] hover:border-[#1A1A1A] transition-colors"
-                  >
-                    Add to Cart
-                  </button>
-                  <button
-                    onClick={handleWishlist}
-                    className={`w-full border-2 font-bold text-[14px] py-3 rounded-[6px] transition-colors flex items-center justify-center gap-2 ${
-                      isWishlisted
-                        ? 'border-red-400 text-red-500 hover:bg-red-50'
-                        : 'border-[#C5C5C5] text-[#1A1A1A] hover:border-[#1A1A1A]'
-                    }`}
-                    aria-pressed={isWishlisted}
-                  >
-                    {isWishlisted
-                      ? <FaHeart size={14} className="text-red-500" aria-hidden="true" />
-                      : <FiHeart size={14} aria-hidden="true" />}
-                    {isWishlisted ? 'Saved to Wishlist' : 'Add To Wishlist'}
-                  </button>
-                </div>
+                <div className="flex flex-col gap-3 mb-5">
+ 
+  <button
+    onClick={handleBuyNow}
+    className="w-full bg-[#FFB700] hover:bg-[#e6a600] active:scale-[0.985] text-black font-bold text-[14px] py-3.5 rounded-[6px] transition-all duration-200 cursor-pointer shadow-sm"
+  >
+    Buy Now
+  </button>
+
+
+  <button
+    onClick={handleAddToCart}
+    className="w-full bg-white hover:bg-gray-50 border-2 border-[#1A1A1A] text-[#1A1A1A] font-bold text-[14px] py-3.5 rounded-[6px] transition-all duration-200 cursor-pointer active:scale-[0.985]"
+  >
+    Add to Cart
+  </button>
+
+
+  <button
+    onClick={handleWishlist}
+    className={`w-full border-2 font-bold text-[14px] py-3.5 rounded-[6px] transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.985] ${
+      isWishlisted
+        ? 'border-red-500 text-red-500 hover:bg-red-50'
+        : 'border-[#1A1A1A] text-[#1A1A1A] hover:bg-gray-50'
+    }`}
+    aria-pressed={isWishlisted}
+  >
+    {isWishlisted ? (
+      <FaHeart size={16} className="text-red-500" />
+    ) : (
+      <FiHeart size={16} />
+    )}
+    {isWishlisted ? 'Saved to Wishlist' : 'Add To Wishlist'}
+  </button>
+</div>
               </>
             )}
 

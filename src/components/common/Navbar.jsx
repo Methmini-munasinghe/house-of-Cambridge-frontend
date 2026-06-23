@@ -212,8 +212,10 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50" style={{ background: '#111111', boxShadow: '0 2px 24px rgba(0,0,0,0.7)' }}>
-
+   <header 
+  className="sticky top-0 z-[9999] w-full bg-[#111111]"
+  style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.7)' }}
+>
       <div className="w-full px-4 md:px-14 py-3 md:py-4 flex items-center flex-wrap gap-3 md:gap-6">
         <Link to="/" className="flex-shrink-0">
           <img src="/images/logo.png" alt="House of Cambridge" className="h-10 md:h-14 w-auto object-contain" />

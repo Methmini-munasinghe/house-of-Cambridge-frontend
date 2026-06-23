@@ -96,7 +96,7 @@ function TopDealCard({ product }) {
       : product.price
   );
 
-  // Set original price if a valid lower sale price exists
+ 
   const originalPrice = (product.flashSalePrice > 0 || product.discountPrice > 0) ? safePrice(product.price) : null;
   const discount = originalPrice && originalPrice > price
     ? Math.min(99, Math.max(0, Math.round((1 - price / originalPrice) * 100)))
