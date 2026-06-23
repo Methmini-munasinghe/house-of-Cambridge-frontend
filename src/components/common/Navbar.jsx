@@ -82,12 +82,12 @@ function NavBadgeDropdown({ label, glowColor, tree, baseParam, loading }) {
 
   return (
     <div ref={ref} className="relative">
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-2 px-5 py-2 rounded-md bg-white text-black text-[13px] font-bold transition-all hover:brightness-95"
-        aria-expanded={open}
-        aria-haspopup="true"
-      >
+  <button
+  onClick={() => setOpen((v) => !v)}
+  className="flex items-center gap-2 px-5 py-2 rounded-md bg-white text-black text-[13px] font-bold transition-all hover:brightness-95 cursor-pointer"
+  aria-expanded={open}
+  aria-haspopup="true"
+>
         <span className="relative flex h-2 w-2">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: glowColor }} />
           <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: glowColor }} />
@@ -138,12 +138,12 @@ function NavTextDropdown({ label, items }) {
   return (
     <div ref={ref} className="relative">
       <button
-        onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1.5 px-5 py-2 bg-white text-black text-[13.5px] font-bold rounded-md transition-all hover:brightness-95"
-        style={{ letterSpacing: '0.04em' }}
-        aria-expanded={open}
-        aria-haspopup="true"
-      >
+  onClick={() => setOpen((v) => !v)}
+  className="flex items-center gap-1.5 px-5 py-2 bg-white text-black text-[13.5px] font-bold rounded-md transition-all hover:brightness-95 cursor-pointer"
+  style={{ letterSpacing: '0.04em' }}
+  aria-expanded={open}
+  aria-haspopup="true"
+>
         {label}
         <FiChevronDown size={12} className={`transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
@@ -326,15 +326,26 @@ export default function Navbar() {
 
               <div className="w-px h-4 bg-white/10 mx-1 flex-shrink-0" />
 
-              <NavBadgeDropdown label="Pre-Owned UK Items" glowColor="#ef4444" tree={categoryTree} baseParam="preowned=true" loading={categoriesLoading} />
+              <NavBadgeDropdown 
+  label="Pre-Owned UK Items" 
+  glowColor="#ef4444" 
+  tree={categoryTree} 
+  baseParam="preowned=true" 
+  loading={categoriesLoading} 
+/>
+              <div className="w-px h-4 bg-white/10 mx-1 flex-shrink-0" />
+
+<NavBadgeDropdown 
+  label="New Arrivals" 
+  glowColor="#22c55e" 
+  tree={categoryTree} 
+  baseParam="newArrival=true" 
+  loading={categoriesLoading} 
+/>
 
               <div className="w-px h-4 bg-white/10 mx-1 flex-shrink-0" />
 
-              <NavBadgeDropdown label="New Arrivals" glowColor="#22c55e" tree={categoryTree} baseParam="newArrival=true" loading={categoriesLoading} />
-
-              <div className="w-px h-4 bg-white/10 mx-1 flex-shrink-0" />
-
-              <NavTextDropdown label="Pages" items={PAGES_ITEMS} />
+             <NavTextDropdown label="Pages" items={PAGES_ITEMS} />
 
               <Link to="/about"   className="px-5 py-2 text-[13.5px] font-bold text-black bg-white whitespace-nowrap rounded-md transition-all hover:brightness-95" style={{ letterSpacing: '0.04em' }}>About</Link>
               <Link to="/contact" className="px-5 py-2 text-[13.5px] font-bold text-black bg-white whitespace-nowrap rounded-md transition-all hover:brightness-95" style={{ letterSpacing: '0.04em' }}>Contact</Link>

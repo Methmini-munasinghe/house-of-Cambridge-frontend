@@ -315,18 +315,20 @@ export default function ContactUs() {
               </div>
 
               <button
-                type="submit"
-                disabled={submitting}
-                className="w-full bg-[#FFB700] text-black font-bold text-[14px] py-2.5 rounded-[6px] hover:bg-amber-500 transition-colors flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
-              >
-                {submitting ? (
-                  <span>Sending…</span>
-                ) : (
-                  <>
-                    <FiSend size={14} aria-hidden="true" /> Send Message
-                  </>
-                )}
-              </button>
+  type="submit"
+  disabled={submitting}
+  className="w-full bg-[#FFB700] text-black font-bold text-[14px] py-2.5 rounded-[6px] 
+             hover:bg-amber-500 active:scale-[0.985] transition-all flex items-center 
+             justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+>
+  {submitting ? (
+    <span>Sending…</span>
+  ) : (
+    <>
+      <FiSend size={14} aria-hidden="true" /> Send Message
+    </>
+  )}
+</button>
             </form>
           </div>
         </div>
