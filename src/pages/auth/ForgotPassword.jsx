@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { forgotPassword } from '../../redux/slices/authSlice.js';
 import { FiMail, FiArrowLeft, FiAlertTriangle } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import MobileForgotPassword from './MobileForgotPassword';
 
 const INPUT_CLS =
   'w-full px-3 py-2.5 bg-[#EEEEEE] border border-[#C5C5C5] rounded-[6px] text-[13px] text-[#1A1A1A] placeholder-gray-400 outline-none focus:border-[#FFB700] focus:bg-white transition-colors';
@@ -15,6 +16,13 @@ export default function ForgotPassword() {
   const { loading } = useSelector((s) => s.auth);
   const [email, setEmail] = useState('');
   const [sent,  setSent]  = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,6 +33,12 @@ export default function ForgotPassword() {
       toast.error(typeof err === 'string' ? err : err?.message || 'Failed to send reset link');
     }
   };
+
+  const passedProps = { email, setEmail, sent, loading, handleSubmit, INPUT_CLS };
+
+  if (isMobile) {
+    return <MobileForgotPassword {...passedProps} />;
+  }
 
   return (
     <div className="min-h-screen flex items-center" style={PAGE_BG}>

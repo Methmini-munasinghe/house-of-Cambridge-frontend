@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, googleLogin, facebookLogin } from '../../redux/slices/authSlice.js';
@@ -7,6 +7,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import useFacebookSDK from '../../hooks/useFacebookSDK.js';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import MobileLogin from './MobileLogin';
 
 const BENEFITS = [
   { icon: '📦', title: 'Track Your Orders',  desc: 'Real-time delivery updates' },
@@ -45,9 +46,16 @@ export default function Login() {
   const [showPass,      setShowPass]      = useState(false);
   const [remember,      setRemember]      = useState(false);
   const [socialLoading, setSocialLoading] = useState('');
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024); // 1024px is Tailwind's lg breakpoint
 
   const fbReady = useFacebookSDK();
   const from    = location.state?.from?.pathname || '/';
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     if (!isAuthenticated || !user) return;
@@ -93,6 +101,16 @@ export default function Login() {
       }
     }, { scope: 'email,public_profile' });
   };
+
+  const passedProps = {
+    form, setForm, showPass, setShowPass, remember, setRemember,
+    loading, socialLoading, handleSubmit, handleGoogleLogin, handleFacebookLogin,
+    INPUT_CLS, GoogleIcon, FacebookIcon, BENEFITS
+  };
+
+  if (isMobile) {
+    return <MobileLogin {...passedProps} />;
+  }
 
   return (
     <div className="min-h-screen flex" style={{ background: 'linear-gradient(136deg, rgba(254,242,228,1) 42%, rgba(255,255,255,1) 83%)' }}>

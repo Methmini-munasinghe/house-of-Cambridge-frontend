@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { register, googleLogin, facebookLogin } from '../../redux/slices/authSlice.js';
@@ -6,6 +6,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import useFacebookSDK from '../../hooks/useFacebookSDK.js';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import MobileRegister from './MobileRegister';
 
 const INPUT_CLS =
   'w-full px-3 py-2.5 bg-[#EEEEEE] border border-[#C5C5C5] rounded-[6px] text-[13px] text-[#1A1A1A] placeholder-gray-400 outline-none focus:border-[#FFB700] focus:bg-white transition-colors';
@@ -65,6 +66,13 @@ export default function Register() {
   const [showPass,      setShowPass]      = useState(false);
   const [showConfirm,   setShowConfirm]   = useState(false);
   const [socialLoading, setSocialLoading] = useState('');
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const fbReady = useFacebookSDK();
   const set     = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
@@ -119,6 +127,16 @@ export default function Register() {
       }
     }, { scope: 'email,public_profile' });
   };
+
+  const passedProps = {
+    form, set, strength, showPass, setShowPass, showConfirm, setShowConfirm,
+    loading, socialLoading, handleSubmit, handleGoogleLogin, handleFacebookLogin,
+    INPUT_CLS, LABEL_CLS, SECTION_CLS, GoogleIcon, FacebookIcon, NEXT_STEPS, MEMBER_BENEFITS
+  };
+
+  if (isMobile) {
+    return <MobileRegister {...passedProps} />;
+  }
 
   return (
     <div className="min-h-screen flex" style={{ background: 'linear-gradient(136deg, rgba(254,242,228,1) 42%, rgba(255,255,255,1) 83%)' }}>

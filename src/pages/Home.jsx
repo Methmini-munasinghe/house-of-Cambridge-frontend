@@ -12,6 +12,7 @@ import {
 import api from '../redux/api/axiosInstance';
 import ProductCard from '../components/ui/ProductCard';
 import Layout from '../components/common/Layout';
+import MobileHome from './MobileHome';
 
 const HERO_SLIDES = [
   {
@@ -266,6 +267,7 @@ export default function Home() {
   const [slide, setSlide]                       = useState(0);
   const [beautyProducts, setBeautyProducts]     = useState([]);
   const [electronicsProducts, setElectronicsProducts] = useState([]);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
   const autoRef = useRef(null);
 
@@ -288,6 +290,12 @@ export default function Home() {
     dispatch(fetchHomeNewArrivals());
     dispatch(fetchCategories());
   }, [dispatch]);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     startAuto();
@@ -317,6 +325,20 @@ export default function Home() {
   }, [categories?.length]);
 
   const cur = HERO_SLIDES[slide];
+
+  const mobileProps = {
+    slide, cur, HERO_SLIDES, goSlide, FEATURES, STATIC_CATS, flashSale, MAX_FLASH_CARDS,
+    popular, homeNewArrivals, beautyProducts, electronicsProducts, BRAND_LOGOS,
+    FlashCountdown, FlashCardSkeleton, ProductRowSkeleton
+  };
+
+  if (isMobile) {
+    return (
+      <Layout>
+        <MobileHome {...mobileProps} />
+      </Layout>
+    );
+  }
 
   return (
     <Layout>

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { resetPassword } from '../../redux/slices/authSlice.js';
 import { FiEye, FiEyeOff, FiCheck, FiX, FiShield, FiAlertTriangle } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import MobileResetPassword from './MobileResetPassword';
 
 const INPUT_CLS =
   'w-full px-3 py-2.5 bg-[#EEEEEE] border border-[#C5C5C5] rounded-[6px] text-[13px] text-[#1A1A1A] placeholder-gray-400 outline-none focus:border-[#FFB700] focus:bg-white transition-colors pr-10';
@@ -38,6 +39,13 @@ export default function ResetPassword() {
   const [showPass,    setShowPass]    = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [success,     setSuccess]     = useState(false);
+  const [isMobile,    setIsMobile]    = useState(window.innerWidth < 1024);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const p = form.password;
   const reqs = {
@@ -66,6 +74,15 @@ export default function ResetPassword() {
       toast.error(typeof err === 'string' ? err : err?.message || 'Failed to reset password');
     }
   };
+
+  const passedProps = {
+    form, setForm, showPass, setShowPass, showConfirm, setShowConfirm,
+    success, loading, reqs, token, handleSubmit, INPUT_CLS
+  };
+
+  if (isMobile) {
+    return <MobileResetPassword {...passedProps} />;
+  }
 
   return (
     <div className="min-h-screen flex items-center" style={PAGE_BG}>
