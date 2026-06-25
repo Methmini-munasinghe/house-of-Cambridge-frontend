@@ -141,15 +141,15 @@ export default function AdminDashboard() {
             </div>
             <div className="space-y-3">
               {recentOrders?.slice(0, 8).map((order) => (
-                <Link
-                  key={order._id}
-                  to={`/admin/orders/${order._id}`}
-                  className="flex items-center justify-between py-2 border-b border-[#F4F5F7] last:border-0 hover:bg-[#FAFAFA] px-1 rounded transition-colors"
-                >
-                  <div>
-                    <p className="text-[13px] font-semibold text-[#1A1A1A]">{order.orderNumber}</p>
-                    <p className="text-[12px] text-[#60717B]">{order.user?.name || order.guestName || 'Guest'}</p>
-                  </div>
+  <Link
+    key={order._id}
+    to={`/admin/orders/${order.orderNumber || order._id}`}   
+    className="flex items-center justify-between py-2 border-b border-[#F4F5F7] last:border-0 hover:bg-[#FAFAFA] px-1 rounded transition-colors"
+  >
+    <div>
+      <p className="text-[13px] font-semibold text-[#1A1A1A]">{order.orderNumber}</p>
+      <p className="text-[12px] text-[#60717B]">{order.user?.name || order.guestName || 'Guest'}</p>
+    </div>
                   <div className="text-right">
                     <p className="text-[13px] font-bold text-[#1A1A1A]">Rs.{order.total?.toLocaleString()}</p>
                     <span className={`text-[11px] px-2 py-0.5 rounded-full font-medium capitalize ${STATUS_COLORS[order.orderStatus] ?? 'bg-gray-100 text-gray-700'}`}>

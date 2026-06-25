@@ -9,6 +9,8 @@ const handle = (err) =>
       : 'Something went wrong'
   ).replace(/[<>]/g, '').slice(0, 500);
 
+
+
 export const fetchDashboardStats = createAsyncThunk('admin/dashboardStats', async (_, { rejectWithValue }) => {
   try { return (await api.get('/admin/dashboard')).data; }
   catch (err) { return rejectWithValue(handle(err)); }
@@ -39,18 +41,24 @@ export const createAdmin = createAsyncThunk('admin/createAdmin', async (data, { 
   catch (err) { return rejectWithValue(handle(err)); }
 });
 
-export const fetchAdminOrders = createAsyncThunk('admin/fetchOrders', async (params, { rejectWithValue }) => {
+export const fetchAdminOrders = createAsyncThunk('admin/fetchOrders', async (params = {}, { rejectWithValue }) => {
   try { return (await api.get('/admin/orders', { params })).data; }
   catch (err) { return rejectWithValue(handle(err)); }
 });
 
 export const fetchAdminOrder = createAsyncThunk('admin/fetchOrder', async (id, { rejectWithValue }) => {
-  try { return (await api.get(`/admin/orders/${encodeURIComponent(id)}`)).data; }
+  try {
+    const res = await api.get(`/admin/orders/${encodeURIComponent(id)}`);
+    return res.data.order ?? res.data;
+  }
   catch (err) { return rejectWithValue(handle(err)); }
 });
 
 export const updateAdminOrderStatus = createAsyncThunk('admin/updateOrderStatus', async ({ id, data }, { rejectWithValue }) => {
-  try { return (await api.put(`/admin/orders/${encodeURIComponent(id)}/status`, data)).data; }
+  try {
+    const res = await api.put(`/admin/orders/${encodeURIComponent(id)}/status`, data);
+    return res.data.order ?? res.data;
+  }
   catch (err) { return rejectWithValue(handle(err)); }
 });
 
@@ -190,6 +198,8 @@ export const broadcastNotification = createAsyncThunk('admin/broadcast', async (
   catch (err) { return rejectWithValue(handle(err)); }
 });
 
+
+
 const pending  = (state) => { state.loading = true;  state.error = null; };
 const rejected = (state, action) => { state.loading = false; state.error = action.payload; };
 
@@ -229,7 +239,7 @@ const adminSlice = createSlice({
       .addCase(fetchDashboardStats.pending, pending)
       .addCase(fetchDashboardStats.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.stats = payload.stats ?? null;
+        state.stats = payload.stats ?? payload ?? null;
         state.recentOrders = Array.isArray(payload.recentOrders) ? payload.recentOrders : [];
         state.topProducts = Array.isArray(payload.topProducts) ? payload.topProducts : [];
       })
@@ -267,18 +277,21 @@ const adminSlice = createSlice({
       .addCase(fetchAdminOrders.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.orders = Array.isArray(payload.orders) ? payload.orders : [];
-        state.ordersTotal = Number.isFinite(payload.total) ? payload.total : 0;
+        state.ordersTotal = Number.isFinite(payload.total) ? payload.total : (payload.count ?? 0);
       })
       .addCase(fetchAdminOrders.rejected, rejected)
+      .addCase(fetchAdminOrder.pending, pending)
       .addCase(fetchAdminOrder.fulfilled, (state, { payload }) => {
-        state.selectedOrder = payload.order ?? null;
+        state.loading = false;
+        state.selectedOrder = payload ?? null;
       })
+      .addCase(fetchAdminOrder.rejected, rejected)
       .addCase(updateAdminOrderStatus.pending, pending)
       .addCase(updateAdminOrderStatus.fulfilled, (state, { payload }) => {
         state.loading = false;
-        const idx = state.orders.findIndex((o) => o._id === payload.order?._id);
-        if (idx !== -1 && payload.order) state.orders[idx] = payload.order;
-        state.selectedOrder = payload.order ?? null;
+        const idx = state.orders.findIndex((o) => o._id === payload?._id);
+        if (idx !== -1 && payload) state.orders[idx] = payload;
+        state.selectedOrder = payload ?? null;
       })
       .addCase(updateAdminOrderStatus.rejected, rejected)
 

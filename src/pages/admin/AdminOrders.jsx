@@ -6,9 +6,12 @@ import AdminLayout from '../../components/admin/AdminLayout.jsx';
 import ConfirmModal from '../../components/ui/ConfirmModal.jsx';
 import { ToastContainer } from '../../components/ui/Toast.jsx';
 import useToast from '../../hooks/useToast.js';
-import { FiSearch, FiEye, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiSearch, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
-const STATUSES = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'return_requested', 'returned'];
+const STATUSES = [
+  'pending', 'confirmed', 'processing', 'shipped',
+  'delivered', 'cancelled', 'return_requested', 'returned',
+];
 
 const STATUS_COLORS = {
   pending:          'bg-yellow-100 text-yellow-700',
@@ -41,16 +44,19 @@ export default function AdminOrders() {
 
   const pages = Math.ceil((ordersTotal ?? 0) / PAGE_SIZE);
 
-  const load = useCallback((s = search, st = status, p = page) => {
-    dispatch(fetchAdminOrders({
-      search: s  || undefined,
-      status: st || undefined,
-      page:   p,
-      limit:  PAGE_SIZE,
-    }));
-  }, [dispatch, search, status, page]);
+  const load = useCallback(
+    (s = search, st = status, p = page) => {
+      dispatch(fetchAdminOrders({
+        search: s  || undefined,
+        status: st || undefined,
+        page:   p,
+        limit:  PAGE_SIZE,
+      }));
+    },
+    [dispatch, search, status, page],
+  );
 
-  useEffect(() => { load(search, status, page); }, [page]);
+  useEffect(() => { load(search, status, page); }, [page]); 
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -64,6 +70,7 @@ export default function AdminOrders() {
     load(search, val, 1);
   };
 
+
   const openModal = (order, newStatus) => {
     setModal({ orderId: order._id, orderNumber: order.orderNumber, newStatus });
     setAdminNotes('');
@@ -74,7 +81,7 @@ export default function AdminOrders() {
     setActionLoading(true);
     try {
       await dispatch(updateAdminOrderStatus({
-        id:   modal.orderId,
+        id:   modal.orderId,          // always _id
         data: { status: modal.newStatus, adminNotes },
       })).unwrap();
       toast.success(`Order ${modal.orderNumber} marked as ${modal.newStatus.replace(/_/g, ' ')}`);
@@ -97,6 +104,7 @@ export default function AdminOrders() {
           </h2>
         </div>
 
+   
         <div className="bg-white rounded-[12px] border border-[#E9E9E9] p-4 flex flex-wrap gap-3">
           <form onSubmit={handleSearch} className="flex gap-2 flex-1 min-w-[220px]" role="search">
             <div className="relative flex-1">
@@ -109,7 +117,10 @@ export default function AdminOrders() {
                 className="w-full pl-8 pr-3 py-2 text-[13px] border border-[#E9E9E9] rounded-[8px] bg-[#FAFAFA] focus:outline-none focus:border-[#FFB700]"
               />
             </div>
-            <button type="submit" className="px-4 py-2 bg-[#FFB700] text-[#1A1A1A] font-semibold text-[13px] rounded-[8px] hover:bg-amber-400 transition-colors">
+            <button
+              type="submit"
+              className="px-4 py-2 bg-[#FFB700] text-[#1A1A1A] font-semibold text-[13px] rounded-[8px] hover:bg-amber-400 transition-colors"
+            >
               Search
             </button>
           </form>
@@ -120,10 +131,13 @@ export default function AdminOrders() {
             className="px-3 py-2 text-[13px] border border-[#E9E9E9] rounded-[8px] bg-[#FAFAFA] focus:outline-none focus:border-[#FFB700]"
           >
             <option value="">All Statuses</option>
-            {STATUSES.map((s) => <option key={s} value={s}>{s.replace(/_/g, ' ')}</option>)}
+            {STATUSES.map((s) => (
+              <option key={s} value={s}>{s.replace(/_/g, ' ')}</option>
+            ))}
           </select>
         </div>
 
+     
         <div className="bg-white rounded-[12px] border border-[#E9E9E9] overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-[13px]">
@@ -145,10 +159,14 @@ export default function AdminOrders() {
                     </td>
                   </tr>
                 ) : orders.length === 0 ? (
-                  <tr><td colSpan={8} className="text-center py-12 text-[#60717B]">No orders found</td></tr>
+                  <tr>
+                    <td colSpan={8} className="text-center py-12 text-[#60717B]">No orders found</td>
+                  </tr>
                 ) : orders.map((order) => (
                   <tr key={order._id} className="border-b border-[#F4F5F7] hover:bg-[#FAFAFA] transition-colors">
-                    <td className="px-4 py-3 font-semibold text-[#1A1A1A] whitespace-nowrap">{order.orderNumber}</td>
+                    <td className="px-4 py-3 font-semibold text-[#1A1A1A] whitespace-nowrap">
+                      {order.orderNumber}
+                    </td>
                     <td className="px-4 py-3 text-[#1A1A1A]">
                       <p className="font-medium">{order.user?.name || order.guestName || 'Guest'}</p>
                       <p className="text-[#60717B] text-[11px]">{order.user?.email || order.guestEmail}</p>
@@ -157,9 +175,15 @@ export default function AdminOrders() {
                       {new Date(order.createdAt).toLocaleDateString('en-GB')}
                     </td>
                     <td className="px-4 py-3 text-[#60717B]">{order.items?.length}</td>
-                    <td className="px-4 py-3 font-bold text-[#1A1A1A] whitespace-nowrap">Rs.{order.total?.toLocaleString()}</td>
+                    <td className="px-4 py-3 font-bold text-[#1A1A1A] whitespace-nowrap">
+                      Rs.{order.total?.toLocaleString()}
+                    </td>
                     <td className="px-4 py-3">
-                      <span className={`px-2 py-0.5 rounded-full text-[11px] font-medium capitalize ${order.paymentStatus === 'paid' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                      <span className={`px-2 py-0.5 rounded-full text-[11px] font-medium capitalize ${
+                        order.paymentStatus === 'paid'
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-yellow-100 text-yellow-700'
+                      }`}>
                         {order.paymentStatus}
                       </span>
                     </td>
@@ -168,18 +192,22 @@ export default function AdminOrders() {
                         value={order.orderStatus}
                         onChange={(e) => openModal(order, e.target.value)}
                         aria-label={`Change status for order ${order.orderNumber}`}
-                        className={`text-[11px] font-semibold px-2 py-1 rounded-full border-0 cursor-pointer capitalize focus:outline-none ${STATUS_COLORS[order.orderStatus] ?? 'bg-gray-100 text-gray-700'}`}
+                        className={`text-[11px] font-semibold px-2 py-1 rounded-full border-0 cursor-pointer capitalize focus:outline-none ${
+                          STATUS_COLORS[order.orderStatus] ?? 'bg-gray-100 text-gray-700'
+                        }`}
                       >
-                        {STATUSES.map((s) => <option key={s} value={s}>{s.replace(/_/g, ' ')}</option>)}
+                        {STATUSES.map((s) => (
+                          <option key={s} value={s}>{s.replace(/_/g, ' ')}</option>
+                        ))}
                       </select>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      
                       <Link
                         to={`/admin/orders/${order._id}`}
-                        aria-label={`View order ${order.orderNumber}`}
-                        className="text-[#FFB700] hover:text-amber-500 transition-colors"
+                        className="text-[#FFB700] font-semibold text-[13px] hover:underline"
                       >
-                        <FiEye size={16} />
+                        View
                       </Link>
                     </td>
                   </tr>
@@ -188,14 +216,25 @@ export default function AdminOrders() {
             </table>
           </div>
 
+   
           {pages > 1 && (
             <div className="px-4 py-3 border-t border-[#E9E9E9] flex items-center justify-between">
               <p className="text-[13px] text-[#60717B]">Page {page} of {pages}</p>
               <div className="flex gap-2">
-                <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1} aria-label="Previous page" className="p-2 rounded-[6px] border border-[#E9E9E9] disabled:opacity-40 hover:bg-[#FAFAFA] transition-colors">
+                <button
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                  aria-label="Previous page"
+                  className="p-2 rounded-[6px] border border-[#E9E9E9] disabled:opacity-40 hover:bg-[#FAFAFA] transition-colors"
+                >
                   <FiChevronLeft size={14} />
                 </button>
-                <button onClick={() => setPage((p) => Math.min(pages, p + 1))} disabled={page === pages} aria-label="Next page" className="p-2 rounded-[6px] border border-[#E9E9E9] disabled:opacity-40 hover:bg-[#FAFAFA] transition-colors">
+                <button
+                  onClick={() => setPage((p) => Math.min(pages, p + 1))}
+                  disabled={page === pages}
+                  aria-label="Next page"
+                  className="p-2 rounded-[6px] border border-[#E9E9E9] disabled:opacity-40 hover:bg-[#FAFAFA] transition-colors"
+                >
                   <FiChevronRight size={14} />
                 </button>
               </div>
@@ -211,7 +250,10 @@ export default function AdminOrders() {
         title="Update Order Status"
         message={
           <div className="space-y-3">
-            <p>Change <strong>{modal?.orderNumber}</strong> to <strong className="capitalize">{modal?.newStatus?.replace(/_/g, ' ')}</strong>?</p>
+            <p>
+              Change <strong>{modal?.orderNumber}</strong> to{' '}
+              <strong className="capitalize">{modal?.newStatus?.replace(/_/g, ' ')}</strong>?
+            </p>
             <textarea
               value={adminNotes}
               onChange={(e) => setAdminNotes(e.target.value)}

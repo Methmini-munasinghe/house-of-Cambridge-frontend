@@ -19,13 +19,7 @@ const STEPS = [
 
 const LOYALTY_RATE = 50;
 
-const ORDER_ID_RE = /^[A-Za-z0-9]+$/;
-
-function sanitizeOrderId(id) {
-  if (!id) return '—';
-  const safe = String(id).replace(/[^A-Za-z0-9]/g, '').slice(-8).toUpperCase();
-  return `DFC-${new Date().getFullYear()}-${safe}`;
-}
+const OBJECT_ID_RE = /^[a-f\d]{24}$/i;
 
 function safeNum(value, fallback = 0) {
   const n = Number(value);
@@ -51,7 +45,7 @@ export default function OrderConfirmation() {
   const { user }           = useSelector((s) => s.auth);
 
   useEffect(() => {
-    if (id && ORDER_ID_RE.test(id)) dispatch(fetchOrder(id));
+    if (id && OBJECT_ID_RE.test(id)) dispatch(fetchOrder(id));
   }, [id, dispatch]);
 
   if (loading) return <Layout><PageSpinner /></Layout>;
@@ -62,7 +56,7 @@ export default function OrderConfirmation() {
   const shipping      = safeNum(order?.shippingCost);
   const tax           = safeNum(order?.tax, Math.round((subtotal - discount) * 0.08));
   const totalPaid     = safeNum(order?.total, subtotal - discount + shipping + tax);
-  const loyaltyEarned = Math.floor(totalPaid / LOYALTY_RATE);
+  const loyaltyEarned = order?.loyaltyPointsEarned ?? Math.floor(totalPaid / LOYALTY_RATE);
 
   const customerName  = order?.guestName  || user?.name  || 'Customer';
   const customerEmail = order?.guestEmail || user?.email || '';
@@ -70,10 +64,14 @@ export default function OrderConfirmation() {
   const shippingAddr  = order?.shippingAddress;
   const firstName     = customerName.split(' ')[0] || 'Customer';
 
+  
+  const displayOrderId = order?.orderNumber || (order?._id ? `#${order._id.slice(-8).toUpperCase()}` : '—');
+
   return (
     <Layout>
       <main className="max-w-[860px] mx-auto px-4 py-8 pb-16">
 
+   
         <nav aria-label="Checkout progress" className="flex items-center justify-center mb-8 overflow-x-auto px-2">
           {STEPS.map(({ n, label }, idx) => (
             <div key={n} className="flex items-center">
@@ -93,6 +91,7 @@ export default function OrderConfirmation() {
           ))}
         </nav>
 
+  
         <div className="text-center mb-6">
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
             <FiCheck size={34} className="text-green-500" strokeWidth={3} />
@@ -105,7 +104,7 @@ export default function OrderConfirmation() {
           {order && (
             <span className="inline-flex items-center gap-2 bg-[#1A1A1A] text-white text-[13px] font-bold px-4 py-2 rounded-full">
               <FiShoppingCart size={13} aria-hidden="true" />
-              Order {sanitizeOrderId(order._id)}
+              {displayOrderId}
             </span>
           )}
         </div>
@@ -127,6 +126,7 @@ export default function OrderConfirmation() {
           </div>
         )}
 
+   
         <div className="bg-amber-50 border border-amber-200 rounded-[10px] px-5 py-3.5 flex items-center gap-3 mb-6" role="note">
           <div className="w-8 h-8 bg-[#FFB700] rounded-full flex items-center justify-center flex-shrink-0" aria-hidden="true">
             <FiStar size={15} className="text-black" />
@@ -142,6 +142,7 @@ export default function OrderConfirmation() {
           </div>
         </div>
 
+    
         {order && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <section
@@ -212,7 +213,7 @@ export default function OrderConfirmation() {
                   <dt className="text-[#60717B]">Order Status</dt>
                   <dd>
                     <span className="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-0.5 rounded-full capitalize">
-                      {order.orderStatus || 'Processing'}
+                      {(order.orderStatus || 'Processing').replace(/_/g, ' ')}
                     </span>
                   </dd>
                 </div>
@@ -227,6 +228,7 @@ export default function OrderConfirmation() {
           </div>
         )}
 
+  
         {items.length > 0 && (
           <section
             className="bg-white border border-[#E9E9E9] rounded-[10px] overflow-hidden shadow-[2px_3px_6px_rgba(0,0,0,0.04)] mb-6"
@@ -270,6 +272,7 @@ export default function OrderConfirmation() {
           </section>
         )}
 
+   
         {order && (
           <section
             className="bg-white border border-[#E9E9E9] rounded-[10px] p-5 shadow-[2px_3px_6px_rgba(0,0,0,0.04)] mb-8"
@@ -307,6 +310,7 @@ export default function OrderConfirmation() {
           </section>
         )}
 
+      
         <div className="flex flex-col sm:flex-row gap-3">
           <button
             type="button"
@@ -323,6 +327,7 @@ export default function OrderConfirmation() {
           </Link>
         </div>
 
+    
         {order && (
           <div className="text-center mt-5">
             <Link
