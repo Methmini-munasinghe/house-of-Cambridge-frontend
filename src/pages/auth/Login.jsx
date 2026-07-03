@@ -97,7 +97,7 @@ export default function Login() {
       <div className="hidden lg:block lg:w-[40%] relative flex-shrink-0 overflow-hidden">
         <img src="/images/auth/auth-login-bg.png" alt="" className="absolute bottom-0 right-0 h-[90%] w-full object-contain object-bottom pointer-events-none select-none" aria-hidden="true" />
         <div className="relative z-10 p-10">
-          <Link to="/"><img src="/images/logo.png" alt="House of Cambridge" className="h-10 w-auto object-contain" /></Link>
+          <Link to="/"><img src="/images/logo.png" alt="House of Cambridge" className="h-20 w-auto object-contain" /></Link>
           <div className="mt-14">
             <h2 className="font-black leading-tight text-[#1A1A1A]" style={{ fontSize: '36px' }}>
               WELCOME BACK!<br /><span className="text-[#FFB700]">SHOP SMARTER,<br />FASTER & EASIER.</span>
