@@ -17,17 +17,17 @@ import Layout from '../components/common/Layout';
 const HERO_SLIDES = [
   {
     title:        'House Of Cambridge',
-    sub:          'One-stop shop for all your favourite brands',
+    
     image:        '/images/hero-slide-1-7a4bbd.png',
   },
   {
     title:        'Beauty Deals — Glow More, Save More!',
-    sub:          'Up to 40% OFF on top brands',
+   
     image:        '/images/hero-slide-2.png',
   },
   {
     title:        'Self Care Starts Here',
-    sub:          'Pamper yourself everyday — up to 40% OFF',
+    
     image:        '/images/hero-slide-3-6a4322.png',
   },
 ];
@@ -276,26 +276,7 @@ export default function Home() {
           role="img"
           aria-label={cur.title}
         >
-          <div className="absolute inset-0 bg-black/30" aria-hidden="true" />
-          <div className="relative max-w-[1280px] mx-auto px-4 sm:px-8 md:px-16 w-full py-10 md:py-16 min-h-[300px] md:min-h-[437px] flex items-center">
-            <div className="max-w-lg">
-              <div className="flex items-start gap-3 mb-0.5">
-                <span className="w-1 h-[28px] md:h-[44px] bg-[#FFB700] rounded-full flex-shrink-0 mt-1" aria-hidden="true" />
-                <p className="text-white text-[22px] md:text-[36px] font-bold leading-[28px] md:leading-[44px]">
-                  {cur.title}
-                </p>
-              </div>
-              <p className="text-white text-[14px] md:text-[20px] font-normal leading-[20px] md:leading-[28px] mb-5 md:mb-8 ml-3 md:ml-4">
-                {cur.sub}
-              </p>
-              <Link
-                to="/shop"
-                className="ml-3 md:ml-4 inline-flex items-center justify-center bg-[#FFB700] text-black text-[13px] md:text-[15px] font-semibold w-[130px] md:w-[157px] h-8 md:h-9 rounded-full hover:bg-amber-500 transition-colors"
-              >
-                Shop Now
-              </Link>
-            </div>
-          </div>
+          
         </div>
 
         <button
