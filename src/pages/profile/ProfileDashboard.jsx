@@ -9,26 +9,22 @@ import {
   FiMapPin, FiCreditCard, FiPhone, FiMail,
 } from 'react-icons/fi';
 
-const MAX_SEARCH_LEN  = 60;
+const MAX_SEARCH_LEN     = 60;
 const RECENT_ORDER_COUNT = 5;
 
 const STATUS_STYLES = {
-  pending:    'bg-yellow-100 text-yellow-700',
-  confirmed:  'bg-blue-100 text-blue-700',
-  processing: 'bg-purple-100 text-purple-700',
-  shipped:    'bg-indigo-100 text-indigo-700',
-  delivered:  'bg-green-100 text-green-700',
-  cancelled:  'bg-red-100 text-red-700',
+  pending:          'bg-yellow-100 text-yellow-700',
+  confirmed:        'bg-blue-100   text-blue-700',
+  processing:       'bg-purple-100 text-purple-700',
+  shipped:          'bg-indigo-100 text-indigo-700',
+  delivered:        'bg-green-100  text-green-700',
+  cancelled:        'bg-red-100    text-red-700',
+  returned:         'bg-orange-100 text-orange-700',
+  return_requested: 'bg-amber-100  text-amber-700',
 };
 
 function sanitizeSearch(value) {
   return value.replace(/[<>"'`]/g, '').slice(0, MAX_SEARCH_LEN);
-}
-
-function fmtOrderId(id) {
-  if (!id) return '—';
-  const safe = id.replace(/[^A-Za-z0-9]/g, '').slice(-8).toUpperCase();
-  return `#DFC-${new Date().getFullYear()}-${safe}`;
 }
 
 function fmtDate(d) {
@@ -55,7 +51,7 @@ export default function ProfileDashboard() {
   const orderList    = orders  || [];
   const wishlistList = wishlist || [];
 
-  const activeOrders  = orderList.filter((o) => !['delivered', 'cancelled'].includes(o.orderStatus));
+  const activeOrders  = orderList.filter((o) => !['delivered', 'cancelled', 'returned'].includes(o.orderStatus));
   const totalSpent    = orderList.reduce((s, o) => s + (o.total || 0), 0);
   const loyaltyPoints = u?.loyaltyPoints || 0;
 
@@ -63,8 +59,12 @@ export default function ProfileDashboard() {
     setSearch(sanitizeSearch(e.target.value));
   }, []);
 
+ 
   const filteredOrders = orderList.filter(
-    (o) => !search || fmtOrderId(o._id).toLowerCase().includes(search.toLowerCase()),
+    (o) =>
+      !search ||
+      (o.orderNumber || '').toLowerCase().includes(search.toLowerCase()) ||
+      (o._id || '').toLowerCase().includes(search.toLowerCase()),
   );
 
   const scrollWishlist = useCallback((dir) => {
@@ -74,14 +74,15 @@ export default function ProfileDashboard() {
   const defaultAddress = (u?.addresses || [])[0];
 
   const STATS = [
-    { label: 'Total Orders',   value: orderList.length,                          color: 'text-[#1A1A1A]' },
-    { label: 'Active Orders',  value: activeOrders.length,                       color: 'text-[#FFB700]' },
-    { label: 'Loyalty Points', value: loyaltyPoints,                             color: 'text-[#FFB700]' },
-    { label: 'Total Spent',    value: `Rs. ${totalSpent.toLocaleString()}`,       color: 'text-[#1A1A1A]' },
+    { label: 'Total Orders',   value: orderList.length,                    color: 'text-[#1A1A1A]' },
+    { label: 'Active Orders',  value: activeOrders.length,                 color: 'text-[#FFB700]' },
+    { label: 'Loyalty Points', value: loyaltyPoints,                       color: 'text-[#FFB700]' },
+    { label: 'Total Spent',    value: `Rs. ${totalSpent.toLocaleString()}`, color: 'text-[#1A1A1A]' },
   ];
 
   return (
     <ProfileLayout>
+    
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
         {STATS.map((s) => (
           <div
@@ -94,6 +95,7 @@ export default function ProfileDashboard() {
         ))}
       </div>
 
+  
       <section
         className="bg-white border border-[#E9E9E9] rounded-[10px] overflow-hidden shadow-[2px_3px_8px_rgba(0,0,0,0.04)] mb-4"
         aria-labelledby="recent-orders-heading"
@@ -103,7 +105,7 @@ export default function ProfileDashboard() {
           <div className="flex items-center gap-2">
             <div className="relative" role="search">
               <FiSearch size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#C5C5C5]" aria-hidden="true" />
-              <label htmlFor="order-search" className="sr-only">Search orders by ID</label>
+              <label htmlFor="order-search" className="sr-only">Search orders by number</label>
               <input
                 id="order-search"
                 type="search"
@@ -114,10 +116,7 @@ export default function ProfileDashboard() {
                 className="pl-8 pr-3 py-1.5 border border-[#E9E9E9] rounded-[6px] text-[12px] outline-none focus:border-[#FFB700] w-40"
               />
             </div>
-            <Link
-              to="/orders"
-              className="text-[12px] text-[#FFB700] font-bold hover:underline whitespace-nowrap"
-            >
+            <Link to="/orders" className="text-[12px] text-[#FFB700] font-bold hover:underline whitespace-nowrap">
               View All
             </Link>
           </div>
@@ -133,7 +132,7 @@ export default function ProfileDashboard() {
             <table className="w-full">
               <thead>
                 <tr className="bg-[#FAFAFA] border-b border-[#F0F0F0]">
-                  {['Order ID', 'Date', 'Items', 'Total', 'Status'].map((h) => (
+                  {['Order #', 'Date', 'Items', 'Total', 'Status'].map((h) => (
                     <th
                       key={h}
                       scope="col"
@@ -148,11 +147,12 @@ export default function ProfileDashboard() {
                 {filteredOrders.slice(0, RECENT_ORDER_COUNT).map((o) => (
                   <tr key={o._id} className="hover:bg-[#FAFAFA] transition-colors">
                     <td className="px-4 py-3">
+                 
                       <Link
-                        to={`/track-order/${o._id}`}
+                        to={`/orders/${o._id}`}
                         className="text-[12px] font-bold text-[#FFB700] hover:underline"
                       >
-                        {fmtOrderId(o._id)}
+                        {o.orderNumber || `#${o._id.slice(-8).toUpperCase()}`}
                       </Link>
                     </td>
                     <td className="px-4 py-3 text-[12px] text-[#60717B]">
@@ -170,7 +170,7 @@ export default function ProfileDashboard() {
                           STATUS_STYLES[o.orderStatus] || 'bg-gray-100 text-gray-600'
                         }`}
                       >
-                        {o.orderStatus}
+                        {(o.orderStatus || '').replace(/_/g, ' ')}
                       </span>
                     </td>
                   </tr>
@@ -182,6 +182,7 @@ export default function ProfileDashboard() {
       </section>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    
         <section
           className="bg-white border border-[#E9E9E9] rounded-[10px] p-5 shadow-[2px_3px_8px_rgba(0,0,0,0.04)]"
           aria-labelledby="account-summary-heading"
@@ -216,11 +217,12 @@ export default function ProfileDashboard() {
             <div className="flex items-center gap-2.5">
               <FiCreditCard size={13} className="text-[#C5C5C5] flex-shrink-0" aria-hidden="true" />
               <dt className="sr-only">Default payment</dt>
-              <dd>VISA ●●●● 4512</dd>
+              <dd>Payment methods managed at checkout</dd>
             </div>
           </dl>
         </section>
 
+   
         <section
           className="bg-white border border-[#E9E9E9] rounded-[10px] p-5 shadow-[2px_3px_8px_rgba(0,0,0,0.04)]"
           aria-labelledby="wishlist-heading"
@@ -267,11 +269,7 @@ export default function ProfileDashboard() {
                 const p = item.product || item;
                 if (!p._id) return null;
                 return (
-                  <Link
-                    key={p._id}
-                    to={`/product/${p._id}`}
-                    className="flex-shrink-0 w-[100px]"
-                  >
+                  <Link key={p._id} to={`/product/${p._id}`} className="flex-shrink-0 w-[100px]">
                     <img
                       src={p.images?.[0]?.url || 'https://placehold.co/100?text=P'}
                       alt={p.name || 'Wishlist product'}

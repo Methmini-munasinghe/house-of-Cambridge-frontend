@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../redux/slices/cartSlice.js';
 import { toggleWishlist } from '../../redux/slices/userSlice.js';
@@ -8,9 +8,7 @@ import toast from 'react-hot-toast';
 function HeartIcon({ filled }) {
   return (
     <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
+      width="16" height="16" viewBox="0 0 24 24"
       fill={filled ? '#e53535' : 'none'}
       stroke={filled ? '#e53535' : '#999'}
       strokeWidth="2"
@@ -29,28 +27,37 @@ function HeartIcon({ filled }) {
 }
 
 export default function ProductCard({ product }) {
-  const dispatch   = useDispatch();
-  const navigate   = useNavigate();
+  const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((s) => s.auth);
-  const { wishlist }        = useSelector((s) => s.user);
+  const { wishlist } = useSelector((s) => s.user);
 
   const isWishlisted = wishlist.some((p) => (p._id || p) === product._id);
 
-  const price         = product.discountPrice > 0 ? product.discountPrice : product.price;
+  const price = product.discountPrice > 0 ? product.discountPrice : product.price;
   const originalPrice = product.discountPrice > 0 ? product.price : null;
-  const discountPct   = originalPrice ? Math.round((1 - price / originalPrice) * 100) : 0;
+  const discountPct = originalPrice ? Math.round((1 - price / originalPrice) * 100) : 0;
 
-  const logoSrc   = product.seller?.logo || product.shop?.logo || product.seller?.avatar?.url || product.shop?.avatar?.url || null;
+  const logoSrc = product.seller?.logo || product.shop?.logo || product.seller?.avatar?.url || product.shop?.avatar?.url || null;
   const sellerName = product.seller?.name || product.shop?.name || null;
 
-  const handleBuyNow = (e) => {
+  const handleAddToCart = (e) => {
     e.preventDefault();
-    dispatch(addToCart({ productId: product._id, quantity: 1 }));
-    navigate('/checkout');
+    e.stopPropagation();
+
+    const toastId = toast.loading('Adding to cart...');
+    
+    dispatch(addToCart({ productId: product._id, quantity: 1 }))
+      .then(() => {
+        toast.success('Added to cart!', { id: toastId });
+      })
+      .catch(() => {
+        toast.error('Failed to add to cart', { id: toastId });
+      });
   };
 
   const handleWishlist = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     if (!isAuthenticated) {
       toast.error('Please login to add to wishlist');
       return;
@@ -66,6 +73,7 @@ export default function ProductCard({ product }) {
       to={`/product/${product._id}`}
       className="group flex flex-col h-full w-full bg-white rounded-[10px] border border-[#E9E9E9] hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition-all duration-200 overflow-hidden relative"
     >
+      {/* Image Section */}
       <div className="relative aspect-square overflow-hidden bg-gray-50 flex-shrink-0">
         <img
           src={product.images?.[0]?.url || 'https://placehold.co/400x400?text=No+Image'}
@@ -82,7 +90,6 @@ export default function ProductCard({ product }) {
 
         <button
           onClick={handleWishlist}
-          aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
           className={`absolute top-2 right-2 z-20 w-[34px] h-[34px] rounded-full flex items-center justify-center shadow-[0_1px_4px_rgba(0,0,0,0.14)] transition-all duration-150 active:scale-90 ${
             isWishlisted ? 'bg-red-50 hover:bg-red-100' : 'bg-white/90 hover:bg-red-50'
           }`}
@@ -91,29 +98,22 @@ export default function ProductCard({ product }) {
         </button>
 
         <div className="absolute bottom-2 right-2 flex flex-col items-end gap-1 z-20">
-          {product.isFlashSale && (
-            <span className="bg-[#FFB700] text-[#5a3a00] text-[10px] font-bold px-2 py-0.5 rounded leading-tight shadow-sm">
-              Flash Sale
-            </span>
-          )}
+          {product.isFlashSale && <span className="bg-[#FFB700] text-[#5a3a00] text-[10px] font-bold px-2 py-0.5 rounded">Flash Sale</span>}
           {discountPct > 0 && !product.isFlashSale && (
-            <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded leading-tight shadow-sm">
-              -{discountPct}%
-            </span>
+            <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded">-{discountPct}%</span>
           )}
         </div>
 
         {!inStock && (
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center z-10">
-            <span className="text-white font-bold text-xs bg-black/70 px-3 py-1 rounded">
-              Out of Stock
-            </span>
+            <span className="text-white font-bold text-xs bg-black/70 px-3 py-1 rounded">Out of Stock</span>
           </div>
         )}
       </div>
 
-      <div className="p-3 flex flex-col flex-1">
-        <div className="flex items-center gap-0.5 mb-1.5" aria-label={`Rating: ${product.ratings ?? 0} out of 5`}>
+      <div className="p-3 flex flex-col flex-1 relative">
+        {/* Rating */}
+        <div className="flex items-center gap-0.5 mb-1.5">
           {[1, 2, 3, 4, 5].map((s) => (
             <FaStar
               key={s}
@@ -124,35 +124,43 @@ export default function ProductCard({ product }) {
           <span className="text-[10px] text-gray-400 ml-1">({product.numReviews ?? 0})</span>
         </div>
 
-        <h3 className="text-[13px] font-medium text-[#1A1A1A] line-clamp-2 mb-2 leading-snug min-h-[36px] flex-1">
+        <h3 className="text-[11.7px] font-normal text-black line-clamp-2 mb-2 leading-snug min-h-[32px] flex-1">
           {product.name}
         </h3>
 
         <div className="flex items-end justify-between mb-2.5 w-full">
-          <div className="min-h-[20px] flex items-end">
-            {originalPrice && (
-              <span className="text-[11px] text-gray-400 line-through">
-                Rs. {originalPrice.toLocaleString()}
-              </span>
-            )}
-          </div>
-          <span className="text-[15px] font-bold text-[#171C26]">
-            Rs. {price.toLocaleString()}
-          </span>
+          <span className="text-[16.5px] font-bold text-[#171C26]">Rs. {price.toLocaleString()}</span>
+          {originalPrice && (
+            <span className="text-[14px] font-light text-gray-400 line-through">Rs. {originalPrice.toLocaleString()}</span>
+          )}
         </div>
 
-        {inStock ? (
-          <button
-            onClick={handleBuyNow}
-            className="w-full bg-[#FFB700] text-black text-[12px] font-semibold py-1.5 rounded-sm hover:bg-amber-500 transition-colors"
-          >
-            Buy Now
-          </button>
-        ) : (
-          <div className="w-full text-center text-[12px] text-gray-400 py-1.5 border border-gray-200 rounded-[4px]">
-            Out of Stock
-          </div>
-        )}
+        <div className="flex items-center justify-between gap-2">
+          { inStock ? (
+            <button
+              onClick={handleAddToCart}
+              className="flex-1 h-[26px] bg-[#FFB700] text-black text-[11px] font-semibold 
+                hover:bg-[#e6a600] active:scale-[0.98] transition-all duration-200 cursor-pointer rounded-[5.8px]"
+            >
+              Buy Now
+            </button>
+          ) : (
+            <div className="text-[11px] text-gray-400">Out of Stock</div>
+          )}
+          {inStock && (
+            <button
+              onClick={handleAddToCart}
+              className="w-[27px] h-[27px] bg-[#FFB700] rounded-full flex items-center justify-center hover:bg-[#e6a600] transition-colors cursor-pointer shadow-sm flex-shrink-0"
+              aria-label="Add to cart"
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+              </svg>
+            </button>
+          )}
+        </div>
       </div>
     </Link>
   );

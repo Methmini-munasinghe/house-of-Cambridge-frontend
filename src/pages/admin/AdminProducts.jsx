@@ -117,7 +117,7 @@ export default function AdminProducts() {
     ),
   [brands, form.category]);
 
-  // Derive active category string label cleanly
+
 const currentCategoryName = useMemo(() => {
     if (!form.category) return '';
     const match = categories.find((c) => c._id === form.category);
@@ -151,11 +151,11 @@ const currentCategoryName = useMemo(() => {
 
   const setField = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
-  // Handle Category selection change to purge dead properties
+ 
   const handleCategorySelection = (e) => {
     const categoryId = e.target.value;
     setForm((f) => ({ ...f, category: categoryId, brand: '' }));
-    setAttributes({}); // Clean out dynamic values safely
+    setAttributes({}); 
   };
 
   const openCreate = useCallback(() => {
@@ -188,7 +188,7 @@ const currentCategoryName = useMemo(() => {
       isFlashSale:       p.isFlashSale   || false,
       flashSalePrice:    p.flashSalePrice || '',
     });
-    setAttributes(p.attributes || {}); // Load stored custom parameters on edit
+    setAttributes(p.attributes || {}); 
     setFiles([]);
     setPreviews(p.images?.map((i) => i.url) || []);
     setInstrInput('');
@@ -230,7 +230,7 @@ const currentCategoryName = useMemo(() => {
         }
       });
 
-      // 3. 🚨 INJECT EXTRA DYNAMIC SPECIFICATIONS INTO FORM DATA 🚨
+  
       if (Object.keys(attributes).length > 0) {
         fd.append('attributes', JSON.stringify(attributes));
       }
