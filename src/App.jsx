@@ -52,6 +52,8 @@ import AdminReturns from './pages/admin/AdminReturns';
 import AdminBroadcast from './pages/admin/AdminBroadcast';
 import AdminOrderDetail from './pages/admin/AdminOrderDetail';
 import AdminFlashSales from './pages/admin/AdminFlash';
+import AdminInvoices from './pages/admin/AdminInvoices';
+
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useSelector((s) => s.auth);
@@ -149,7 +151,7 @@ function App() {
         <Route path="/admin/returns" element={<AdminRoute><AdminReturns /></AdminRoute>} />
         <Route path="/admin/flash-sales" element={<AdminRoute><AdminFlashSales /></AdminRoute>} />
         <Route path="/admin/broadcast" element={<AdminRoute><AdminBroadcast /></AdminRoute>} />
-
+        <Route path="/admin/invoices" element={<AdminRoute><AdminInvoices /></AdminRoute>} />
        
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contact" element={<ContactUs />} />
