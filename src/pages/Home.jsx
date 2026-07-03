@@ -270,12 +270,12 @@ export default function Home() {
         aria-label="Promotional hero carousel"
         aria-roledescription="carousel"
       >
-        <div
-          className="relative min-h-[437px] bg-cover bg-center transition-all duration-700"
-          style={{ backgroundImage: `url(${cur.image})` }}
-          role="img"
-          aria-label={cur.title}
-        >
+      <div
+  className="relative min-h-[550px] bg-cover bg-center transition-all duration-700"
+  style={{ backgroundImage: `url(${cur.image})` }}
+  role="img"
+  aria-label={cur.title}
+>
           
         </div>
 
