@@ -1,6 +1,7 @@
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { Icon } from '@iconify/react';
 import { fetchFlashSaleProducts } from '../../redux/slices/productSlice';
 import Layout from '../../components/common/Layout';
@@ -23,9 +24,13 @@ function safePrice(value) {
 }
 
 function Countdown({ endsAt }) {
+  const fallbackEndRef = useRef(null);
+  if (fallbackEndRef.current === null) {
+    fallbackEndRef.current = new Date(Date.now() + 3 * 3_600_000);
+  }
+
   const calcRemaining = useCallback(() => {
-    const fallbackEnd = new Date(Date.now() + 3 * 3_600_000);
-    const end = endsAt ? new Date(endsAt) : fallbackEnd;
+    const end = endsAt ? new Date(endsAt) : fallbackEndRef.current;
     if (isNaN(end.getTime())) return { h: 0, m: 0, s: 0 };
     const diff = Math.max(0, end - Date.now());
     return {
@@ -38,6 +43,7 @@ function Countdown({ endsAt }) {
   const [t, setT] = useState(calcRemaining);
 
   useEffect(() => {
+    setT(calcRemaining());
     const id = setInterval(() => setT(calcRemaining()), 1000);
     return () => clearInterval(id);
   }, [calcRemaining]);
@@ -251,7 +257,7 @@ export default function FlashSalePage() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8 md:gap-16 pb-8">
             <div className="flex items-start gap-2 sm:gap-3">
-              <Icon icon="mdi:flash" width={40} className="sm:w-[60px] text-[#FFB700] mt-1 flex-shrink-0" aria-hidden="true" />
+            <Icon icon="mdi:flash" width={36} className="sm:w-[44px] text-[#FFB700]" aria-hidden="true" />
               <div>
                 <div
                   className="font-black italic leading-none select-none"

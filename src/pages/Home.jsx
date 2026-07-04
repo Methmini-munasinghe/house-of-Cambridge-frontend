@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
@@ -60,6 +60,8 @@ const FEATURES = [
   { icon: <Icon icon="mdi:medal" width={24} className="text-[#FFB700]" aria-hidden="true" />, title: 'Best Quality',   sub: 'Original product guaranteed'  },
 ];
 
+
+
 const SKELETON_COUNT  = 6;
 const HERO_INTERVAL   = 5000;
 const SCROLL_STEP     = 220;
@@ -73,9 +75,13 @@ function safeNum(value, fallback = 0) {
 }
 
 function FlashCountdown({ endsAt }) {
+  const fallbackEndRef = useRef(null);
+  if (fallbackEndRef.current === null) {
+    fallbackEndRef.current = new Date(Date.now() + FLASH_SALE_FALLBACK_HOURS * 3_600_000);
+  }
+
   const calcRemaining = useCallback(() => {
-    const fallbackEnd = new Date(Date.now() + FLASH_SALE_FALLBACK_HOURS * 3_600_000);
-    const end  = endsAt ? new Date(endsAt) : fallbackEnd;
+    const end = endsAt ? new Date(endsAt) : fallbackEndRef.current;
     const diff = Math.max(0, end - Date.now());
     return {
       h: Math.floor(diff / 3_600_000),
@@ -87,9 +93,11 @@ function FlashCountdown({ endsAt }) {
   const [t, setT] = useState(calcRemaining);
 
   useEffect(() => {
+    setT(calcRemaining());
     const id = setInterval(() => setT(calcRemaining()), 1000);
     return () => clearInterval(id);
   }, [calcRemaining]);
+
 
   const pad = (n) => String(n).padStart(2, '0');
 
@@ -195,7 +203,7 @@ function SectionHeader({ title, to }) {
       <h2 className="text-[16px] font-black text-black uppercase">{title}</h2>
       <Link
         to={to || '/shop'}
-        className="text-[16px] font-semibold text-black underline hover:text-[#FFB700] transition-colors"
+        className="inline-flex items-center justify-center bg-[#FFB700] text-black text-[12px] sm:text-[14px] font-bold px-4 sm:px-5 py-1.5 sm:py-2 rounded-[6px] hover:bg-amber-500 transition-colors"
       >
         View All
       </Link>
@@ -206,6 +214,19 @@ function SectionHeader({ title, to }) {
 export default function Home() {
   const dispatch = useDispatch();
   const { flashSale, popular, homeNewArrivals, categories } = useSelector((s) => s.products);
+
+   const categoryIdMap = useMemo(() => {
+    const map = {};
+    (categories || []).forEach((c) => {
+      const name = c.name.toLowerCase();
+      if (name.includes('beauty')) map.beauty = c._id;
+      else if (name.includes('computer')) map.computers = c._id;
+      else if (name.includes('electronic')) map.electronics = c._id;
+      else if (name.includes('home') && name.includes('appliance')) map['home-appliances'] = c._id;
+      else if (name.includes('baby')) map['baby-care'] = c._id;
+    });
+    return map;
+  }, [categories]);
 
   const [slide, setSlide]                       = useState(0);
   const [beautyProducts, setBeautyProducts]     = useState([]);
@@ -346,7 +367,18 @@ export default function Home() {
             <div className="bg-[linear-gradient(90deg,#C20404_60.25%,#FF5312_100%)] rounded-[10px] p-4 sm:p-6">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-5">
                 <div className="flex items-center gap-2">
-                  <Icon icon="mdi:flash" width={28} className="sm:w-[32px] text-[#FFB700]" aria-hidden="true" />
+                 <svg
+  width="52"
+  height="52"
+  viewBox="0 0 24 24"
+  className="text-[#FFB700]"
+  aria-hidden="true"
+>
+  <path
+    d="M13 2L3 14h7l-1 8 11-14h-8l1-6z"
+    fill="currentColor"
+  />
+</svg>
                   <div>
                     <h2 id="flash-sale-heading" className="font-['Poppins'] font-bold text-white text-[24px] sm:text-[32px]">
                       FLASH SALE
@@ -384,100 +416,116 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-8 bg-white" aria-labelledby="categories-heading">
-        <div className="max-w-[1280px] mx-auto px-4">
-          <h2 id="categories-heading" className="sr-only">Shop by Category</h2>
-          <ul className="flex items-center justify-center gap-4 sm:gap-8 flex-wrap list-none m-0 p-0">
-            {STATIC_CATS.map((cat) => (
-              <li key={cat.slug}>
-                <Link
-                  to={`/shop?category=${encodeURIComponent(cat.slug)}`}
-                  className="flex flex-col items-center gap-2 sm:gap-3 group"
-                >
-                  <div
-                    className="w-[80px] sm:w-[110px] h-[80px] sm:h-[110px] rounded-[14px] sm:rounded-[20px] flex items-center justify-center overflow-hidden border-2 border-transparent group-hover:border-[#FFB700] transition-all shadow-sm"
-                    style={{ background: cat.bg }}
-                    aria-hidden="true"
-                  >
-                    <img
-                      src={cat.img}
-                      alt=""
-                      className="w-[75%] sm:w-[80%] h-[75%] sm:h-[80%] object-contain"
-                      loading="lazy"
-                    />
-                  </div>
-                  <p className="text-[12px] sm:text-[14px] font-medium text-black text-center whitespace-pre-line leading-tight group-hover:text-[#FFB700] transition-colors">
-                    {cat.label.replace('\n', ' ')}
-                  </p>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+    <section className="py-8 bg-white" aria-labelledby="categories-heading">
+  <div className="max-w-[1280px] mx-auto px-4">
+    <h2 id="categories-heading" className="sr-only">Shop by Category</h2>
+    <ul className="flex items-center justify-center gap-4 sm:gap-8 flex-wrap list-none m-0 p-0">
+      {STATIC_CATS.map((cat) => {
+        const realId = categoryIdMap[cat.slug];
+        const to = realId ? `/shop?category=${encodeURIComponent(realId)}` : '/shop';
+
+        return (
+          <li key={cat.slug}>
+            <Link
+              to={to}
+              className="flex flex-col items-center gap-2 sm:gap-3 group"
+            >
+              <div
+                className="w-[80px] sm:w-[110px] h-[80px] sm:h-[110px] rounded-[14px] sm:rounded-[20px] flex items-center justify-center overflow-hidden border-2 border-transparent group-hover:border-[#FFB700] transition-all shadow-sm"
+                style={{ background: cat.bg }}
+                aria-hidden="true"
+              >
+                <img
+                  src={cat.img}
+                  alt=""
+                  className="w-[75%] sm:w-[80%] h-[75%] sm:h-[80%] object-contain"
+                  loading="lazy"
+                />
+              </div>
+              <p className="text-[12px] sm:text-[14px] font-medium text-black text-center whitespace-pre-line leading-tight group-hover:text-[#FFB700] transition-colors">
+                {cat.label.replace('\n', ' ')}
+              </p>
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+</section>
 
       <section className="bg-white py-6" aria-labelledby="promo-banners-1-heading">
-        <div className="max-w-[1280px] mx-auto px-4">
-          <h2 id="promo-banners-1-heading" className="sr-only">Promotional offers</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Link to="/shop" className="rounded-[10px] overflow-hidden relative flex items-center w-full h-[180px] sm:h-[207px] shadow-sm" style={{ background: 'linear-gradient(135deg, #1a0533 0%, #4a148c 30%, #7c3aed 70%, #a855f7 100%)' }}>
-              <div className="relative p-4 sm:p-6 z-10 w-[45%] sm:w-[50%]">
-                <h3 className="font-black text-[16px] sm:text-[22px] leading-tight mb-0.5">
-                  <span className="text-[#FFB700]">BEST</span>
-                </h3>
-                <h3 className="text-white font-black text-[16px] sm:text-[22px] leading-tight mb-1">DEALS</h3>
-                <p className="text-white text-[11px] sm:text-[13px] mb-2 sm:mb-3">OF THE WEEK</p>
-                <span className="inline-block bg-black text-white text-[10px] sm:text-[11px] font-bold px-3 sm:px-4 py-1 sm:py-1.5 rounded hover:bg-gray-800 transition-colors">
-                  Shop Now
-                </span>
-              </div>
-              <img
-                src="/images/best deals.png"
-                alt=""
-                aria-hidden="true"
-                className="absolute right-0 bottom-0 h-full w-[58%] sm:w-[55%] object-contain object-right-bottom"
-                loading="lazy"
-              />
-            </Link>
-
-            <Link to="/shop" className="rounded-[10px] overflow-hidden relative flex items-center w-full h-[180px] sm:h-[207px] shadow-sm" style={{ background: 'linear-gradient(135deg, #7c2d12 0%, #b45309 30%, #f59e0b 60%, #fbbf24 100%)' }}>
-              <div className="relative p-4 sm:p-6 z-10 w-[45%] sm:w-[50%]">
-                <h3 className="text-white font-black text-[16px] sm:text-[22px] leading-tight mb-0.5">SAVE MORE</h3>
-                <h3 className="text-white font-black text-[16px] sm:text-[22px] leading-tight mb-1">EVERYDAY</h3>
-                <p className="text-white/80 text-[11px] sm:text-[12px] mb-2 sm:mb-3">Great products at unbeatable prices</p>
-                <span className="inline-block bg-black text-white text-[10px] sm:text-[11px] font-bold px-3 sm:px-4 py-1 sm:py-1.5 rounded hover:bg-gray-800 transition-colors">
-                  Shop Now
-                </span>
-              </div>
-              <img
-                src="/images/save more.png"
-                alt=""
-                aria-hidden="true"
-                className="absolute right-0 bottom-0 h-full w-[58%] sm:w-[55%] object-contain object-right-bottom"
-                loading="lazy"
-              />
-            </Link>
-
-            <Link to="/shop?newArrival=true" className="rounded-[10px] overflow-hidden relative flex items-center w-full h-[180px] sm:h-[207px] shadow-sm" style={{ background: 'linear-gradient(135deg, #831843 0%, #be185d 30%, #ec4899 60%, #f9a8d4 100%)' }}>
-              <div className="relative p-4 sm:p-6 z-10 w-[45%] sm:w-[50%]">
-                <h3 className="text-white font-black text-[16px] sm:text-[22px] leading-tight mb-0.5">BEAUTY</h3>
-                <h3 className="text-white font-black text-[16px] sm:text-[22px] leading-tight mb-1">DEALS</h3>
-                <p className="text-white/80 text-[11px] sm:text-[12px] mb-2 sm:mb-3">Glow more, save more!</p>
-                <span className="inline-block bg-black text-white text-[10px] sm:text-[11px] font-bold px-3 sm:px-4 py-1 sm:py-1.5 rounded hover:bg-gray-800 transition-colors">
-                  Shop Now
-                </span>
-              </div>
-              <img
-                src="/images/beauty.png"
-                alt=""
-                aria-hidden="true"
-                className="absolute right-0 bottom-0 h-full w-[58%] sm:w-[55%] object-contain object-right-bottom"
-                loading="lazy"
-              />
-            </Link>
-          </div>
+  <div className="max-w-[1280px] mx-auto px-4">
+    <h2 id="promo-banners-1-heading" className="sr-only">Promotional offers</h2>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* 1) Save More Everyday -> generic shop page */}
+      <Link to="/shop" className="rounded-[10px] overflow-hidden relative flex items-center w-full h-[180px] sm:h-[207px] shadow-sm" style={{ background: 'linear-gradient(135deg, #7c2d12 0%, #b45309 30%, #f59e0b 60%, #fbbf24 100%)' }}>
+        <div className="relative p-4 sm:p-6 z-10 w-[45%] sm:w-[50%]">
+          <h3 className="text-white font-black text-[16px] sm:text-[22px] leading-tight mb-0.5">SAVE MORE</h3>
+          <h3 className="text-white font-black text-[16px] sm:text-[22px] leading-tight mb-1">EVERYDAY</h3>
+          <p className="text-white/80 text-[11px] sm:text-[12px] mb-2 sm:mb-3">Great products at unbeatable prices</p>
+          <span className="inline-block bg-black text-white text-[10px] sm:text-[11px] font-bold px-3 sm:px-4 py-1 sm:py-1.5 rounded hover:bg-gray-800 transition-colors">
+            Shop Now
+          </span>
         </div>
-      </section>
+        <img
+          src="/images/save more.png"
+          alt=""
+          aria-hidden="true"
+          className="absolute right-0 bottom-0 h-full w-[58%] sm:w-[55%] object-contain object-right-bottom"
+          loading="lazy"
+        />
+      </Link>
+
+      {/* 2) Best Deals -> Computers & Printers */}
+      <Link
+        to={categoryIdMap.computers ? `/shop?category=${encodeURIComponent(categoryIdMap.computers)}` : '/shop'}
+        className="rounded-[10px] overflow-hidden relative flex items-center w-full h-[180px] sm:h-[207px] shadow-sm"
+        style={{ background: 'linear-gradient(135deg, #1a0533 0%, #4a148c 30%, #7c3aed 70%, #a855f7 100%)' }}
+      >
+        <div className="relative p-4 sm:p-6 z-10 w-[45%] sm:w-[50%]">
+          <h3 className="font-black text-[16px] sm:text-[22px] leading-tight mb-0.5">
+            <span className="text-[#FFB700]">BEST</span>
+          </h3>
+          <h3 className="text-white font-black text-[16px] sm:text-[22px] leading-tight mb-1">DEALS</h3>
+          <p className="text-white text-[11px] sm:text-[13px] mb-2 sm:mb-3">OF THE WEEK</p>
+          <span className="inline-block bg-black text-white text-[10px] sm:text-[11px] font-bold px-3 sm:px-4 py-1 sm:py-1.5 rounded hover:bg-gray-800 transition-colors">
+            Shop Now
+          </span>
+        </div>
+        <img
+          src="/images/best deals.png"
+          alt=""
+          aria-hidden="true"
+          className="absolute right-0 bottom-0 h-full w-[58%] sm:w-[55%] object-contain object-right-bottom"
+          loading="lazy"
+        />
+      </Link>
+
+      {/* 3) Beauty Deals banner -> Baby Care */}
+      <Link
+        to={categoryIdMap['baby-care'] ? `/shop?category=${encodeURIComponent(categoryIdMap['baby-care'])}` : '/shop'}
+        className="rounded-[10px] overflow-hidden relative flex items-center w-full h-[180px] sm:h-[207px] shadow-sm"
+        style={{ background: 'linear-gradient(135deg, #831843 0%, #be185d 30%, #ec4899 60%, #f9a8d4 100%)' }}
+      >
+        <div className="relative p-4 sm:p-6 z-10 w-[45%] sm:w-[50%]">
+          <h3 className="text-white font-black text-[16px] sm:text-[22px] leading-tight mb-0.5">BEAUTY</h3>
+          <h3 className="text-white font-black text-[16px] sm:text-[22px] leading-tight mb-1">DEALS</h3>
+          <p className="text-white/80 text-[11px] sm:text-[12px] mb-2 sm:mb-3">Glow more, save more!</p>
+          <span className="inline-block bg-black text-white text-[10px] sm:text-[11px] font-bold px-3 sm:px-4 py-1 sm:py-1.5 rounded hover:bg-gray-800 transition-colors">
+            Shop Now
+          </span>
+        </div>
+        <img
+          src="/images/beauty.png"
+          alt=""
+          aria-hidden="true"
+          className="absolute right-0 bottom-0 h-full w-[68%] sm:w-[65%] object-contain object-right-bottom"
+          loading="lazy"
+        />
+      </Link>
+    </div>
+  </div>
+</section>
 
       <section className="py-8 bg-white" aria-labelledby="popular-heading">
         <div className="max-w-[1280px] mx-auto px-4 md:px-10">
@@ -502,45 +550,60 @@ export default function Home() {
       </section>
 
       <section className="bg-white py-6" aria-labelledby="sub-banners-heading">
-        <div className="max-w-[1280px] mx-auto px-4 md:px-10">
-          <h2 id="sub-banners-heading" className="sr-only">Shop by department</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Link to="/shop?category=home-appliances" className="rounded-[15px] overflow-hidden relative flex items-center w-full h-[110px] sm:h-[129px] shadow-sm bg-cover bg-center" style={{ backgroundImage: "url('/images/card%201.png')", backgroundColor: '#1E2A3A' }}>
-              <div className="relative p-4 sm:p-5 z-10 w-[55%]">
-                <h3 className="text-white font-black text-[13px] lg:text-[16px] leading-tight mb-0.5">PREMIUM HOME</h3>
-                <p className="text-white font-black text-[13px] lg:text-[16px] leading-tight mb-0.5 sm:mb-1">APPLIANCES</p>
-                <p className="text-white/70 text-[10px] lg:text-[11px] mb-1 sm:mb-2">For a smarter kitchen</p>
-                <span className="inline-block bg-[#FFB700] text-black text-[9px] lg:text-[10px] font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded hover:bg-amber-500 transition-colors">
-                  Shop Now
-                </span>
-              </div>
-            </Link>
-
-            <Link to="/shop?category=electronics" className="rounded-[15px] overflow-hidden relative flex items-center w-full h-[110px] sm:h-[129px] shadow-sm bg-cover bg-center" style={{ backgroundImage: "url('/images/card2.png')", backgroundColor: '#1A1A2E' }}>
-              <div className="relative p-4 sm:p-5 z-10 w-[55%]">
-                <h3 className="text-white font-black text-[13px] lg:text-[16px] leading-tight mb-0.5">LATEST GADGETS</h3>
-                <p className="text-[#FFB700] text-[10px] lg:text-[11px] font-bold mb-0.5">UP TO 45% OFF</p>
-                <p className="text-white/60 text-[10px] lg:text-[11px] mb-1 sm:mb-2">Grab the best offers</p>
-                <span className="inline-block bg-[#FFB700] text-black text-[9px] lg:text-[10px] font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded hover:bg-amber-500 transition-colors">
-                  Shop Now
-                </span>
-              </div>
-            </Link>
-
-            <Link to="/shop?category=beauty" className="rounded-[15px] overflow-hidden relative flex items-center w-full h-[110px] sm:h-[129px] shadow-sm bg-cover bg-center" style={{ backgroundImage: "url('/images/card3.png')", backgroundColor: '#F5D5C8' }}>
-              <div className="relative p-4 sm:p-5 z-10 w-[55%]">
-                <h3 className="text-[#8B2252] font-black text-[13px] lg:text-[16px] leading-tight mb-0.5">BEAUTY AND</h3>
-                <p className="text-[#8B2252] font-black text-[13px] lg:text-[16px] leading-tight mb-0.5">PERSONAL CARE</p>
-                <p className="text-[#8B2252]/80 text-[10px] lg:text-[11px] font-bold mb-0.5">UP TO 40% OFF</p>
-                <p className="text-[#8B2252]/60 text-[10px] lg:text-[11px] mb-1 sm:mb-2">Look good, feel great</p>
-                <span className="inline-block bg-[#FFB700] text-black text-[9px] lg:text-[10px] font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded hover:bg-amber-500 transition-colors">
-                  Shop Now
-                </span>
-              </div>
-            </Link>
-          </div>
+  <div className="max-w-[1280px] mx-auto px-4 md:px-10">
+    <h2 id="sub-banners-heading" className="sr-only">Shop by department</h2>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* 4) Premium Home Appliances -> Home Appliances */}
+      <Link
+        to={categoryIdMap['home-appliances'] ? `/shop?category=${encodeURIComponent(categoryIdMap['home-appliances'])}` : '/shop'}
+        className="rounded-[15px] overflow-hidden relative flex items-center w-full h-[110px] sm:h-[129px] shadow-sm bg-cover bg-center"
+        style={{ backgroundImage: "url('/images/card%201.png')", backgroundColor: '#1E2A3A' }}
+      >
+        <div className="relative p-4 sm:p-5 z-10 w-[55%]">
+          <h3 className="text-white font-black text-[13px] lg:text-[16px] leading-tight mb-0.5">PREMIUM HOME</h3>
+          <p className="text-white font-black text-[13px] lg:text-[16px] leading-tight mb-0.5 sm:mb-1">APPLIANCES</p>
+          <p className="text-white/70 text-[10px] lg:text-[11px] mb-1 sm:mb-2">For a smarter kitchen</p>
+          <span className="inline-block bg-[#FFB700] text-black text-[9px] lg:text-[10px] font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded hover:bg-amber-500 transition-colors">
+            Shop Now
+          </span>
         </div>
-      </section>
+      </Link>
+
+      {/* 5) Latest Gadgets -> Electronics */}
+      <Link
+        to={categoryIdMap.electronics ? `/shop?category=${encodeURIComponent(categoryIdMap.electronics)}` : '/shop'}
+        className="rounded-[15px] overflow-hidden relative flex items-center w-full h-[110px] sm:h-[129px] shadow-sm bg-cover bg-center"
+        style={{ backgroundImage: "url('/images/card2.png')", backgroundColor: '#1A1A2E' }}
+      >
+        <div className="relative p-4 sm:p-5 z-10 w-[55%]">
+          <h3 className="text-white font-black text-[13px] lg:text-[16px] leading-tight mb-0.5">LATEST GADGETS</h3>
+          <p className="text-[#FFB700] text-[10px] lg:text-[11px] font-bold mb-0.5">UP TO 45% OFF</p>
+          <p className="text-white/60 text-[10px] lg:text-[11px] mb-1 sm:mb-2">Grab the best offers</p>
+          <span className="inline-block bg-[#FFB700] text-black text-[9px] lg:text-[10px] font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded hover:bg-amber-500 transition-colors">
+            Shop Now
+          </span>
+        </div>
+      </Link>
+
+      {/* 6) Beauty and Personal Care -> Beauty */}
+      <Link
+        to={categoryIdMap.beauty ? `/shop?category=${encodeURIComponent(categoryIdMap.beauty)}` : '/shop'}
+        className="rounded-[15px] overflow-hidden relative flex items-center w-full h-[110px] sm:h-[129px] shadow-sm bg-cover bg-center"
+        style={{ backgroundImage: "url('/images/card3.png')", backgroundColor: '#F5D5C8' }}
+      >
+        <div className="relative p-4 sm:p-5 z-10 w-[55%]">
+          <h3 className="text-[#8B2252] font-black text-[13px] lg:text-[16px] leading-tight mb-0.5">BEAUTY AND</h3>
+          <p className="text-[#8B2252] font-black text-[13px] lg:text-[16px] leading-tight mb-0.5">PERSONAL CARE</p>
+          <p className="text-[#8B2252]/80 text-[10px] lg:text-[11px] font-bold mb-0.5">UP TO 40% OFF</p>
+          <p className="text-[#8B2252]/60 text-[10px] lg:text-[11px] mb-1 sm:mb-2">Look good, feel great</p>
+          <span className="inline-block bg-[#FFB700] text-black text-[9px] lg:text-[10px] font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded hover:bg-amber-500 transition-colors">
+            Shop Now
+          </span>
+        </div>
+      </Link>
+    </div>
+  </div>
+</section>
 
       <section className="py-8 bg-gray-50" aria-labelledby="beauty-heading">
         <div className="max-w-[1280px] mx-auto px-4 md:px-10">

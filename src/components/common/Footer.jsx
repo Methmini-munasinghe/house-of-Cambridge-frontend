@@ -16,52 +16,31 @@ export default function Footer() {
   return (
     <footer className="bg-[#171C26] text-gray-400">
 
-      <div className="relative overflow-hidden md:h-[170px] py-6 md:py-0" style={{ background: '#758688' }}>
-        <div className="max-w-[1280px] mx-auto px-4 md:px-14 h-full flex flex-col md:flex-row items-center justify-center md:justify-between gap-4 md:gap-0 text-center md:text-left relative">
+    <div className="relative overflow-hidden md:h-[170px] py-6 md:py-0" style={{ background: '#758688' }}>
+  <div className="max-w-[1280px] mx-auto px-4 md:px-14 h-full flex flex-col md:flex-row items-center justify-center md:justify-between gap-4 md:gap-0 text-center md:text-left relative">
 
-          <div className="flex-shrink-0">
-            <p className="text-white font-black text-[13px] md:text-[14px] tracking-wide mb-0.5">Stay Updated with Us</p>
-            <h3 className="text-white font-black leading-tight mb-0.5 text-[24px] md:text-[34px]">
-              Get <span className="text-[#FFB700]">20% Off</span> Discount Coupon
-            </h3>
-            <p className="text-white font-black text-[13px] md:text-[14px]">by Subscribe our Newsletter</p>
-          </div>
+    <div className="flex-shrink-0">
+      <p className="text-white font-black text-[13px] md:text-[14px] tracking-wide mb-0.5">Stay Updated with Us</p>
+      <h3 className="text-white font-black leading-tight mb-0.5 text-[24px] md:text-[34px]">
+        Get <span className="text-[#FFB700]">20% Off</span> Discount Coupon
+      </h3>
+      <p className="text-white font-black text-[13px] md:text-[14px]">by Subscribe our Newsletter</p>
+    </div>
 
-          <div className="w-full md:w-auto md:flex items-center gap-6 flex-shrink-0">
-            <form onSubmit={handleNewsletter} className="flex items-center max-w-[340px] mx-auto md:mx-0" aria-label="Newsletter signup">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                required
-                aria-label="Email address"
-                className="flex-1 md:w-44 px-3 py-2 text-[12px] text-[#1A1A1A] placeholder-gray-400 bg-white outline-none border-0 rounded-l-sm"
-              />
-              <button
-                type="submit"
-                className="bg-[#FFB700] text-black text-[12px] font-bold px-4 py-2 rounded-r-sm hover:bg-amber-500 transition-colors whitespace-nowrap"
-              >
-                Subscribe Now
-              </button>
-            </form>
-
-            <div className="hidden md:flex items-center flex-shrink-0 pointer-events-none select-none" aria-hidden="true">
+   <div className="hidden md:flex items-center flex-shrink-0 pointer-events-none select-none" aria-hidden="true">
               <img src="/images/arrow.png" alt="" className="w-[100px] h-[100px] object-contain -mr-4 z-10 flex-shrink-0" />
-              <img src="/images/headphone.png" alt="" className="h-[200px] w-auto object-contain flex-shrink-0" />
+              <img src="/images/headphone.png" alt="" className="h-[160px] w-auto object-contain flex-shrink-0" />
               <img src="/images/newsletter-email.png" alt="" className="w-[70px] h-[70px] object-contain ml-2 flex-shrink-0" />
             </div>
-          </div>
-
-        </div>
-      </div>
+  </div>
+</div>
 
       <div className="max-w-[1280px] mx-auto px-4 py-8 md:py-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 border-b border-white/5">
 
         <div className="sm:col-span-2 lg:col-span-1">
           <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
-            <img src="/images/logo.png" alt="House of Cambridge" className="h-7 md:h-10 w-auto object-contain" />
-            <span className="text-white font-bold text-[13px] md:text-[18px]">House Of Cambridge</span>
+            <img src="/images/logo.png" alt="House of Cambridge" className="h-9 md:h-13 w-auto object-contain" />
+           
           </div>
           <p className="text-[11px] md:text-[14px] leading-relaxed text-white mb-2">
             We are more than just an online store; we are a platform built to deliver quality, convenience, and trust.
