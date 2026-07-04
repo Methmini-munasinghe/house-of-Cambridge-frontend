@@ -16,31 +16,30 @@ export default function Footer() {
   return (
     <footer className="bg-[#171C26] text-gray-400">
 
-    <div className="relative overflow-hidden md:h-[170px] py-6 md:py-0" style={{ background: '#758688' }}>
-  <div className="max-w-[1280px] mx-auto px-4 md:px-14 h-full flex flex-col md:flex-row items-center justify-center md:justify-between gap-4 md:gap-0 text-center md:text-left relative">
+      <div className="relative overflow-hidden md:h-[170px] py-6 md:py-0" style={{ background: '#758688' }}>
+        <div className="max-w-[1280px] mx-auto px-4 md:px-14 h-full flex flex-col md:flex-row items-center justify-center md:justify-between gap-4 md:gap-0 text-center md:text-left relative">
 
-    <div className="flex-shrink-0">
-      <p className="text-white font-black text-[13px] md:text-[14px] tracking-wide mb-0.5">Stay Updated with Us</p>
-      <h3 className="text-white font-black leading-tight mb-0.5 text-[24px] md:text-[34px]">
-        Get <span className="text-[#FFB700]">20% Off</span> Discount Coupon
-      </h3>
-      <p className="text-white font-black text-[13px] md:text-[14px]">by Subscribe our Newsletter</p>
-    </div>
+          <div className="flex-shrink-0">
+            <p className="text-white font-black text-[13px] md:text-[14px] tracking-wide mb-0.5">Stay Updated with Us</p>
+            <h3 className="text-white font-black leading-tight mb-0.5 text-[24px] md:text-[34px]">
+              Get <span className="text-[#FFB700]">20% Off</span> Discount Coupon
+            </h3>
+            <p className="text-white font-black text-[13px] md:text-[14px]">by Subscribe our Newsletter</p>
+          </div>
 
-   <div className="hidden md:flex items-center flex-shrink-0 pointer-events-none select-none" aria-hidden="true">
-              <img src="/images/arrow.png" alt="" className="w-[100px] h-[100px] object-contain -mr-4 z-10 flex-shrink-0" />
-              <img src="/images/headphone.png" alt="" className="h-[160px] w-auto object-contain flex-shrink-0" />
-              <img src="/images/newsletter-email.png" alt="" className="w-[70px] h-[70px] object-contain ml-2 flex-shrink-0" />
-            </div>
-  </div>
-</div>
+          <div className="hidden md:flex items-center flex-shrink-0 pointer-events-none select-none" aria-hidden="true">
+            <img src="/images/arrow.png" alt="" className="w-[100px] h-[100px] object-contain -mr-4 z-10 flex-shrink-0" />
+            <img src="/images/headphone.png" alt="" className="h-[160px] w-auto object-contain flex-shrink-0" />
+            <img src="/images/newsletter-email.png" alt="" className="w-[70px] h-[70px] object-contain ml-2 flex-shrink-0" />
+          </div>
+        </div>
+      </div>
 
-      <div className="max-w-[1280px] mx-auto px-4 py-8 md:py-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 border-b border-white/5">
+      <div className="max-w-[1280px] mx-auto px-4 py-8 md:py-10 flex flex-col sm:flex-row sm:justify-between gap-8 border-b border-white/5">
 
-        <div className="sm:col-span-2 lg:col-span-1">
+        <div className="w-full sm:w-auto sm:max-w-[260px]">
           <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
             <img src="/images/logo.png" alt="House of Cambridge" className="h-9 md:h-13 w-auto object-contain" />
-           
           </div>
           <p className="text-[11px] md:text-[14px] leading-relaxed text-white mb-2">
             We are more than just an online store; we are a platform built to deliver quality, convenience, and trust.
@@ -48,28 +47,38 @@ export default function Footer() {
           <p className="text-[#FFB700] text-[11px] md:text-[14px] font-semibold mb-3 md:mb-4">Shop with confidence!</p>
         </div>
 
-        <div>
+        <div className="w-full sm:w-auto">
           <h4 className="text-[#FFB700] text-[12px] md:text-[14px] font-bold mb-2 md:mb-3">ABOUT</h4>
           <ul className="space-y-1.5 md:space-y-2 text-[11px] md:text-[13px]">
-            <li><Link to="/about"          className="text-white hover:text-[#FFB700] transition-colors">About Us</Link></li>
+            <li><Link to="/about" className="text-white hover:text-[#FFB700] transition-colors">About Us</Link></li>
             <li><Link to="/privacy-policy" className="text-white hover:text-[#FFB700] transition-colors">Privacy Policy</Link></li>
-            <li><Link to="/return-policy"  className="text-white hover:text-[#FFB700] transition-colors">Return and Refund Policy</Link></li>
-            <li><Link to="/terms"          className="text-white hover:text-[#FFB700] transition-colors">Terms and Conditions</Link></li>
+            <li><Link to="/return-policy" className="text-white hover:text-[#FFB700] transition-colors">Return and Refund Policy</Link></li>
+            <li><Link to="/terms" className="text-white hover:text-[#FFB700] transition-colors">Terms and Conditions</Link></li>
           </ul>
         </div>
 
-        <div>
-          <h4 className="text-[#FFB700] text-[12px] md:text-[14px] font-bold mb-2 md:mb-3">HELP</h4>
-          <ul className="space-y-1.5 md:space-y-2 text-[11px] md:text-[13px]">
-            <li><Link to="/faq" className="text-white hover:text-[#FFB700] transition-colors">Frequently Asked Questions</Link></li>
-            <li><Link to="/how-to-buy" className="text-white hover:text-[#FFB700] transition-colors">How To Buy</Link></li>
-            <li><Link to="/shipping" className="text-white hover:text-[#FFB700] transition-colors">Shipping & Delivery</Link></li>
-            <li><Link to="/warranty" className="text-white hover:text-[#FFB700] transition-colors">Warranty Information</Link></li>
-            <li><Link to="/return-products" className="text-white hover:text-[#FFB700] transition-colors">Return Products</Link></li>
-          </ul>
+        <div className="w-full sm:w-auto">
+          <h4 className="text-[#FFB700] text-[12px] md:text-[14px] font-bold mb-2 md:mb-3 opacity-0 select-none" aria-hidden="true">Newsletter</h4>
+          <form onSubmit={handleNewsletter} className="flex items-stretch max-w-[280px]">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              aria-label="Email address"
+              required
+              className="flex-1 min-w-0 bg-white text-[#171C26] text-[12px] md:text-[13px] placeholder:text-gray-400 rounded-l-[6px] px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#FFB700]"
+            />
+            <button
+              type="submit"
+              className="bg-[#FFB700] text-black text-[12px] md:text-[13px] font-bold px-3 md:px-4 rounded-r-[6px] whitespace-nowrap hover:bg-amber-500 transition-colors"
+            >
+              Subscribe Now
+            </button>
+          </form>
         </div>
 
-        <div>
+        <div className="w-full sm:w-auto">
           <h4 className="text-[#FFB700] text-[12px] md:text-[14px] font-bold mb-2 md:mb-3">CONTACT US</h4>
           <ul className="space-y-1.5 md:space-y-2 text-[11px] md:text-[13px]">
             <li className="flex items-center gap-1.5 md:gap-2">
