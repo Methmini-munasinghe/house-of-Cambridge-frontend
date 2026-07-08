@@ -353,10 +353,24 @@ const currentCategoryName = useMemo(() => {
                     </td>
                     <td className="px-4 py-3 text-[#60717B]">{p.category?.name || '—'}</td>
                     <td className="px-4 py-3">
-                      {p.brand?.name
-                        ? <span className="px-2 py-0.5 bg-[#F4F5F7] text-[#1A1A1A] rounded-full text-[11px] font-semibold">{p.brand.name}</span>
-                        : <span className="text-[#C5C5C5]">—</span>
-                      }
+                      {p.brand ? (
+                        typeof p.brand === 'object' && p.brand.name ? (
+                          //populated brand object from the server
+                          <span className="px-2 py-0.5 bg-[#F4F5F7] text-[#1A1A1A] rounded-full text-[11px] font-semibold">
+                            {p.brand.name}
+                          </span>
+                        ) : typeof p.brand === 'string' && !p.brand.match(/^[0-9a-fA-F]{24}$/) ? (
+                          //  old text string name (like "Johnson's")
+                          <span className="px-2 py-0.5 bg-[#F4F5F7] text-[#1A1A1A] rounded-full text-[11px] font-semibold">
+                            {p.brand}
+                          </span>
+                        ) : (
+                          // Fallback display for brand ID or unrecognized format
+                          <span className="text-[#C5C5C5]">Saved (Refresh Page)</span>
+                        )
+                      ) : (
+                        <span className="text-[#C5C5C5]">—</span>
+                      )}
                     </td>
                     <td className="px-4 py-3 font-bold text-[#1A1A1A]">
                       Rs.{p.price?.toLocaleString()}
