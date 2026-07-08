@@ -145,8 +145,12 @@ function FlashCardSkeleton() {
   );
 }
 
-function ProductRow({ products, label }) {
+function ProductRow({ products, label, twoUpMobile = false }) {
   const rowRef = useRef(null);
+  const rowGapClass = twoUpMobile ? 'gap-3 sm:gap-4' : 'gap-4';
+  const itemWidthClass = twoUpMobile
+    ? 'w-[calc((100%-0.75rem)/2)] sm:w-[185px]'
+    : 'w-[185px]';
 
   const scroll = useCallback((dir) => {
     rowRef.current?.scrollBy({ left: dir * SCROLL_STEP, behavior: 'smooth' });
@@ -164,13 +168,13 @@ function ProductRow({ products, label }) {
       </button>
       <div
         ref={rowRef}
-        className="flex gap-4 overflow-x-auto pb-1 scroll-smooth"
+        className={`flex ${rowGapClass} overflow-x-auto pb-1 scroll-smooth`}
         style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}
         aria-label={label}
         role="list"
       >
         {products.map((p) => (
-          <div key={p._id} className="w-[185px] flex-shrink-0" role="listitem">
+          <div key={p._id} className={`${itemWidthClass} flex-shrink-0`} role="listitem">
             <ProductCard product={p} />
           </div>
         ))}
@@ -532,7 +536,7 @@ export default function Home() {
           <SectionHeader title="Popular Products" />
           <h2 id="popular-heading" className="sr-only">Popular Products</h2>
           {popular.length > 0
-            ? <ProductRow products={popular} label="Popular products" />
+            ? <ProductRow products={popular} label="Popular products" twoUpMobile />
             : <ProductRowSkeleton />
           }
         </div>
@@ -543,7 +547,7 @@ export default function Home() {
           <SectionHeader title="New Arrivals" />
           <h2 id="new-arrivals-heading" className="sr-only">New Arrivals</h2>
           {homeNewArrivals.length > 0
-            ? <ProductRow products={homeNewArrivals} label="New arrivals" />
+            ? <ProductRow products={homeNewArrivals} label="New arrivals" twoUpMobile />
             : <ProductRowSkeleton />
           }
         </div>
@@ -610,7 +614,7 @@ export default function Home() {
           <SectionHeader title="Beauty and Cosmetics" to="/shop?category=beauty" />
           <h2 id="beauty-heading" className="sr-only">Beauty and Cosmetics</h2>
           {beautyProducts.length > 0
-            ? <ProductRow products={beautyProducts} label="Beauty and cosmetics products" />
+            ? <ProductRow products={beautyProducts} label="Beauty and cosmetics products" twoUpMobile />
             : <ProductRowSkeleton />
           }
         </div>
@@ -621,7 +625,7 @@ export default function Home() {
           <SectionHeader title="Electronic Appliances" to="/shop?category=electronics" />
           <h2 id="electronics-heading" className="sr-only">Electronic Appliances</h2>
           {electronicsProducts.length > 0
-            ? <ProductRow products={electronicsProducts} label="Electronic appliances" />
+            ? <ProductRow products={electronicsProducts} label="Electronic appliances" twoUpMobile />
             : <ProductRowSkeleton />
           }
         </div>
