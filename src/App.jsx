@@ -35,7 +35,7 @@ import PaymentMethods from './pages/profile/PaymentMethods';
 import AboutUs from './pages/misc/AboutUs';
 import ContactUs from './pages/misc/ContactUs';
 import FAQ from './pages/misc/FAQ';
-import PrivacyPolicy from './pages/misc/PrivacyPolicy';
+import DataPrivacy from './pages/misc/DataPrivacy';
 import TermsAndConditions from './pages/misc/TermsAndConditions';
 import Error404 from './pages/misc/Error404';
 import WriteReview from './pages/reviews/WriteReview';
@@ -52,16 +52,18 @@ import AdminReturns from './pages/admin/AdminReturns';
 import AdminBroadcast from './pages/admin/AdminBroadcast';
 import AdminOrderDetail from './pages/admin/AdminOrderDetail';
 import AdminFlashSales from './pages/admin/AdminFlash';
+import AdminInvoices from './pages/admin/AdminInvoices';
+
 
 function ProtectedRoute({ children }) {
-  const { isAuthenticated, loading } = useSelector((s) => s.auth);
-  if (loading) return null;
+  const { isAuthenticated, authChecked } = useSelector((s) => s.auth);
+  if (!authChecked) return null;
   return isAuthenticated ? children : <Navigate to="/login" replace />;
 }
 
 function AdminRoute({ children }) {
-  const { isAuthenticated, user, loading } = useSelector((s) => s.auth);
-  if (loading) return null;
+  const { isAuthenticated, user, authChecked } = useSelector((s) => s.auth);
+  if (!authChecked) return null;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
   if (!['admin', 'superadmin'].includes(user?.role)) return <Navigate to="/" replace />;
   return children;
@@ -74,8 +76,7 @@ function App() {
   useEffect(() => {
    
     const init = async () => {
-      const token = localStorage.getItem('token');
-      if (token) await dispatch(loadUser());
+      await dispatch(loadUser());
       dispatch(fetchCart());
     };
     init();
@@ -149,12 +150,12 @@ function App() {
         <Route path="/admin/returns" element={<AdminRoute><AdminReturns /></AdminRoute>} />
         <Route path="/admin/flash-sales" element={<AdminRoute><AdminFlashSales /></AdminRoute>} />
         <Route path="/admin/broadcast" element={<AdminRoute><AdminBroadcast /></AdminRoute>} />
-
+        <Route path="/admin/invoices" element={<AdminRoute><AdminInvoices /></AdminRoute>} />
        
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/faq" element={<FAQ />} />
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/privacy-policy" element={<DataPrivacy />} />
         <Route path="/terms" element={<TermsAndConditions />} />
 
         <Route path="*" element={<Error404 />} />

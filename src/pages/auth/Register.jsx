@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { register, googleLogin, facebookLogin } from '../../redux/slices/authSlice.js';
-import { useGoogleLogin } from '@react-oauth/google';
-import useFacebookSDK from '../../hooks/useFacebookSDK.js';
+import { register, googleLogin, /**acebookLogin **/ } from '../../redux/slices/authSlice.js';
+
+// import useFacebookSDK from '../../hooks/useFacebookSDK.js';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import MobileRegister from './MobileRegister';
@@ -37,12 +37,12 @@ const GoogleIcon = () => (
   </svg>
 );
 
-const FacebookIcon = () => (
+/** const FacebookIcon = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
     <rect width="18" height="18" rx="3" fill="#1877F2"/>
     <path d="M12.375 11.25l.45-2.925H9.99V6.525c0-.8.39-1.575 1.65-1.575H12.9V2.4S11.7 2.175 10.56 2.175c-2.34 0-3.87 1.42-3.87 3.99v2.16H4.2v2.925H6.69V18h3.3v-6.75h2.385Z" fill="white"/>
   </svg>
-);
+); **/
 
 function passwordStrength(p) {
   if (!p) return null;
@@ -74,7 +74,7 @@ export default function Register() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const fbReady = useFacebookSDK();
+  //const fbReady = useFacebookSDK();
   const set     = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
   const strength = passwordStrength(form.password);
 
@@ -96,22 +96,19 @@ export default function Register() {
     }
   };
 
-  const handleGoogleLogin = useGoogleLogin({
-    onSuccess: async ({ access_token }) => {
-      setSocialLoading('google');
-      try {
-        await dispatch(googleLogin(access_token)).unwrap();
-        navigate('/', { replace: true });
-      } catch (err) {
-        toast.error(typeof err === 'string' ? err : 'Google sign-up failed');
-      } finally {
-        setSocialLoading('');
-      }
-    },
-    onError: () => toast.error('Google sign-up was cancelled'),
-  });
+  const handleGoogleLogin = async () => {
+  setSocialLoading('google');
+  try {
+    await dispatch(googleLogin()).unwrap(); 
+    navigate('/', { replace: true });
+  } catch (err) {
+    toast.error(typeof err === 'string' ? err : 'Google sign-up failed');
+  } finally {
+    setSocialLoading('');
+  }
+};
 
-  const handleFacebookLogin = () => {
+  /**const handleFacebookLogin = () => {
     if (!fbReady) { toast.error('Facebook SDK not ready yet, please try again'); return; }
     setSocialLoading('facebook');
     window.FB.login((response) => {
@@ -126,7 +123,7 @@ export default function Register() {
         toast.error('Facebook sign-up was cancelled');
       }
     }, { scope: 'email,public_profile' });
-  };
+  }; **/
 
   const passedProps = {
     form, set, strength, showPass, setShowPass, showConfirm, setShowConfirm,
@@ -144,7 +141,7 @@ export default function Register() {
       <div className="hidden lg:block lg:w-[40%] relative flex-shrink-0 overflow-hidden">
         <img src="/images/auth/auth-login-bg.png" alt="" className="absolute bottom-0 right-0 h-[90%] w-full object-contain object-bottom pointer-events-none select-none" aria-hidden="true" />
         <div className="relative z-10 p-10">
-          <Link to="/"><img src="/images/logo.png" alt="House of Cambridge" className="h-10 w-auto object-contain" /></Link>
+          <Link to="/"><img src="/images/logo.png" alt="House of Cambridge" className="h-20 w-auto object-contain" /></Link>
           <div className="mt-14">
             <h2 className="font-black leading-tight text-[#1A1A1A]" style={{ fontSize: '36px' }}>
               SIGN UP NOW!<br /><span className="text-[#FFB700]">UNLOCK DEALS,<br />REWARDS & MORE.</span>
@@ -160,7 +157,7 @@ export default function Register() {
           </div>
 
           <h1 className="text-[20px] font-bold text-[#1A1A1A] mb-0.5">Create Your Account</h1>
-          <p className="text-[13px] text-[#60717B] mb-5">Join House of Cambridge — it's free and takes less than a minute.</p>
+          <p className="text-[13px] text-[#60717B] mb-5">Join House of Cambridge - it's free and takes less than a minute.</p>
 
           <form onSubmit={handleSubmit} className="space-y-3.5" noValidate>
             <p className={SECTION_CLS}>Personal Information</p>
@@ -280,20 +277,20 @@ export default function Register() {
           </div>
 
           <div className="space-y-2.5">
-            <button type="button" onClick={() => handleGoogleLogin()} disabled={!!socialLoading} className="w-full flex items-center justify-center gap-2.5 border border-[#C5C5C5] bg-white rounded-[6px] py-2.5 text-[13px] font-medium text-[#1A1A1A] hover:bg-gray-50 transition-colors disabled:opacity-60">
+            <button type="button" onClick={handleGoogleLogin} disabled={!!socialLoading} className="w-full flex items-center justify-center gap-2.5 border border-[#C5C5C5] bg-white rounded-[6px] py-2.5 text-[13px] font-medium text-[#1A1A1A] hover:bg-gray-50 transition-colors disabled:opacity-60">
               {socialLoading === 'google'
                 ? <span className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" aria-hidden="true" />
                 : <GoogleIcon />
               }
               Continue with Google
             </button>
-            <button type="button" onClick={handleFacebookLogin} disabled={!!socialLoading} className="w-full flex items-center justify-center gap-2.5 border border-[#C5C5C5] bg-white rounded-[6px] py-2.5 text-[13px] font-medium text-[#1A1A1A] hover:bg-gray-50 transition-colors disabled:opacity-60">
+           {/* <button type="button" onClick={handleFacebookLogin} disabled={!!socialLoading} className="w-full flex items-center justify-center gap-2.5 border border-[#C5C5C5] bg-white rounded-[6px] py-2.5 text-[13px] font-medium text-[#1A1A1A] hover:bg-gray-50 transition-colors disabled:opacity-60">
               {socialLoading === 'facebook'
                 ? <span className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" aria-hidden="true" />
                 : <FacebookIcon />
               }
               Continue with Facebook
-            </button>
+            </button> */}
           </div>
 
           <p className="text-center text-[13px] text-[#60717B] mt-4">

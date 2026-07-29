@@ -12,16 +12,16 @@ import {
 import toast from 'react-hot-toast';
 import { downloadInvoice } from '../../utils/invoiceGenerator';
 
-const ORDER_ID_RE     = /^[A-Za-z0-9]+$/;
-const MAX_INPUT_LEN   = 80;
+const OBJECT_ID_RE   = /^[a-f\d]{24}$/i;
+const MAX_INPUT_LEN  = 80;
 
 const SHIP_STEPS = [
-  { key: 'confirmed',        label: 'Order Confirmed',   icon: FiCheck   },
-  { key: 'processing',       label: 'Processing',        icon: FiPackage },
-  { key: 'dispatched',       label: 'Dispatched',        icon: FiTruck   },
-  { key: 'in_transit',       label: 'In Transit',        icon: FiTruck   },
-  { key: 'out_for_delivery', label: 'Out for Delivery',  icon: FiTruck   },
-  { key: 'delivered',        label: 'Delivered',         icon: FiCheck   },
+  { key: 'confirmed',        label: 'Order Confirmed',  icon: FiCheck   },
+  { key: 'processing',       label: 'Processing',       icon: FiPackage },
+  { key: 'dispatched',       label: 'Dispatched',       icon: FiTruck   },
+  { key: 'in_transit',       label: 'In Transit',       icon: FiTruck   },
+  { key: 'out_for_delivery', label: 'Out for Delivery', icon: FiTruck   },
+  { key: 'delivered',        label: 'Delivered',        icon: FiCheck   },
 ];
 
 const STATUS_TO_STEP = {
@@ -31,12 +31,6 @@ const STATUS_TO_STEP = {
 
 function stepIndexFromStatus(status) {
   return STATUS_TO_STEP[status] ?? 0;
-}
-
-function sanitizeOrderId(id) {
-  if (!id) return '—';
-  const safe = String(id).replace(/[^A-Za-z0-9]/g, '').slice(-8).toUpperCase();
-  return `DFC-${new Date().getFullYear()}-${safe}`;
 }
 
 function fmtDate(d) {
@@ -64,17 +58,15 @@ function safeNum(value, fallback = 0) {
 }
 
 export default function OrderTracking() {
-  const { id }   = useParams();
+  const { id }   = useParams();          
   const dispatch = useDispatch();
   const { order, loading } = useSelector((s) => s.orders);
   const { user }           = useSelector((s) => s.auth);
 
-  const [trackInput, setTrackInput] = useState(
-    id ? sanitizeOrderId(id) : '',
-  );
+  const [trackInput, setTrackInput] = useState(id || '');
 
   useEffect(() => {
-    if (id && ORDER_ID_RE.test(id)) dispatch(fetchOrder(id));
+    if (id && OBJECT_ID_RE.test(id)) dispatch(fetchOrder(id));
   }, [id, dispatch]);
 
   const handleInputChange = useCallback((e) => {
@@ -83,9 +75,15 @@ export default function OrderTracking() {
   }, []);
 
   const handleTrack = useCallback(() => {
-    if (!trackInput.trim()) { toast.error('Enter an order ID'); return; }
-    toast('Searching for order…');
-  }, [trackInput]);
+    const val = trackInput.trim();
+    if (!val) { toast.error('Enter an order ID'); return; }
+
+    if (OBJECT_ID_RE.test(val)) {
+      dispatch(fetchOrder(val));
+    } else {
+      toast.error('Please enter a valid Order ID (from your order confirmation)');
+    }
+  }, [trackInput, dispatch]);
 
   const handleKeyDown = useCallback((e) => {
     if (e.key === 'Enter') handleTrack();
@@ -114,7 +112,7 @@ export default function OrderTracking() {
     order && {
       time:   order.createdAt,
       title:  'Order placed',
-      desc:   `Order ${sanitizeOrderId(order._id)} placed. ${items.length} item${items.length !== 1 ? 's' : ''} added to fulfilment queue.`,
+      desc:   `Order ${order.orderNumber || order._id} placed. ${items.length} item${items.length !== 1 ? 's' : ''} added to fulfilment queue.`,
       active: false,
     },
   ].filter(Boolean);
@@ -130,17 +128,17 @@ export default function OrderTracking() {
         <div className="bg-white border border-[#E9E9E9] rounded-[10px] p-5 shadow-[2px_3px_8px_rgba(0,0,0,0.04)] mb-5">
           <h1 className="text-[18px] font-black text-[#1A1A1A] mb-1">Track Your Order</h1>
           <p className="text-[12px] text-[#60717B] mb-4">
-            Enter your order ID or tracking number to get real-time updates on your shipment.
+            Enter your order ID to get real-time updates on your shipment.
           </p>
           <div className="flex gap-2" role="search">
-            <label htmlFor="track-input" className="sr-only">Order ID or tracking number</label>
+            <label htmlFor="track-input" className="sr-only">Order ID</label>
             <input
               id="track-input"
               type="search"
               value={trackInput}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
-              placeholder="e.g. DFC-2026-00847"
+              placeholder="Enter your Order ID..."
               maxLength={MAX_INPUT_LEN}
               className="flex-1 border border-[#C5C5C5] rounded-[6px] px-4 py-2.5 text-[13px] outline-none focus:border-[#FFB700] bg-[#FAFAFA]"
             />
@@ -153,7 +151,7 @@ export default function OrderTracking() {
             </button>
           </div>
           <p className="text-[11px] text-[#60717B] mt-2">
-            Guest users: also enter the email address used during checkout.
+            Find your Order ID in your confirmation email or order history.
           </p>
         </div>
 
@@ -161,6 +159,9 @@ export default function OrderTracking() {
           <div className="text-center py-16 text-[#60717B]" role="status">
             <FiPackage size={40} className="mx-auto mb-3 text-[#C5C5C5]" aria-hidden="true" />
             <p className="text-[14px]">Enter an order ID above to track your shipment.</p>
+            <Link to="/orders" className="text-[13px] text-[#FFB700] font-semibold hover:underline mt-2 inline-block">
+              View your orders →
+            </Link>
           </div>
         )}
 
@@ -170,7 +171,7 @@ export default function OrderTracking() {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h2 className="text-[16px] font-black text-[#1A1A1A] mb-1">
-                    Order #{sanitizeOrderId(order._id)}
+                    {order.orderNumber || `Order #${order._id.slice(-8).toUpperCase()}`}
                   </h2>
                   <p className="text-[12px] text-[#60717B]">
                     Placed: <time dateTime={order.createdAt}>{fmtDate(order.createdAt)}</time>
@@ -182,9 +183,10 @@ export default function OrderTracking() {
                 <span className={`flex-shrink-0 text-[11px] font-bold px-3 py-1.5 rounded-full capitalize ${
                   order.orderStatus === 'delivered'  ? 'bg-green-100 text-green-700'  :
                   order.orderStatus === 'processing' ? 'bg-amber-100 text-amber-700'  :
+                  order.orderStatus === 'cancelled'  ? 'bg-red-100   text-red-700'    :
                   'bg-blue-100 text-blue-700'
                 }`}>
-                  {order.orderStatus || 'Processing'}
+                  {(order.orderStatus || 'Processing').replace(/_/g, ' ')}
                 </span>
               </div>
             </div>
@@ -197,11 +199,7 @@ export default function OrderTracking() {
                 Shipment Progress
               </h2>
 
-              <div
-                className="relative flex items-start justify-between"
-                role="list"
-                aria-label="Shipping steps"
-              >
+              <div className="relative flex items-start justify-between" role="list" aria-label="Shipping steps">
                 <div className="absolute top-5 left-0 right-0 h-[2px] bg-[#E9E9E9] z-0" aria-hidden="true" />
                 <div
                   className="absolute top-5 left-0 h-[2px] bg-[#FFB700] z-0 transition-all duration-500"
@@ -244,7 +242,7 @@ export default function OrderTracking() {
                         )}
                         {!done && !active && (
                           <p className="text-[10px] text-[#C5C5C5] mt-0.5">
-                            {i === 2 ? `Est. ${addDays(1)}`              :
+                            {i === 2 ? `Est. ${addDays(1)}`               :
                              i === 3 ? `Est. ${addDays(2)}–${addDays(3)}` :
                              i === 4 ? `Est. ${addDays(3)}–${addDays(5)}` : '—'}
                           </p>
@@ -324,10 +322,10 @@ export default function OrderTracking() {
                 <p className="text-[11px] font-black text-[#60717B] uppercase tracking-wider mb-3">Carrier Information</p>
                 <dl className="space-y-1.5 text-[12px]">
                   {[
-                    { label: 'Carrier',     value: 'DFC Express' },
-                    { label: 'Service',     value: `${(order.shippingMethod || 'Standard').replace(/_/g, ' ')} (3–5 days)` },
+                    { label: 'Carrier',      value: 'HOC Express' },
+                    { label: 'Service',      value: `${(order.shippingMethod || 'Standard').replace(/_/g, ' ')} (3–5 days)` },
                     { label: 'Tracking No.', value: order.trackingNumber || 'Pending dispatch' },
-                    { label: 'Ship Date',   value: order.shippedAt ? fmtDate(order.shippedAt) : `Est. ${addDays(1)}` },
+                    { label: 'Ship Date',    value: order.shippedAt ? fmtDate(order.shippedAt) : `Est. ${addDays(1)}` },
                   ].map(({ label, value }) => (
                     <div key={label} className="flex gap-2">
                       <dt className="text-[#60717B] min-w-[80px]">{label}:</dt>
@@ -348,8 +346,8 @@ export default function OrderTracking() {
                   </li>
                   <li className="flex items-center gap-2 text-[12px]">
                     <FiMail size={12} className="text-[#60717B]" aria-hidden="true" />
-                    <a href="mailto:info@houseofcambridge.co.uk" className="text-[#60717B] hover:underline">
-                      info@houseofcambridge.co.uk
+                    <a href="mailto:support@houseofcambridge.lk" className="text-[#60717B] hover:underline">
+                      support@houseofcambridge.lk
                     </a>
                   </li>
                   <li className="flex items-center gap-2 text-[12px]">
@@ -403,20 +401,38 @@ export default function OrderTracking() {
               >
                 <FiDownload size={13} aria-hidden="true" /> Download Invoice
               </button>
-              <Link to={`/orders/${order._id}/return`}
-                className="flex items-center gap-2 border border-[#C5C5C5] text-[#1A1A1A] text-[12px] font-semibold px-4 py-2.5 rounded-[6px] hover:bg-gray-50 transition-colors">
-                <FiRotateCcw size={13} aria-hidden="true" /> Request Return
-              </Link>
-              <Link to="/contact"
-                className="flex items-center gap-2 border border-[#C5C5C5] text-[#1A1A1A] text-[12px] font-semibold px-4 py-2.5 rounded-[6px] hover:bg-gray-50 transition-colors">
+              {order.orderStatus === 'delivered' && (
+                <Link
+                  to={`/orders/${order._id}/return`}
+                  className="flex items-center gap-2 border border-[#C5C5C5] text-[#1A1A1A] text-[12px] font-semibold px-4 py-2.5 rounded-[6px] hover:bg-gray-50 transition-colors"
+                >
+                  <FiRotateCcw size={13} aria-hidden="true" /> Request Return
+                </Link>
+              )}
+              {order.orderStatus === 'return_requested' && (
+                <Link
+                  to={`/return-status/${order._id}`}
+                  className="flex items-center gap-2 border border-amber-300 text-amber-700 text-[12px] font-semibold px-4 py-2.5 rounded-[6px] hover:bg-amber-50 transition-colors"
+                >
+                  <FiList size={13} aria-hidden="true" /> Return Status
+                </Link>
+              )}
+              <Link
+                to="/contact"
+                className="flex items-center gap-2 border border-[#C5C5C5] text-[#1A1A1A] text-[12px] font-semibold px-4 py-2.5 rounded-[6px] hover:bg-gray-50 transition-colors"
+              >
                 <FiPhone size={13} aria-hidden="true" /> Contact Support
               </Link>
-              <Link to={`/orders/${order._id}`}
-                className="flex items-center gap-2 border border-[#C5C5C5] text-[#1A1A1A] text-[12px] font-semibold px-4 py-2.5 rounded-[6px] hover:bg-gray-50 transition-colors">
+              <Link
+                to={`/orders/${order._id}`}
+                className="flex items-center gap-2 border border-[#C5C5C5] text-[#1A1A1A] text-[12px] font-semibold px-4 py-2.5 rounded-[6px] hover:bg-gray-50 transition-colors"
+              >
                 <FiList size={13} aria-hidden="true" /> View Order Details
               </Link>
-              <Link to="/orders"
-                className="flex items-center gap-2 border border-[#C5C5C5] text-[#1A1A1A] text-[12px] font-semibold px-4 py-2.5 rounded-[6px] hover:bg-gray-50 transition-colors">
+              <Link
+                to="/orders"
+                className="flex items-center gap-2 border border-[#C5C5C5] text-[#1A1A1A] text-[12px] font-semibold px-4 py-2.5 rounded-[6px] hover:bg-gray-50 transition-colors"
+              >
                 <FiArrowLeft size={13} aria-hidden="true" /> Back to Orders
               </Link>
             </nav>

@@ -44,12 +44,7 @@ const FAQ_DATA = [
         a: 'Standard delivery takes 2–5 business days within Colombo and suburbs. Orders to other provinces typically take 3–7 business days. Express delivery (1–2 business days) is available at checkout for an additional fee.',
         tags: ['Delivery', 'Shipping'],
       },
-      {
-        id: 'free-shipping',
-        q: 'Is free shipping available?',
-        a: 'Yes! All orders over Rs. 5,000 qualify for free standard delivery islandwide. Orders below this threshold are charged a flat delivery fee of Rs. 350.',
-        tags: ['Shipping', 'Free'],
-      },
+     
       {
         id: 'change-address',
         q: 'Can I change my delivery address after placing an order?',
@@ -398,19 +393,7 @@ export default function FAQ() {
                 Our support team is ready to help you. Choose your preferred contact method below.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="border border-[#E9E9E9] rounded-[10px] p-5 text-center hover:border-[#FFB700] hover:shadow-md transition-all">
-                  <div className="w-10 h-10 bg-[#F5F5F5] rounded-full flex items-center justify-center mx-auto mb-3">
-                    <FiMessageCircle size={18} className="text-[#60717B]" aria-hidden="true" />
-                  </div>
-                  <p className="text-[13px] font-bold text-[#1A1A1A] mb-1">Live Chat</p>
-                  <p className="text-[11px] text-[#60717B] mb-4">Chat with a human agent. Available 24/7</p>
-                  <button
-                    type="button"
-                    className="w-full bg-[#FFB700] text-black font-bold text-[12px] py-2 rounded-[6px] hover:bg-amber-500 transition-colors"
-                  >
-                    Start Chat
-                  </button>
-                </div>
+               
 
                 <div className="border border-[#E9E9E9] rounded-[10px] p-5 text-center hover:border-[#FFB700] hover:shadow-md transition-all">
                   <div className="w-10 h-10 bg-[#F5F5F5] rounded-full flex items-center justify-center mx-auto mb-3">

@@ -25,7 +25,7 @@ export default function CartPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  // 1. SELECTORS & INITIAL STATES (Unconditional)
+
   const { cart, loading }             = useSelector((s) => s.cart);
   const { addresses }                 = useSelector((s) => s.user);
   const { isAuthenticated }           = useSelector((s) => s.auth);
@@ -35,7 +35,8 @@ export default function CartPage() {
   const [couponApplied, setCouponApplied] = useState('');
   const scrollRef = useRef(null);
 
-  // 2. ALL LIFECYCLE EFFECTS (Unconditional)
+  const VAT_RATE = Number(import.meta.env.VAT_RATE) || 0;
+
   useEffect(() => { dispatch(fetchCart()); }, [dispatch]);
 
   useEffect(() => {
@@ -54,7 +55,7 @@ export default function CartPage() {
     }
   }, [dispatch, items.length]);
 
-  // 3. ALL HANDLERS AND CALLBAK HOOKS (Unconditional)
+  
   const handleQty = useCallback((productId, qty) => {
     if (qty <= 0) {
       dispatch(removeFromCart(productId));
@@ -94,14 +95,13 @@ export default function CartPage() {
     toast.success('Cart updated!');
   }, [dispatch]);
 
-  // 4. 🚨 MOVE THE EARLY RETURN HERE (BELOW ALL HOOKS) 🚨
   if (loading && !cart) return <Layout><PageSpinner /></Layout>;
 
-  // 5. MEMOS & COMPUTED PROPERTIES (Safely processing after hooks)
+
   const subtotal      = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
   const discount      = cart?.discount || 0;
   const totalWeightKg = calcTotalWeightKg(items);
-  const vat           = Math.round((subtotal - discount) * 0.08);
+  const vat           = Math.round((subtotal - discount) * VAT_RATE);
   const cartTotal     = subtotal - discount + vat;
   const loyaltyPoints = Math.floor(subtotal / 50);
   const defaultAddress = addresses.find((a) => a.isDefault) || addresses[0];

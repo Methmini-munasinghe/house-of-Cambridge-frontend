@@ -10,8 +10,9 @@ import {
   FiArrowLeft, FiMapPin, FiCreditCard, FiPackage,
   FiUser, FiTruck, FiClipboard,
 } from 'react-icons/fi';
+import { ORDER_STATUSES } from '../../constants/order.js';
 
-const STATUSES = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'return_requested', 'returned'];
+const STATUSES = ORDER_STATUSES;
 
 const STATUS_COLORS = {
   pending:          'bg-yellow-100 text-yellow-700 border-yellow-200',
@@ -42,10 +43,11 @@ function Section({ icon: Icon, title, children }) {
 }
 
 export default function AdminOrderDetail() {
+
   const { id } = useParams();
   const dispatch = useDispatch();
   const { selectedOrder: order, loading } = useSelector((s) => s.admin);
-  const { toasts, toast, removeToast }    = useToast();
+  const { toasts, toast, removeToast } = useToast();
 
   const [status,         setStatus]         = useState('');
   const [paymentStatus,  setPaymentStatus]  = useState('pending');
@@ -53,21 +55,28 @@ export default function AdminOrderDetail() {
   const [adminNotes,     setAdminNotes]     = useState('');
   const [saving,         setSaving]         = useState(false);
 
-  useEffect(() => { dispatch(fetchAdminOrder(id)); }, [id, dispatch]);
+  useEffect(() => {
+    if (id) dispatch(fetchAdminOrder(id));
+  }, [id, dispatch]);
 
   useEffect(() => {
-    if (!order) return;
-    setStatus(order.orderStatus);
-    setPaymentStatus(order.paymentStatus || 'pending');
-    setTrackingNumber(order.trackingNumber || '');
-    setAdminNotes(order.adminNotes || '');
+    if (order) {
+      setStatus(order.orderStatus || '');
+      setPaymentStatus(order.paymentStatus || 'pending');
+      setTrackingNumber(order.trackingNumber || '');
+      setAdminNotes(order.adminNotes || '');
+    }
   }, [order]);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
     setSaving(true);
     try {
-      await dispatch(updateAdminOrderStatus({ id, data: { status, paymentStatus, trackingNumber, adminNotes } })).unwrap();
+   
+      await dispatch(updateAdminOrderStatus({
+        id,
+        data: { status, paymentStatus, trackingNumber, adminNotes },
+      })).unwrap();
       toast.success('Order updated successfully');
     } catch (err) {
       toast.error(typeof err === 'string' ? err : 'Update failed');
@@ -77,14 +86,25 @@ export default function AdminOrderDetail() {
   };
 
   if (loading && !order) return <AdminLayout><PageSpinner /></AdminLayout>;
-  if (!order) return <AdminLayout><p className="text-[#60717B] p-6">Order not found.</p></AdminLayout>;
+  if (!order) return (
+    <AdminLayout>
+      <div className="p-6">
+        <Link to="/admin/orders" className="text-[#FFB700] font-semibold hover:underline flex items-center gap-2">
+          <FiArrowLeft size={16} /> Back to Orders
+        </Link>
+        <p className="text-[#60717B] mt-4">Order not found.</p>
+      </div>
+    </AdminLayout>
+  );
 
-  const timelineStep  = TIMELINE_STEPS.indexOf(order.orderStatus);
-  const showTimeline  = !['cancelled', 'return_requested', 'returned'].includes(order.orderStatus);
-  const paymentColor  =
+  const timelineStep = TIMELINE_STEPS.indexOf(order.orderStatus);
+  const showTimeline = !['cancelled', 'return_requested', 'returned'].includes(order.orderStatus);
+
+  const paymentColor =
     order.paymentStatus === 'paid'     ? 'text-green-600' :
     order.paymentStatus === 'refunded' ? 'text-blue-600'  : 'text-amber-600';
-  const paySelectCls  =
+
+  const paySelectCls =
     paymentStatus === 'paid'     ? 'border-green-300  text-green-700'  :
     paymentStatus === 'refunded' ? 'border-blue-300   text-blue-700'   :
     paymentStatus === 'failed'   ? 'border-red-300    text-red-700'    :
@@ -100,33 +120,49 @@ export default function AdminOrderDetail() {
   return (
     <AdminLayout>
       <div className="space-y-5 max-w-[1100px]">
+
+     
         <div className="flex flex-wrap items-center gap-4 justify-between">
           <div className="flex items-center gap-3">
-            <Link to="/admin/orders" aria-label="Back to orders" className="text-[#60717B] hover:text-[#1A1A1A] transition-colors">
+            <Link to="/admin/orders" className="text-[#60717B] hover:text-[#1A1A1A]">
               <FiArrowLeft size={20} />
             </Link>
             <div>
-              <h2 className="text-[20px] font-black text-[#1A1A1A]">{order.orderNumber}</h2>
+         
+              <h2 className="text-[20px] font-black text-[#1A1A1A]">
+                {order.orderNumber || `Order #${order._id?.slice(-8).toUpperCase()}`}
+              </h2>
               <p className="text-[13px] text-[#60717B]">
-                Placed on {new Date(order.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+                Placed on{' '}
+                {new Date(order.createdAt).toLocaleDateString('en-GB', {
+                  day: 'numeric', month: 'long', year: 'numeric',
+                })}
               </p>
             </div>
           </div>
-          <span className={`px-3 py-1.5 rounded-full text-[13px] font-semibold capitalize border ${STATUS_COLORS[order.orderStatus] ?? 'bg-gray-100 text-gray-700 border-gray-200'}`}>
+          <span className={`px-3 py-1.5 rounded-full text-[13px] font-semibold capitalize border ${
+            STATUS_COLORS[order.orderStatus] ?? 'bg-gray-100 text-gray-700 border-gray-200'
+          }`}>
             {order.orderStatus?.replace(/_/g, ' ')}
           </span>
         </div>
 
+      
         {showTimeline && (
           <div className="bg-white rounded-[12px] border border-[#E9E9E9] p-5" aria-label="Order progress">
             <div className="flex items-center justify-between">
               {TIMELINE_STEPS.map((step, i) => (
                 <div key={step} className="flex-1 flex flex-col items-center relative">
                   {i < TIMELINE_STEPS.length - 1 && (
-                    <div className={`absolute top-4 left-1/2 w-full h-0.5 ${i < timelineStep ? 'bg-[#FFB700]' : 'bg-[#E9E9E9]'}`} aria-hidden="true" />
+                    <div
+                      className={`absolute top-4 left-1/2 w-full h-0.5 ${i < timelineStep ? 'bg-[#FFB700]' : 'bg-[#E9E9E9]'}`}
+                      aria-hidden="true"
+                    />
                   )}
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-bold relative z-10 ${i <= timelineStep ? 'bg-[#FFB700] text-[#1A1A1A]' : 'bg-[#E9E9E9] text-[#60717B]'}`}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-bold relative z-10 ${
+                      i <= timelineStep ? 'bg-[#FFB700] text-[#1A1A1A]' : 'bg-[#E9E9E9] text-[#60717B]'
+                    }`}
                     aria-label={`${step}${i < timelineStep ? ' (completed)' : i === timelineStep ? ' (current)' : ''}`}
                   >
                     {i < timelineStep ? '✓' : i + 1}
@@ -138,8 +174,11 @@ export default function AdminOrderDetail() {
           </div>
         )}
 
+     
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <div className="lg:col-span-2 space-y-5">
+
+         
             <Section icon={FiPackage} title="Order Items">
               <div className="space-y-3">
                 {order.items?.map((item, i) => (
@@ -173,18 +212,35 @@ export default function AdminOrderDetail() {
               </div>
             </Section>
 
+            
             <Section icon={FiClipboard} title="Update Order">
               <form onSubmit={handleUpdate} className="space-y-3">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label htmlFor="order-status" className="text-[12px] font-semibold text-[#1A1A1A] block mb-1">Order Status</label>
-                    <select id="order-status" value={status} onChange={(e) => setStatus(e.target.value)} className={INPUT_CLS}>
-                      {STATUSES.map((s) => <option key={s} value={s}>{s.replace(/_/g, ' ')}</option>)}
+                    <label htmlFor="order-status" className="text-[12px] font-semibold text-[#1A1A1A] block mb-1">
+                      Order Status
+                    </label>
+                    <select
+                      id="order-status"
+                      value={status}
+                      onChange={(e) => setStatus(e.target.value)}
+                      className={INPUT_CLS}
+                    >
+                      {STATUSES.map((s) => (
+                        <option key={s} value={s}>{s.replace(/_/g, ' ')}</option>
+                      ))}
                     </select>
                   </div>
                   <div>
-                    <label htmlFor="payment-status" className="text-[12px] font-semibold text-[#1A1A1A] block mb-1">Payment Status</label>
-                    <select id="payment-status" value={paymentStatus} onChange={(e) => setPaymentStatus(e.target.value)} className={`${INPUT_CLS} font-semibold ${paySelectCls}`}>
+                    <label htmlFor="payment-status" className="text-[12px] font-semibold text-[#1A1A1A] block mb-1">
+                      Payment Status
+                    </label>
+                    <select
+                      id="payment-status"
+                      value={paymentStatus}
+                      onChange={(e) => setPaymentStatus(e.target.value)}
+                      className={`${INPUT_CLS} font-semibold ${paySelectCls}`}
+                    >
                       <option value="pending">Pending</option>
                       <option value="paid">Paid</option>
                       <option value="failed">Failed</option>
@@ -193,27 +249,58 @@ export default function AdminOrderDetail() {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="tracking" className="text-[12px] font-semibold text-[#1A1A1A] block mb-1">Tracking Number</label>
-                  <input id="tracking" value={trackingNumber} onChange={(e) => setTrackingNumber(e.target.value)} placeholder="e.g. SL123456789" maxLength={100} className={INPUT_CLS} />
+                  <label htmlFor="tracking" className="text-[12px] font-semibold text-[#1A1A1A] block mb-1">
+                    Tracking Number
+                  </label>
+                  <input
+                    id="tracking"
+                    value={trackingNumber}
+                    onChange={(e) => setTrackingNumber(e.target.value)}
+                    placeholder="e.g. SL123456789"
+                    maxLength={100}
+                    className={INPUT_CLS}
+                  />
                 </div>
                 <div>
-                  <label htmlFor="admin-notes" className="text-[12px] font-semibold text-[#1A1A1A] block mb-1">Admin Notes</label>
-                  <textarea id="admin-notes" value={adminNotes} onChange={(e) => setAdminNotes(e.target.value)} rows={2} maxLength={1000} placeholder="Internal notes (not visible to customer)" className={`${INPUT_CLS} resize-none`} />
+                  <label htmlFor="admin-notes" className="text-[12px] font-semibold text-[#1A1A1A] block mb-1">
+                    Admin Notes
+                  </label>
+                  <textarea
+                    id="admin-notes"
+                    value={adminNotes}
+                    onChange={(e) => setAdminNotes(e.target.value)}
+                    rows={2}
+                    maxLength={1000}
+                    placeholder="Internal notes (not visible to customer)"
+                    className={`${INPUT_CLS} resize-none`}
+                  />
                 </div>
-                <button type="submit" disabled={saving} className="w-full py-2.5 bg-[#FFB700] rounded-[8px] text-[13px] font-bold text-[#1A1A1A] hover:bg-amber-400 disabled:opacity-50 flex items-center justify-center gap-2 transition-colors">
-                  {saving && <span className="w-4 h-4 border-2 border-[#1A1A1A] border-t-transparent rounded-full animate-spin" aria-hidden="true" />}
+                <button
+                  type="submit"
+                  disabled={saving}
+                  className="w-full py-2.5 bg-[#FFB700] rounded-[8px] text-[13px] font-bold text-[#1A1A1A] hover:bg-amber-400 disabled:opacity-50 flex items-center justify-center gap-2 transition-colors"
+                >
+                  {saving && (
+                    <span className="w-4 h-4 border-2 border-[#1A1A1A] border-t-transparent rounded-full animate-spin" aria-hidden="true" />
+                  )}
                   Save Changes
                 </button>
               </form>
             </Section>
           </div>
 
+        
           <div className="space-y-5">
+
+        
             <Section icon={FiUser} title="Customer">
               {order.user ? (
                 <div>
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-9 h-9 rounded-full bg-[#FFB700]/20 flex items-center justify-center text-[#FFB700] font-bold" aria-hidden="true">
+                    <div
+                      className="w-9 h-9 rounded-full bg-[#FFB700]/20 flex items-center justify-center text-[#FFB700] font-bold"
+                      aria-hidden="true"
+                    >
                       {order.user.name?.[0]?.toUpperCase()}
                     </div>
                     <div>
@@ -221,28 +308,40 @@ export default function AdminOrderDetail() {
                       <p className="text-[12px] text-[#60717B]">{order.user.email}</p>
                     </div>
                   </div>
-                  <Link to="/admin/users" className="text-[12px] text-[#FFB700] font-semibold hover:underline">View Customer →</Link>
+                  <Link to="/admin/users" className="text-[12px] text-[#FFB700] font-semibold hover:underline">
+                    View Customer →
+                  </Link>
                 </div>
               ) : (
                 <div>
                   <p className="text-[13px] font-semibold text-[#1A1A1A]">{order.guestName || 'Guest'}</p>
                   <p className="text-[12px] text-[#60717B]">{order.guestEmail}</p>
-                  <span className="text-[11px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full font-medium mt-1 inline-block">Guest Order</span>
+                  <span className="text-[11px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full font-medium mt-1 inline-block">
+                    Guest Order
+                  </span>
                 </div>
               )}
             </Section>
 
+           
             <Section icon={FiMapPin} title="Shipping Address">
               <address className="text-[13px] space-y-0.5 not-italic">
                 <p className="font-semibold text-[#1A1A1A]">{order.shippingAddress?.fullName}</p>
                 <p className="text-[#60717B]">{order.shippingAddress?.addressLine1}</p>
-                {order.shippingAddress?.addressLine2 && <p className="text-[#60717B]">{order.shippingAddress.addressLine2}</p>}
-                <p className="text-[#60717B]">{order.shippingAddress?.city}, {order.shippingAddress?.state} {order.shippingAddress?.postalCode}</p>
+                {order.shippingAddress?.addressLine2 && (
+                  <p className="text-[#60717B]">{order.shippingAddress.addressLine2}</p>
+                )}
+                <p className="text-[#60717B]">
+                  {order.shippingAddress?.city}, {order.shippingAddress?.state} {order.shippingAddress?.postalCode}
+                </p>
                 <p className="text-[#60717B]">{order.shippingAddress?.country}</p>
-                {order.shippingAddress?.phone && <p className="text-[#60717B] mt-1">{order.shippingAddress.phone}</p>}
+                {order.shippingAddress?.phone && (
+                  <p className="text-[#60717B] mt-1">{order.shippingAddress.phone}</p>
+                )}
               </address>
             </Section>
 
+         
             <Section icon={FiCreditCard} title="Payment">
               <div className="space-y-1.5 text-[13px]">
                 <div className="flex justify-between">
@@ -272,7 +371,10 @@ export default function AdminOrderDetail() {
                   </div>
                 )}
                 {order.paymentMethod === 'cod' && order.paymentStatus === 'pending' && (
-                  <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-[8px] text-[12px] text-amber-700" role="note">
+                  <div
+                    className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-[8px] text-[12px] text-amber-700"
+                    role="note"
+                  >
                     COD — mark as <strong>Paid</strong> once cash is collected on delivery.
                   </div>
                 )}
@@ -294,12 +396,15 @@ export default function AdminOrderDetail() {
                 {order.deliveredAt && (
                   <div className="flex justify-between">
                     <span className="text-[#60717B]">Delivered</span>
-                    <span className="font-semibold text-green-600">{new Date(order.deliveredAt).toLocaleDateString('en-GB')}</span>
+                    <span className="font-semibold text-green-600">
+                      {new Date(order.deliveredAt).toLocaleDateString('en-GB')}
+                    </span>
                   </div>
                 )}
               </div>
             </Section>
 
+          
             {order.notes && (
               <Section icon={FiClipboard} title="Customer Notes">
                 <p className="text-[13px] text-[#60717B] italic">"{order.notes}"</p>
@@ -308,6 +413,7 @@ export default function AdminOrderDetail() {
           </div>
         </div>
       </div>
+
       <ToastContainer toasts={toasts} removeToast={removeToast} />
     </AdminLayout>
   );
