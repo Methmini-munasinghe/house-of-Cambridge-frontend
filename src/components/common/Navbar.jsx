@@ -28,7 +28,7 @@ function AllCategoriesDropdown({ tree }) {
     onMouseLeave={() => setOpen(false)}>
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-2 bg-white text-black text-[13px] md:text-[14px] font-bold px-3 md:px-4 py-1.5 rounded-md hover:bg-gray-100 transition-colors whitespace-nowrap"
+        className="flex items-center gap-2 bg-white text-black text-[13px] md:text-[14px] font-bold px-3 md:px-4 py-1.5 rounded-md hover:bg-gray-50 hover:shadow-sm active:scale-95 transition-all duration-200 cursor-pointer whitespace-nowrap"
         aria-expanded={open}
         aria-haspopup="true"
       >
@@ -88,7 +88,7 @@ function NavBadgeDropdown({ label, tree, baseParam, loading, badgeColor }) {
       onMouseLeave={() => setOpen(false)}>
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1 px-2.5 md:px-3 py-1 rounded-md text-white text-[12px] md:text-[13px] font-bold transition-all hover:opacity-90 cursor-pointer whitespace-nowrap"
+        className="flex items-center gap-1 px-2.5 md:px-3 py-1 rounded-md text-white text-[12px] md:text-[13px] font-bold transition-all duration-200 hover:brightness-110 hover:shadow-sm active:scale-95 cursor-pointer whitespace-nowrap"
         style={{ background: badgeColor || "#ef4444" }}
         aria-expanded={open}
         aria-haspopup="true"
